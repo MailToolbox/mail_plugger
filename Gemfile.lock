@@ -6,7 +6,12 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
+    crack (0.4.4)
     diff-lcs (1.4.4)
+    hashdiff (1.0.1)
+    public_suffix (4.0.6)
     rake (12.3.3)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
@@ -21,6 +26,10 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.0)
+    webmock (3.10.0)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
 
 PLATFORMS
   ruby
@@ -29,6 +38,7 @@ DEPENDENCIES
   mail_plugger!
   rake (~> 12.0)
   rspec (~> 3.0)
+  webmock (~> 3.0)
 
 BUNDLED WITH
    2.1.4
