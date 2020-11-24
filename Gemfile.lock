@@ -12,7 +12,7 @@ GEM
     diff-lcs (1.4.4)
     hashdiff (1.0.1)
     public_suffix (4.0.6)
-    rake (12.3.3)
+    rake (13.0.1)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -36,7 +36,7 @@ PLATFORMS
 
 DEPENDENCIES
   mail_plugger!
-  rake (~> 12.0)
+  rake (~> 13.0)
   rspec (~> 3.0)
   webmock (~> 3.0)
 
