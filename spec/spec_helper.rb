@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'mail_plugger'
+require 'mail'
 require 'webmock/rspec'
 
 WebMock.disable_net_connect!(allow_localhost: true)
