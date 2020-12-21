@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MailPlugger
   class Error < StandardError
     # Specific error class for errors if tries to add undelclared option

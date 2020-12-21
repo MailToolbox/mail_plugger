@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module MailPlugger
   class Railtie < Rails::Railtie
     initializer 'mail_plugger.add_delivery_method' do
