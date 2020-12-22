@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'mail_plugger/error'
+require 'mail_plugger/mail_helper'
+require 'mail_plugger/delivery_method'
 # If we are using this gem outside of Rails then do not load this code.
 require 'mail_plugger/railtie' if defined?(Rails)
 require 'mail_plugger/version'
