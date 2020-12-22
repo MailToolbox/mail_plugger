@@ -5,6 +5,8 @@ require:
 AllCops:
   NewCops: enable
   SuggestExtensions: false
+  Exclude:
+    - 'gemfiles/**/*'
 
 Layout/LineLength:
   Max: 80

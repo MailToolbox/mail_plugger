@@ -1,5 +1,5 @@
 PATH
-  remote: .
+  remote: ..
   specs:
     mail_plugger (0.1.0)
       mail (~> 2.5)
@@ -71,6 +71,7 @@ PLATFORMS
 
 DEPENDENCIES
   appraisal
+  mail (~> 2.7.0)
   mail_plugger!
   rake (~> 13.0)
   rspec (~> 3.0)
