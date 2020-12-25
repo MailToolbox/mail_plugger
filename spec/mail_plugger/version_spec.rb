@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 
-RSpec.describe MailPlugger do
+RSpec.describe 'MailPlugger::VERSION' do
   it 'has a version number' do
-    expect(described_class::VERSION).not_to be nil
+    expect(MailPlugger::VERSION).not_to be nil
   end
 end
