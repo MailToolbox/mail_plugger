@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Norbert Szivós']
   spec.email         = ['sysqa@yahoo.com']
 
-  spec.summary       = 'Plug in the required API(s) with mail plugger.'
+  spec.summary       = 'Plug in the required mailer API(s) with MailPlugger.'
   spec.description   = 'Delivery Method to send emails via the defined ' \
                        'API(s), e.g. for Rails ActionMailer.'
   spec.homepage      = 'https://github.com/norbertszivos/mail_plugger'
