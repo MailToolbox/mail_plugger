@@ -1,8 +1,8 @@
 # MailPlugger
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/mail_plugger`. To experiment with that code, run `bin/console` for an interactive prompt.
+[![Build Status](https://travis-ci.com/norbertszivos/mail_plugger.svg?branch=main)](https://travis-ci.com/norbertszivos/mail_plugger)
 
-TODO: Delete this and the text above, and describe your gem
+**MailPlugger** helps you to use different mail providers' **API**. You can use any APIs which one would like to use. It allows you to send different emails with different APIs. Also it can help to move between providers, load balacing or cost management.
 
 ## Installation
 
@@ -32,7 +32,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/mail_plugger.
+Bug reports and pull requests are welcome on GitHub at https://github.com/norbertszivos/mail_plugger. Please use the [issue tracker](https://github.com/norbertszivos/mail_plugger/issues) if you found any issues. If you would like to contribute to this project, please fork this repository and create a new pull request.
 
 
 ## License
