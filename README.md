@@ -1,4 +1,4 @@
-# MailPlugger <img src="https://github.com/norbertszivos/mail_plugger/images/mail_plugger.png" height="25" />
+# MailPlugger <img src="https://github.com/norbertszivos/mail_plugger/blob/main/images/mail_plugger.png" height="25" />
 
 [![Build Status](https://travis-ci.com/norbertszivos/mail_plugger.svg?branch=main)](https://travis-ci.com/norbertszivos/mail_plugger)
 
