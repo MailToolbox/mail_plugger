@@ -1,4 +1,7 @@
 ---
+env:
+  global:
+    - CC_TEST_REPORTER_ID=b510dcaf1de6f05f2fcdd623d5870628f3ab45124249a0819a63bea1257e8e79
 language: ruby
 cache: bundler
 rvm:
@@ -6,7 +9,13 @@ rvm:
   - 2.6
   - 2.7
 before_install: gem install bundler -v 2.1.4
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 gemfile:
   - gemfiles/mail_2.7.gemfile
   - gemfiles/mail_2.7.0.gemfile
   - gemfiles/mail_2.6.gemfile
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

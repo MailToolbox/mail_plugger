@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# For code coverage measurements to work properly, `SimpleCov` should be loaded
+# and started before any application code is loaded.
+require 'simplecov'
+SimpleCov.start
+
 require 'bundler/setup'
 require 'mail_plugger'
 require 'mail'
