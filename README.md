@@ -35,9 +35,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/norbertszivos/mail_plugger. Please use the [issue tracker](https://github.com/norbertszivos/mail_plugger/issues) if you found any issues. If you would like to contribute to this project, please fork this repository and create a new pull request.
-
+Bug reports and pull requests are welcome. Please read [CONTRIBUTING.md](https://github.com/norbertszivos/mail_plugger/blob/main/CONTRIBUTING.md) if you would like to contribute to this project.
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+The gem is available as open source under the terms of the [MIT License](https://github.com/norbertszivos/mail_plugger/blob/main/LICENSE.txt).
