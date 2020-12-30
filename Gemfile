@@ -10,7 +10,7 @@ gem 'appraisal'
 gem 'rake', '~> 13.0'
 
 # Ruby static code analyzer and code formatter, code linter in short
-gem 'rubocop', '~> 1.4', require: false
+gem 'rubocop', '~> 1.7', require: false
 gem 'rubocop-performance', require: false
 gem 'rubocop-rspec', require: false
 

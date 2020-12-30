@@ -1,5 +1,6 @@
 # M<img src="https://github.com/norbertszivos/mail_plugger/blob/main/images/mail_plugger.png" height="25" />ilPlugger
 
+[![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop-hq/rubocop)
 [![Build Status](https://travis-ci.com/norbertszivos/mail_plugger.svg?branch=main)](https://travis-ci.com/norbertszivos/mail_plugger)
 
 **MailPlugger** helps you to use different mail providers' **API**. You can use any APIs which one would like to use. It allows you to send different emails with different APIs. Also it can help to move between providers, load balacing or cost management.
