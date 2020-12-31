@@ -9,14 +9,11 @@ module MailPlugger
     # attributes.
     #
     # @param [Hash] options with the credentials
-    def initialize(
-      delivery_options: nil,
-      client: nil,
-      default_delivery_system: nil
-    )
-      @delivery_options = delivery_options || MailPlugger.delivery_options
-      @client = client || MailPlugger.client
-      @default_delivery_system = default_delivery_system ||
+    def initialize(options = {})
+      @delivery_options = options[:delivery_options] ||
+                          MailPlugger.delivery_options
+      @client = options[:client] || MailPlugger.client
+      @default_delivery_system = options[:default_delivery_system] ||
                                  default_delivery_system_get
 
       @message = nil
