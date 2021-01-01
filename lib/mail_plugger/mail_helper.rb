@@ -19,7 +19,7 @@ module MailPlugger
 
     # Extract 'client'. If it's a hash then it'll return the right
     # client belongs to the delivery system. If it's not a hash it'll return
-    # the given value. But if it's not a class it'll raise an error.
+    # the given value. But if the value doesn't a class it'll raise an error.
     #
     # @return [Class] the defined API class
     def client
@@ -74,7 +74,7 @@ module MailPlugger
 
     # Extract 'delivery_options'. If it's a hash then it'll return the right
     # options belongs to the delivery system. If it's not a hash it'll return
-    # the given value. But if it's not an array it'll raise an error.
+    # the given value. But if the value doesn't an array it'll raise an error.
     #
     # @return [Array] the options it'll collect from the Mail::Message object
     def delivery_options
@@ -95,7 +95,7 @@ module MailPlugger
     # @return [String] with the name of the delivery system
     def delivery_system
       @delivery_system ||=
-        message_field_value_from(@message['delivery_system']) ||
+        (@message && message_field_value_from(@message['delivery_system'])) ||
         @default_delivery_system
 
       if @delivery_system.nil? &&
@@ -155,9 +155,31 @@ module MailPlugger
     #
     # @param [Hash/Array/Class] option
     #
-    # @return [Array/Class] with the option value
+    # @return [Hash/Array/Class] with the option value
     def option_value_from(option)
-      option.is_a?(Hash) ? option[delivery_system] : option
+      if option.is_a?(Hash) && option[delivery_system]
+        option[delivery_system]
+      else
+        option
+      end
+    end
+
+    # Extract 'settings'. If it's a hash then it'll return the right
+    # settings belongs to the delivery system. If it's not a hash it'll return
+    # the given value. But if the value doesn't a hash it'll raise an error.
+    #
+    # @return [Hash] settings for Mail delivery_method
+    def settings
+      @settings ||= option_value_from(@delivery_settings)
+
+      return {} if @settings.nil?
+
+      unless @settings.is_a?(Hash)
+        raise Error::WrongDeliverySettings,
+              '"delivery_settings" does not a Hash'
+      end
+
+      @settings
     end
   end
 end

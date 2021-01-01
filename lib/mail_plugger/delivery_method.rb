@@ -10,13 +10,18 @@ module MailPlugger
     #
     # @param [Hash] options with the credentials
     def initialize(options = {})
-      @delivery_options = options[:delivery_options] ||
-                          MailPlugger.delivery_options
-      @client = options[:client] || MailPlugger.client
+      @delivery_options        = options[:delivery_options] ||
+                                 MailPlugger.delivery_options
+
+      @client                  = options[:client] || MailPlugger.client
+
       @default_delivery_system = options[:default_delivery_system] ||
                                  default_delivery_system_get
 
-      @message = nil
+      @delivery_settings       = options[:delivery_settings] ||
+                                 MailPlugger.delivery_settings
+
+      @message                 = nil
     end
 
     # Send message with the given client if the message parameter is a

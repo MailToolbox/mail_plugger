@@ -9,7 +9,7 @@ require 'mail_plugger/version'
 
 module MailPlugger
   class << self
-    attr_reader :delivery_options, :client
+    attr_reader :delivery_options, :delivery_settings, :client
 
     # Plug in defined API(s) class.
     #
@@ -86,7 +86,7 @@ module MailPlugger
     # Define 'delivery_options' and 'client' setter methods. These methods are
     # generating a hash where the key is the 'delivery_system'. This let us to
     # set/use more than one API.
-    %w[delivery_options client].each do |method|
+    %w[delivery_options delivery_settings client].each do |method|
       define_method "#{method}=" do |value|
         variable = instance_variable_get("@#{method}")
         variable = instance_variable_set("@#{method}", {}) if variable.nil?

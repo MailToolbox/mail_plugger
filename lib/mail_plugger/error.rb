@@ -18,5 +18,8 @@ module MailPlugger
 
     # Specific error class for errors if parameter is not given
     class WrongParameter < Error; end
+
+    # Specific error class for errors if delivery settings has a wrong type
+    class WrongDeliverySettings < Error; end
   end
 end

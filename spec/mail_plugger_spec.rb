@@ -54,6 +54,10 @@ RSpec.describe MailPlugger do
         expect(described_class.delivery_options).to be nil
       end
 
+      it 'does not set delivery_settings' do
+        expect(described_class.delivery_settings).to be nil
+      end
+
       it 'does not set client' do
         expect(described_class.client).to be nil
       end
@@ -77,10 +81,12 @@ RSpec.describe MailPlugger do
     context 'when plug in a delivery system' do
       let(:delivery_system) { 'dummy_api' }
       let(:delivery_options) { %i[to from subject body] }
+      let(:delivery_settings) { { key: :value } }
 
       before do
         described_class.plug_in(delivery_system) do |api|
           api.delivery_options = delivery_options
+          api.delivery_settings = delivery_settings
           api.client = DummyApi
         end
       end
@@ -88,6 +94,11 @@ RSpec.describe MailPlugger do
       it 'sets delivery_options' do
         expect(described_class.delivery_options)
           .to eq({ delivery_system => delivery_options })
+      end
+
+      it 'sets delivery_settings' do
+        expect(described_class.delivery_settings)
+          .to eq({ delivery_system => delivery_settings })
       end
 
       it 'sets client' do
@@ -98,12 +109,14 @@ RSpec.describe MailPlugger do
     context 'when plug in more delivery systems' do
       let(:delivery_system) { 'dummy_api' }
       let(:delivery_options) { %i[to from subject body] }
+      let(:delivery_settings) { { key: :value } }
       let(:another_delivery_system) { 'another_dummy_api' }
       let(:another_delivery_options) { %i[to from subject text_part html_part] }
 
       before do
         described_class.plug_in(delivery_system) do |api|
           api.delivery_options = delivery_options
+          api.delivery_settings = delivery_settings
           api.client = DummyApi
         end
 
@@ -119,6 +132,11 @@ RSpec.describe MailPlugger do
                    delivery_system => delivery_options,
                    another_delivery_system => another_delivery_options
                  })
+      end
+
+      it 'sets delivery_settings where was added' do
+        expect(described_class.delivery_settings)
+          .to eq({ delivery_system => delivery_settings })
       end
 
       it 'sets client' do

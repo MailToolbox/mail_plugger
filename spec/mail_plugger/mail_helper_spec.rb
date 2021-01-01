@@ -12,11 +12,13 @@ RSpec.describe MailPlugger::MailHelper do
           delivery_options: nil,
           client: nil,
           default_delivery_system: nil,
+          delivery_settings: nil,
           message: nil
         )
           @delivery_options = delivery_options
           @client = client
           @default_delivery_system = default_delivery_system
+          @delivery_settings = delivery_settings
           @message = message
         end
       end
@@ -415,127 +417,140 @@ RSpec.describe MailPlugger::MailHelper do
         .delivery_system
     end
 
-    let(:message) { Mail.new(mail_options) }
-
-    context 'when both delivery_options and client are hashes' do
-      let(:delivery_options) { { 'dummy_api' => %i[to from subject body] } }
-      let(:client) { { 'dummy_api' => DummyApi } }
-
-      context 'and default_delivery_system is defined' do
-        let(:mail_options) { {} }
-        let(:default_delivery_system) { 'dummy_api' }
-
-        it 'returns with the default delivery system' do
-          expect(delivery_system).to eq('dummy_api')
-        end
-      end
-
-      context 'and delivery_system is defined in Mail::Message object' do
-        let(:mail_options) { { delivery_system: 'dummy_api' } }
-        let(:default_delivery_system) { nil }
-
-        it 'returns with the delivery system from Mail::Message' do
-          expect(delivery_system).to eq('dummy_api')
-        end
-      end
-
-      context 'and delivery_system does NOT defined' do
-        let(:mail_options) { {} }
-        let(:default_delivery_system) { nil }
-
-        it 'raises error' do
-          expect { delivery_system }
-            .to raise_error(MailPlugger::Error::WrongDeliverySystem)
-        end
-      end
-    end
-
-    context 'when one of the delivery_options and client is a hash' do
-      let(:delivery_options) { { 'dummy_api' => %i[to from subject body] } }
-      let(:client) { DummyApi }
-
-      context 'and default_delivery_system is defined' do
-        let(:mail_options) { {} }
-        let(:default_delivery_system) { 'dummy_api' }
-
-        it 'returns with the default delivery system' do
-          expect(delivery_system).to eq('dummy_api')
-        end
-      end
-
-      context 'and delivery_system is defined in Mail::Message object' do
-        let(:mail_options) { { delivery_system: 'dummy_api' } }
-        let(:default_delivery_system) { nil }
-
-        it 'returns with the delivery system from Mail::Message' do
-          expect(delivery_system).to eq('dummy_api')
-        end
-      end
-
-      context 'and delivery_system does NOT defined' do
-        let(:mail_options) { {} }
-        let(:default_delivery_system) { nil }
-
-        it 'raises error' do
-          expect { delivery_system }
-            .to raise_error(MailPlugger::Error::WrongDeliverySystem)
-        end
-      end
-    end
-
-    context 'when none of the delivery_options and client are hashes' do
-      let(:delivery_options) { %i[to from subject body] }
-      let(:client) { DummyApi }
-
-      context 'and default_delivery_system is defined' do
-        let(:mail_options) { {} }
-        let(:default_delivery_system) { 'dummy_api' }
-
-        it 'returns with the default delivery system' do
-          expect(delivery_system).to eq('dummy_api')
-        end
-      end
-
-      context 'and delivery_system is defined in Mail::Message object' do
-        let(:mail_options) { { delivery_system: 'dummy_api' } }
-        let(:default_delivery_system) { nil }
-
-        it 'returns with the delivery system from Mail::Message' do
-          expect(delivery_system).to eq('dummy_api')
-        end
-      end
-
-      context 'and delivery_system does NOT defined' do
-        let(:mail_options) { {} }
-        let(:default_delivery_system) { nil }
-
-        it 'returns with nil' do
-          expect(delivery_system).to be nil
-        end
-      end
-    end
-
-    # rubocop:disable RSpec/AnyInstance
-    context 'when calls delivery_system more time' do
+    context 'when message does NOT exist' do
       let(:delivery_options) { nil }
       let(:client) { nil }
-      let(:mail_options) { {} }
       let(:default_delivery_system) { nil }
+      let(:message) { nil }
 
-      before do
-        allow_any_instance_of(described_class)
-          .to receive(:message_field_value_from)
-          .and_return('dummy_api')
-        delivery_system
-      end
-
-      it 'returns back with memoized value' do
-        expect_any_instance_of(described_class)
-          .not_to receive(:message_field_value_from)
-        delivery_system
+      it 'does NOT raise error' do
+        expect { delivery_system }.not_to raise_error
       end
     end
-    # rubocop:enable RSpec/AnyInstance
+
+    context 'when message exists' do
+      let(:message) { Mail.new(mail_options) }
+
+      context 'and both delivery_options and client are hashes' do
+        let(:delivery_options) { { 'dummy_api' => %i[to from subject body] } }
+        let(:client) { { 'dummy_api' => DummyApi } }
+
+        context 'and default_delivery_system is defined' do
+          let(:mail_options) { {} }
+          let(:default_delivery_system) { 'dummy_api' }
+
+          it 'returns with the default delivery system' do
+            expect(delivery_system).to eq('dummy_api')
+          end
+        end
+
+        context 'and delivery_system is defined in Mail::Message object' do
+          let(:mail_options) { { delivery_system: 'dummy_api' } }
+          let(:default_delivery_system) { nil }
+
+          it 'returns with the delivery system from Mail::Message' do
+            expect(delivery_system).to eq('dummy_api')
+          end
+        end
+
+        context 'and delivery_system does NOT defined' do
+          let(:mail_options) { {} }
+          let(:default_delivery_system) { nil }
+
+          it 'raises error' do
+            expect { delivery_system }
+              .to raise_error(MailPlugger::Error::WrongDeliverySystem)
+          end
+        end
+      end
+
+      context 'and one of the delivery_options and client is a hash' do
+        let(:delivery_options) { { 'dummy_api' => %i[to from subject body] } }
+        let(:client) { DummyApi }
+
+        context 'and default_delivery_system is defined' do
+          let(:mail_options) { {} }
+          let(:default_delivery_system) { 'dummy_api' }
+
+          it 'returns with the default delivery system' do
+            expect(delivery_system).to eq('dummy_api')
+          end
+        end
+
+        context 'and delivery_system is defined in Mail::Message object' do
+          let(:mail_options) { { delivery_system: 'dummy_api' } }
+          let(:default_delivery_system) { nil }
+
+          it 'returns with the delivery system from Mail::Message' do
+            expect(delivery_system).to eq('dummy_api')
+          end
+        end
+
+        context 'and delivery_system does NOT defined' do
+          let(:mail_options) { {} }
+          let(:default_delivery_system) { nil }
+
+          it 'raises error' do
+            expect { delivery_system }
+              .to raise_error(MailPlugger::Error::WrongDeliverySystem)
+          end
+        end
+      end
+
+      context 'and none of the delivery_options and client are hashes' do
+        let(:delivery_options) { %i[to from subject body] }
+        let(:client) { DummyApi }
+
+        context 'and default_delivery_system is defined' do
+          let(:mail_options) { {} }
+          let(:default_delivery_system) { 'dummy_api' }
+
+          it 'returns with the default delivery system' do
+            expect(delivery_system).to eq('dummy_api')
+          end
+        end
+
+        context 'and delivery_system is defined in Mail::Message object' do
+          let(:mail_options) { { delivery_system: 'dummy_api' } }
+          let(:default_delivery_system) { nil }
+
+          it 'returns with the delivery system from Mail::Message' do
+            expect(delivery_system).to eq('dummy_api')
+          end
+        end
+
+        context 'and delivery_system does NOT defined' do
+          let(:mail_options) { {} }
+          let(:default_delivery_system) { nil }
+
+          it 'returns with nil' do
+            expect(delivery_system).to be nil
+          end
+        end
+      end
+
+      # rubocop:disable RSpec/AnyInstance
+      context 'and calls delivery_system more time' do
+        let(:delivery_options) { nil }
+        let(:client) { nil }
+        let(:mail_options) { {} }
+        let(:default_delivery_system) { nil }
+
+        before do
+          allow_any_instance_of(described_class)
+            .to receive(:message_field_value_from)
+            .and_return('dummy_api')
+          delivery_system
+        end
+
+        it 'returns back with memoized value' do
+          expect_any_instance_of(described_class)
+            .not_to receive(:message_field_value_from)
+          delivery_system
+        end
+      end
+      # rubocop:enable RSpec/AnyInstance
+    end
   end
 
   describe '#mail_field_value' do
@@ -633,10 +648,20 @@ RSpec.describe MailPlugger::MailHelper do
     let(:message) { Mail.new(delivery_system: 'key') }
 
     context 'when option does NOT a hash' do
-      let(:option) { 'option' }
+      context 'and option is a string' do
+        let(:option) { 'option' }
 
-      it 'returns with the given class' do
-        expect(value).to eq(option)
+        it 'returns with the given value' do
+          expect(value).to eq(option)
+        end
+      end
+
+      context 'and option is nil' do
+        let(:option) { nil }
+
+        it 'returns with nil' do
+          expect(value).to be nil
+        end
       end
     end
 
@@ -644,8 +669,8 @@ RSpec.describe MailPlugger::MailHelper do
       context 'and it does NOT find the key' do
         let(:option) { {} }
 
-        it 'returns with nil' do
-          expect(value).to be nil
+        it 'returns with the given hash' do
+          expect(value).to eq(option)
         end
       end
 
@@ -657,5 +682,57 @@ RSpec.describe MailPlugger::MailHelper do
         end
       end
     end
+  end
+
+  describe '#settings' do
+    subject(:settings) do
+      TestClass.new(delivery_settings: delivery_settings).settings
+    end
+
+    context 'when delivery_settings does NOT a hash' do
+      context 'but it is nil' do
+        let(:delivery_settings) { nil }
+
+        it 'returns with empty hash' do
+          expect(settings).to eq({})
+        end
+      end
+
+      context 'but it is string' do
+        let(:delivery_settings) { 'settings' }
+
+        it 'raises error' do
+          expect { settings }
+            .to raise_error(MailPlugger::Error::WrongDeliverySettings)
+        end
+      end
+    end
+
+    context 'when delivery_settings is a hash' do
+      let(:delivery_settings) { { key: :value } }
+
+      it 'returns with the hash' do
+        expect(settings).to eq(delivery_settings)
+      end
+    end
+
+    # rubocop:disable RSpec/AnyInstance
+    context 'and calls settings more time' do
+      before do
+        allow_any_instance_of(described_class)
+          .to receive(:option_value_from)
+          .and_return(delivery_settings)
+        settings
+      end
+
+      let(:delivery_settings) { { key: :value } }
+
+      it 'returns back with memoized value' do
+        expect_any_instance_of(described_class)
+          .not_to receive(:option_value_from)
+        settings
+      end
+    end
+    # rubocop:enable RSpec/AnyInstance
   end
 end

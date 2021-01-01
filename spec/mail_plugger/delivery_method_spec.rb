@@ -14,6 +14,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
   end
   let(:delivery_system) { 'dummy_api' }
   let(:delivery_options) { %i[to from subject body] }
+  let(:delivery_settings) { { key: :value } }
   let(:client) { DummyApi }
 
   describe '#initialize' do
@@ -24,6 +25,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
         before do
           MailPlugger.plug_in(delivery_system) do |api|
             api.delivery_options = delivery_options
+            api.delivery_settings = delivery_settings
             api.client = client
           end
         end
@@ -49,6 +51,11 @@ RSpec.describe MailPlugger::DeliveryMethod do
             .to eq(delivery_system)
         end
 
+        it 'sets delivery_settings with expected value' do
+          expect(init_method.instance_variable_get('@delivery_settings'))
+            .to eq({ delivery_system => delivery_settings })
+        end
+
         it 'sets message with nil' do
           expect(init_method.instance_variable_get('@message')).to be nil
         end
@@ -69,6 +76,11 @@ RSpec.describe MailPlugger::DeliveryMethod do
             .to be nil
         end
 
+        it 'does NOT set delivery_settings' do
+          expect(init_method.instance_variable_get('@delivery_settings'))
+            .to be nil
+        end
+
         it 'sets message with nil' do
           expect(init_method.instance_variable_get('@message')).to be nil
         end
@@ -80,7 +92,8 @@ RSpec.describe MailPlugger::DeliveryMethod do
         described_class.new(
           delivery_options: delivery_options,
           client: client,
-          default_delivery_system: delivery_system
+          default_delivery_system: delivery_system,
+          delivery_settings: delivery_settings
         )
       end
 
@@ -88,6 +101,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
         before do
           MailPlugger.plug_in('different_api') do |api|
             api.delivery_options = 'different options'
+            api.delivery_settings = 'different settings'
             api.client = 'different client'
           end
         end
@@ -112,6 +126,11 @@ RSpec.describe MailPlugger::DeliveryMethod do
             .to eq(delivery_system)
         end
 
+        it 'sets delivery_settings with given value' do
+          expect(init_method.instance_variable_get('@delivery_settings'))
+            .to eq(delivery_settings)
+        end
+
         it 'sets message with nil' do
           expect(init_method.instance_variable_get('@message')).to be nil
         end
@@ -130,6 +149,11 @@ RSpec.describe MailPlugger::DeliveryMethod do
         it 'sets default_delivery_system with given value' do
           expect(init_method.instance_variable_get('@default_delivery_system'))
             .to eq(delivery_system)
+        end
+
+        it 'sets delivery_settings with given value' do
+          expect(init_method.instance_variable_get('@delivery_settings'))
+            .to eq(delivery_settings)
         end
 
         it 'sets message with nil' do
