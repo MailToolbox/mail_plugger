@@ -18,6 +18,9 @@ Metrics/BlockLength:
 Metrics/MethodLength:
   Max: 20
 
+Metrics/ModuleLength:
+  Max: 150
+
 Lint/AmbiguousBlockAssociation:
   Exclude:
     - spec/**/*
