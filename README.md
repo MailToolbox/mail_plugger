@@ -39,6 +39,13 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 Bug reports and pull requests are welcome. Please read [CONTRIBUTING.md](https://github.com/norbertszivos/mail_plugger/blob/main/CONTRIBUTING.md) if you would like to contribute to this project.
 
+## Inspiration
+
+- [T-mailer](https://github.com/100Starlings/t-mailer)
+- [Mandrill DM](https://github.com/kshnurov/mandrill_dm)
+- [SparkPost Rails](https://github.com/the-refinery/sparkpost_rails)
+- and other solutions regarding in this topic
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://github.com/norbertszivos/mail_plugger/blob/main/LICENSE.txt).
