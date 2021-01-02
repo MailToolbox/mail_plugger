@@ -25,7 +25,9 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+[Use MailPlugger in a Ruby script or IRB console](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_script_or_console.md)
+
+[Use MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md)
 
 ## Development
 
