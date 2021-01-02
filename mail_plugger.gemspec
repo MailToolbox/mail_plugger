@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.metadata['source_code_uri'] =
     'https://github.com/norbertszivos/mail_plugger'
   spec.metadata['changelog_uri'] =
-    'https://github.com/norbertszivos/mail_plugger/CHANGELOG.md'
+    'https://github.com/norbertszivos/mail_plugger/blob/main/CHANGELOG.md'
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem
