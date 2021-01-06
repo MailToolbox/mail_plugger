@@ -42,6 +42,8 @@ module MailPlugger
       data = {}
 
       delivery_options.each do |option|
+        option = option.to_sym unless option.is_a?(Symbol)
+
         data[option] =
           case option
           when :from, :to, :cc, :bcc, :subject

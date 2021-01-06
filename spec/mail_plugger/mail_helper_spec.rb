@@ -308,6 +308,30 @@ RSpec.describe MailPlugger::MailHelper do
         expect(delivery_data).to eq(expected_hash)
       end
     end
+
+    context 'when delivery_options is an array of string' do
+      let(:message) do
+        Mail.new do
+          from    'from@example.com'
+          to      'to@example.com'
+          subject 'This is the message subject'
+          body    'This is the message body'
+        end
+      end
+      let(:delivery_options) { %w[from to subject body] }
+      let(:expected_hash) do
+        {
+          from: ['from@example.com'],
+          to: ['to@example.com'],
+          subject: 'This is the message subject',
+          body: 'This is the message body'
+        }
+      end
+
+      it 'returns back with the right data' do
+        expect(delivery_data).to eq(expected_hash)
+      end
+    end
     # rubocop:enable RSpec/VariableDefinition, RSpec/VariableName
   end
 
