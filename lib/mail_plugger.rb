@@ -9,7 +9,7 @@ require 'mail_plugger/version'
 
 module MailPlugger
   class << self
-    attr_reader :delivery_options, :delivery_settings, :client
+    attr_reader :client, :delivery_options, :delivery_settings
 
     # Plug in defined API(s) class.
     #
@@ -19,16 +19,12 @@ module MailPlugger
     #
     # The defined API class should have an 'initializer' and a 'deliver' method.
     #   class DefinedApiClientClass
-    #     def initialize(options = {}) # required
-    #       @settings = { api_key: ENV['API_KEY'] }
-    #       @massage_to = options[:to]
-    #       @message_from = options[:from]
-    #       @message_subject = options[:subject]
-    #       @message_body_text = options[:text_part]
-    #       @message_body_html = options[:html_part]
+    #     def initialize(options = {})
+    #       @settings = { api_key: '12345' }
+    #       @options = options
     #     end
     #
-    #     def deliver # required
+    #     def deliver
     #       API.new(@settings).client.post(generate_mail_hash)
     #     end
     #
@@ -38,24 +34,24 @@ module MailPlugger
     #       {
     #         to: generate_recipients,
     #         from: {
-    #           email: @message_from
+    #           email: @options[:from].first
     #         },
-    #         subject: @message_subject,
+    #         subject: @options[:subject],
     #         content: [
     #           {
     #             type: 'text/plain',
-    #             value: @message_body_text
+    #             value: @options[:text_part]
     #           },
     #           {
-    #             type: 'text/html',
-    #             value: @message_body_html
+    #             type: 'text/html; charset=UTF-8',
+    #             value: @options[:html_part]
     #           }
     #         ]
     #       }
     #     end
     #
     #     def generate_recipients
-    #       @massage_to.map do |to|
+    #       @options[:to].map do |to|
     #         {
     #           email: to
     #         }
@@ -63,10 +59,10 @@ module MailPlugger
     #     end
     #   end
     #
-    #   MailPlugger.plug_in('definedapi') do |api|
+    #   MailPlugger.plug_in('defined_api') do |api|
     #     # It will search these options in the Mail::Message object
     #     api.delivery_options = [:to, :from, :subject, :text_part, :html_part]
-    #
+    #     api.delivery_settings = { return_response: true }
     #     api.client = DefinedApiClientClass
     #   end
     #
@@ -88,10 +84,10 @@ module MailPlugger
       raise Error::WrongPlugInOption, e.message
     end
 
-    # Define 'delivery_options' and 'client' setter methods. These methods are
-    # generating a hash where the key is the 'delivery_system'. This let us to
-    # set/use more than one API.
-    %w[delivery_options delivery_settings client].each do |method|
+    # Define 'client', 'delivery_options' and 'delivery_settings' setter
+    # methods. These methods are generating a hash where the key is the
+    # 'delivery_system'. This let us to set/use more than one API.
+    %w[client delivery_options delivery_settings].each do |method|
       define_method "#{method}=" do |value|
         variable = instance_variable_get("@#{method}")
         variable = instance_variable_set("@#{method}", {}) if variable.nil?

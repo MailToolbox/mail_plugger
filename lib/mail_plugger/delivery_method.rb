@@ -8,18 +8,24 @@ module MailPlugger
     # method, then these attributes can be nil, if not then we should set these
     # attributes.
     #
-    # @param [Hash] options with the credentials
+    # @param [Hash] options below
+    #   - `client` [Class/Hash] e.g. DefinedApiClientClass or
+    #     { 'key' => DefinedApiClientClass }
+    #   - `delivery_options` [Array/Hash] e.g. [:to, :from, :subject, :body]
+    #     { 'key' => [:to, :from, :subject, :body] }
+    #   - `delivery_settings` [Hash] e.g. { return_response: true }
+    #   - `default_delivery_system` [String/Symbol] e.g. 'defined_api'
     def initialize(options = {})
+      @client                  = options[:client] || MailPlugger.client
+
       @delivery_options        = options[:delivery_options] ||
                                  MailPlugger.delivery_options
 
-      @client                  = options[:client] || MailPlugger.client
+      @delivery_settings       = options[:delivery_settings] ||
+                                 MailPlugger.delivery_settings
 
       @default_delivery_system = options[:default_delivery_system] ||
                                  default_delivery_system_get
-
-      @delivery_settings       = options[:delivery_settings] ||
-                                 MailPlugger.delivery_settings
 
       @message                 = nil
     end
@@ -31,6 +37,31 @@ module MailPlugger
     # provided client class which has a 'deliver' method.
     #
     # @param [Mail::Message] message what we would like to send
+    #
+    # @return [Mail::Message/Hash] depend on delivery_settings and method calls
+    #
+    # @example
+    #
+    #   MailPlugger.plug_in('test_api_client') do |api|
+    #     api.delivery_options = %i[from to subject body]
+    #     api.client = DefinedApiClientClass
+    #   end
+    #
+    #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
+    #                      subject: 'Test email', body: 'Test email body')
+    #
+    #   MailPlugger::DeliveryMethod.new.deliver!(message)
+    #
+    # or
+    #
+    #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
+    #                      subject: 'Test email', body: 'Test email body')
+    #
+    #   MailPlugger::DeliveryMethod.new(
+    #     delivery_options: %i[from to subject body],
+    #     client: DefinedApiClientClass
+    #   ).deliver!(message)
+    #
     def deliver!(message)
       unless message.is_a?(Mail::Message)
         raise Error::WrongParameter,
