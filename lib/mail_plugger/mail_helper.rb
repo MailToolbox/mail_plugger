@@ -53,7 +53,7 @@ module MailPlugger
           when :body, :html_part, :text_part
             @message.public_send(option)&.decoded
           else
-            message_field_value_from(@message[option.to_s])
+            message_field_value_from(@message[option])
           end
       end
 
@@ -97,7 +97,7 @@ module MailPlugger
     # @return [String] with the name of the delivery system
     def delivery_system
       @delivery_system ||=
-        (@message && message_field_value_from(@message['delivery_system'])) ||
+        (@message && message_field_value_from(@message[:delivery_system])) ||
         @default_delivery_system
 
       if @delivery_system.nil? &&

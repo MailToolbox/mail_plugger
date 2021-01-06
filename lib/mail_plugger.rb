@@ -71,9 +71,14 @@ module MailPlugger
     #   end
     #
     def plug_in(delivery_system)
-      if delivery_system.nil? || delivery_system.strip.empty?
-        raise Error::WrongDeliverySystem, 'Delivery system is nil or empty. ' \
-          'You should provide correct MailPlugger.plug_in parameter'
+      if delivery_system.nil? ||
+         (delivery_system.is_a?(String) && delivery_system.strip.empty?)
+        raise Error::WrongDeliverySystem, '"delivery_system" is nil or empty.'
+      end
+
+      unless delivery_system.is_a?(String) || delivery_system.is_a?(Symbol)
+        raise Error::WrongDeliverySystem, '"delivery_system" does not a ' \
+          'String or Symbol.'
       end
 
       @delivery_system = delivery_system

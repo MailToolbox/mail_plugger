@@ -43,6 +43,34 @@ RSpec.describe MailPlugger do
       end
     end
 
+    context 'when delivery system is an empty array' do
+      it 'raises error' do
+        expect { described_class.plug_in([]) {} }
+          .to raise_error(described_class::Error::WrongDeliverySystem)
+      end
+    end
+
+    context 'when delivery system is an array' do
+      it 'raises error' do
+        expect { described_class.plug_in([:dummy_api]) {} }
+          .to raise_error(described_class::Error::WrongDeliverySystem)
+      end
+    end
+
+    context 'when delivery system is an empty hash' do
+      it 'raises error' do
+        expect { described_class.plug_in({}) {} }
+          .to raise_error(described_class::Error::WrongDeliverySystem)
+      end
+    end
+
+    context 'when delivery system is a hash' do
+      it 'raises error' do
+        expect { described_class.plug_in({ key: :value }) {} }
+          .to raise_error(described_class::Error::WrongDeliverySystem)
+      end
+    end
+
     context 'when api options are missing' do
       let(:delivery_system) { 'dummy_api' }
 
@@ -79,7 +107,6 @@ RSpec.describe MailPlugger do
     end
 
     context 'when plug in a delivery system' do
-      let(:delivery_system) { 'dummy_api' }
       let(:delivery_options) { %i[to from subject body] }
       let(:delivery_settings) { { key: :value } }
 
@@ -91,26 +118,38 @@ RSpec.describe MailPlugger do
         end
       end
 
-      it 'sets delivery_options' do
-        expect(described_class.delivery_options)
-          .to eq({ delivery_system => delivery_options })
+      shared_examples 'setting with the right data' do
+        it 'sets delivery_options' do
+          expect(described_class.delivery_options)
+            .to eq({ delivery_system => delivery_options })
+        end
+
+        it 'sets delivery_settings' do
+          expect(described_class.delivery_settings)
+            .to eq({ delivery_system => delivery_settings })
+        end
+
+        it 'sets client' do
+          expect(described_class.client).to eq({ delivery_system => DummyApi })
+        end
       end
 
-      it 'sets delivery_settings' do
-        expect(described_class.delivery_settings)
-          .to eq({ delivery_system => delivery_settings })
+      context 'and delivery_system value is string' do
+        let(:delivery_system) { 'dummy_api' }
+
+        it_behaves_like 'setting with the right data'
       end
 
-      it 'sets client' do
-        expect(described_class.client).to eq({ delivery_system => DummyApi })
+      context 'and delivery_system value is symbol' do
+        let(:delivery_system) { :dummy_api }
+
+        it_behaves_like 'setting with the right data'
       end
     end
 
     context 'when plug in more delivery systems' do
-      let(:delivery_system) { 'dummy_api' }
       let(:delivery_options) { %i[to from subject body] }
       let(:delivery_settings) { { key: :value } }
-      let(:another_delivery_system) { 'another_dummy_api' }
       let(:another_delivery_options) { %i[to from subject text_part html_part] }
 
       before do
@@ -126,25 +165,41 @@ RSpec.describe MailPlugger do
         end
       end
 
-      it 'sets delivery_options' do
-        expect(described_class.delivery_options)
-          .to eq({
-                   delivery_system => delivery_options,
-                   another_delivery_system => another_delivery_options
-                 })
+      shared_examples 'setting with the right data' do
+        it 'sets delivery_options' do
+          expect(described_class.delivery_options)
+            .to eq({
+                     delivery_system => delivery_options,
+                     another_delivery_system => another_delivery_options
+                   })
+        end
+
+        it 'sets delivery_settings where was added' do
+          expect(described_class.delivery_settings)
+            .to eq({ delivery_system => delivery_settings })
+        end
+
+        it 'sets client' do
+          expect(described_class.client)
+            .to eq({
+                     delivery_system => DummyApi,
+                     another_delivery_system => AnotherDummyApi
+                   })
+        end
       end
 
-      it 'sets delivery_settings where was added' do
-        expect(described_class.delivery_settings)
-          .to eq({ delivery_system => delivery_settings })
+      context 'and delivery_systems value are string' do
+        let(:delivery_system) { 'dummy_api' }
+        let(:another_delivery_system) { 'another_dummy_api' }
+
+        it_behaves_like 'setting with the right data'
       end
 
-      it 'sets client' do
-        expect(described_class.client)
-          .to eq({
-                   delivery_system => DummyApi,
-                   another_delivery_system => AnotherDummyApi
-                 })
+      context 'and delivery_systems value are symbol' do
+        let(:delivery_system) { :dummy_api }
+        let(:another_delivery_system) { :another_dummy_api }
+
+        it_behaves_like 'setting with the right data'
       end
     end
   end

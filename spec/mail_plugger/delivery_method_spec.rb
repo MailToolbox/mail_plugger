@@ -226,13 +226,30 @@ RSpec.describe MailPlugger::DeliveryMethod do
               context 'and the given delivery_system exists' do
                 let(:message) { Mail.new(delivery_system: delivery_system) }
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
+                context 'and delivery_system value is string' do
+                  let(:delivery_system) { 'dummy_api' }
+
+                  it 'does NOT raise error' do
+                    expect { deliver }.not_to raise_error
+                  end
+
+                  it 'calls deliver method of the client' do
+                    expect(client).to receive_message_chain(:new, :deliver)
+                    deliver
+                  end
                 end
 
-                it 'calls deliver method of the client' do
-                  expect(client).to receive_message_chain(:new, :deliver)
-                  deliver
+                context 'and delivery_system value is symbol' do
+                  let(:delivery_system) { :dummy_api }
+
+                  it 'does NOT raise error' do
+                    expect { deliver }.not_to raise_error
+                  end
+
+                  it 'calls deliver method of the client' do
+                    expect(client).to receive_message_chain(:new, :deliver)
+                    deliver
+                  end
                 end
               end
             end
@@ -507,13 +524,30 @@ RSpec.describe MailPlugger::DeliveryMethod do
                 context 'and the given delivery_system exists' do
                   let(:message) { Mail.new(delivery_system: delivery_system) }
 
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
+                  context 'and delivery_system value is string' do
+                    let(:delivery_system) { 'dummy_api' }
+
+                    it 'does NOT raise error' do
+                      expect { deliver }.not_to raise_error
+                    end
+
+                    it 'calls deliver method of the client' do
+                      expect(DummyApi).to receive_message_chain(:new, :deliver)
+                      deliver
+                    end
                   end
 
-                  it 'calls deliver method of the client' do
-                    expect(DummyApi).to receive_message_chain(:new, :deliver)
-                    deliver
+                  context 'and delivery_system value is symbol' do
+                    let(:delivery_system) { :dummy_api }
+
+                    it 'does NOT raise error' do
+                      expect { deliver }.not_to raise_error
+                    end
+
+                    it 'calls deliver method of the client' do
+                      expect(DummyApi).to receive_message_chain(:new, :deliver)
+                      deliver
+                    end
                   end
                 end
               end

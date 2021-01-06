@@ -634,6 +634,14 @@ RSpec.describe MailPlugger::MailHelper do
         end
       end
 
+      context 'and value is a symbol' do
+        let(:mail_options) { { test_field: :test_field_value } }
+
+        it 'returns with the symbol' do
+          expect(value).to eq(:test_field_value)
+        end
+      end
+
       context 'and value is a boolean' do
         let(:mail_options) { { test_field: true } }
 
