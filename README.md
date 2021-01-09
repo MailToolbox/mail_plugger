@@ -32,6 +32,7 @@ Or install it yourself as:
 - [Use MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md)
   - [How to add API specific options to the mailer method in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_secial_options_in_ruby_on_rails.md)
   - [How to use more delivey systems in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_more_delivery_system_in_ruby_on_rails.md)
+  - [How to use AWS SES with MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_aws_ses_in_ruby_on_rails.md)
 
 ## Development
 
