@@ -56,11 +56,15 @@ class TestApiClientClass
 end
 ```
 
+We can add simple options to `MailPlugger::DeliveryMethod`.
+
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 
 MailPlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], client: TestApiClientClass).deliver!(message)
 ```
+
+Or we can add these options in Hash and set `default_delivery_system`.
 
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -68,17 +72,23 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 MailPlugger::DeliveryMethod.new(delivery_options: { 'test_api_client' => %i[from to subject body] }, client: { 'test_api_client' => TestApiClientClass }, default_delivery_system: 'test_api_client').deliver!(message)
 ```
 
+Add `delivery_system` in the `Mail::Message` object (it will search this value in the given Hash).
+
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body', delivery_system: 'test_api_client')
 
 MailPlugger::DeliveryMethod.new(delivery_options: { 'test_api_client' => %i[from to subject body] }, client: { 'test_api_client' => TestApiClientClass }).deliver!(message)
 ```
 
+If we are not adding `delivery_system` anywhere then it will use the first key of the Hash.
+
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 
 MailPlugger::DeliveryMethod.new(delivery_options: { 'test_api_client' => %i[from to subject body] }, client: { 'test_api_client' => TestApiClientClass }).deliver!(message)
 ```
+
+We can use `MailPlugger.plug_in` to add our configurations.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|

@@ -30,6 +30,8 @@ Or install it yourself as:
 - [How to use MailPlugger::DeliveryMethod class](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_delivery_method.md)
 - [Use MailPlugger in a Ruby script or IRB console](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_script_or_console.md)
 - [Use MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md)
+  - [How to add API specific options to the mailer method in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_secial_options_in_ruby_on_rails.md)
+  - [How to use more delivey systems in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_more_delivery_system_in_ruby_on_rails.md)
 
 ## Development
 
