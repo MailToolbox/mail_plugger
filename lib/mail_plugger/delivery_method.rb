@@ -9,12 +9,18 @@ module MailPlugger
     # attributes.
     #
     # @param [Hash] options below
-    #   - `client` [Class/Hash] e.g. DefinedApiClientClass or
-    #     { 'key' => DefinedApiClientClass }
-    #   - `delivery_options` [Array/Hash] e.g. [:to, :from, :subject, :body]
-    #     { 'key' => [:to, :from, :subject, :body] }
-    #   - `delivery_settings` [Hash] e.g. { return_response: true }
-    #   - `default_delivery_system` [String/Symbol] e.g. 'defined_api'
+    # @option options [Class/Hash] :client
+    #   e.g. DefinedApiClientClass or { 'key' => DefinedApiClientClass }
+    #
+    # @option options [Array/Hash] delivery_options
+    #   e.g. [:to, :from, :subject, :body] or
+    #   { 'key' => [:to, :from, :subject, :body] }
+    #
+    # @option options [Hash] delivery_settings
+    #   e.g. { return_response: true }
+    #
+    # @option options [String/Symbol] default_delivery_system
+    #   e.g. 'defined_api'
     def initialize(options = {})
       @client                  = options[:client] || MailPlugger.client
 

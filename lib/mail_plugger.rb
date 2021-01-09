@@ -13,7 +13,7 @@ module MailPlugger
 
     # Plug in defined API(s) class.
     #
-    # @param [String] delivery_system the name of the API
+    # @param [String/Symbol] delivery_system the name of the API
     #
     # @example using Rails config/initializers/mail_plugger.rb
     #
