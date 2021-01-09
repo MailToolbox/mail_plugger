@@ -52,6 +52,8 @@ module MailPlugger
             extract_attachments
           when :body, :html_part, :text_part
             @message.public_send(option)&.decoded
+          when :message_obj
+            @message
           else
             message_field_value_from(@message[option])
           end

@@ -293,7 +293,7 @@ RSpec.describe MailPlugger::MailHelper do
         message
       end
       let(:delivery_options) do
-        %i[from to subject body string boolean array hash]
+        %i[from to subject body string boolean array hash message_obj]
       end
       let(:expected_hash) do
         {
@@ -304,7 +304,8 @@ RSpec.describe MailPlugger::MailHelper do
           string: 'This is the string',
           boolean: true,
           array: ['This', 'is', 'the array'],
-          hash: { this: 'is the hash' }
+          hash: { this: 'is the hash' },
+          message_obj: message
         }
       end
 
