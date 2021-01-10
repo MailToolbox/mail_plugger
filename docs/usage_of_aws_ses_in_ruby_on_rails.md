@@ -17,7 +17,7 @@ Then run `bundle install` command to deploy the gem.
 Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
 
 ```ruby
-class AwsSes
+class AwsSesApiClient
   def initialize(options = {})
     @credentials = Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
     @region = ENV['AWS_DEFAULT_REGION']
@@ -66,7 +66,7 @@ end
 MailPlugger.plug_in('aws_ses') do |api|
   api.delivery_options = %i[from to subject text_part html_part message_obj tag configuration_set_name]
   api.delivery_settings = { return_response: true }
-  api.client = AwsSes
+  api.client = AwsSesApiClient
 end
 ```
 
@@ -87,7 +87,7 @@ end
 Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
 
 ```ruby
-class AwsSes
+class AwsSesApiClient
   def initialize(options = {})
     @credentials = Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
     @region = ENV['AWS_DEFAULT_REGION']
@@ -119,7 +119,7 @@ end
 MailPlugger.plug_in('aws_ses') do |api|
   api.delivery_options = %i[message_obj tag configuration_set_name]
   api.delivery_settings = { return_response: true }
-  api.client = AwsSes
+  api.client = AwsSesApiClient
 end
 ```
 

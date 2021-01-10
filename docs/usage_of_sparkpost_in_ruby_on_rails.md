@@ -17,7 +17,7 @@ Then run `bundle install` command to deploy the gem.
 Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
 
 ```ruby
-class SparkPost
+class SparkPostApiClient
   def initialize(options = {})
     @settings = { api_key: ENV['SPARKPOST_API_KEY'] }
     @options = options
@@ -63,7 +63,7 @@ end
 MailPlugger.plug_in('sparkpost') do |api|
   api.delivery_options = %i[from to subject text_part html_part options tag metadata]
   api.delivery_settings = { return_response: true }
-  api.client = SparkPost
+  api.client = SparkPostApiClient
 end
 ```
 
@@ -84,7 +84,7 @@ end
 Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
 
 ```ruby
-class SparkPost
+class SparkPostApiClient
   def initialize(options = {})
     @settings = { api_key: ENV['SPARKPOST_API_KEY'] }
     @options = options
@@ -125,7 +125,7 @@ end
 MailPlugger.plug_in('sparkpost') do |api|
   api.delivery_options = %i[to options message_obj tag metadata]
   api.delivery_settings = { return_response: true }
-  api.client = SparkPost
+  api.client = SparkPostApiClient
 end
 ```
 
