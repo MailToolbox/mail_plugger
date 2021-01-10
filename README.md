@@ -1,6 +1,7 @@
 # M<img src="https://github.com/norbertszivos/mail_plugger/blob/main/images/mail_plugger.png" height="25" />ilPlugger
 
 [![Gem Version](https://badge.fury.io/rb/mail_plugger.svg)](https://badge.fury.io/rb/mail_plugger)
+[![MIT license](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE.txt)
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop-hq/rubocop)
 [![Build Status](https://travis-ci.com/norbertszivos/mail_plugger.svg?branch=main)](https://travis-ci.com/norbertszivos/mail_plugger)
 [![Maintainability](https://api.codeclimate.com/v1/badges/bd2cda43214c111d8d16/maintainability)](https://codeclimate.com/github/norbertszivos/mail_plugger/maintainability)
