@@ -9,7 +9,7 @@ module MailPlugger
     # attributes.
     #
     # @param [Hash] options below
-    # @option options [Class/Hash] :client
+    # @option options [Class/Hash] client
     #   e.g. DefinedApiClientClass or { 'key' => DefinedApiClientClass }
     #
     # @option options [Array/Hash] delivery_options
