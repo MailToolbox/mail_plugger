@@ -1,4 +1,6 @@
-## How to use AWS SES with MailPlugger in Ruby on Rails
+# How to use AWS SES with MailPlugger in Ruby on Rails
+
+**Please note that these examples were not tested, but I believe it should work.**
 
 Let's use mailer method which was defined [here](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
 
@@ -10,7 +12,7 @@ gem 'aws-sdk-ses'
 
 Then run `bundle install` command to deploy the gem.
 
-### Send Email
+## Send Email
 
 Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
 
@@ -80,7 +82,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-### Send Raw Email
+## Send Raw Email
 
 Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
 

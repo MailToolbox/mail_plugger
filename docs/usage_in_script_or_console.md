@@ -1,4 +1,4 @@
-## Use MailPlugger in a Ruby script or IRB console
+# Use MailPlugger in a Ruby script or IRB console
 
 First you should be able to `require 'mail'` and `require 'mail_plugger'` to get started.
 

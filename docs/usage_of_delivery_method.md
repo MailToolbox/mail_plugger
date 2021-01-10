@@ -1,12 +1,12 @@
-## How to use MailPlugger::DeliveryMethod class
+# How to use MailPlugger::DeliveryMethod class
 
-With this class it can extract data from the Mail::Massage object and send message based on the given configurations. We can add these options directly in the `new` method or we can use `MailPlugger.plug_in` method as well.
+With this class it can extract data from the Mail::Message object and send message based on the given configurations. We can add these options directly in the `new` method or we can use `MailPlugger.plug_in` method as well.
 
 The `new` method parameter is a hash where the keys are Symbols.
 
 Hash parameters:
 - `client` which should a Class (It can be a Hash with this Class as well. In this case the key of the Hash is the `delivery_system` from the `Mail::Message` object or the `default_delivery_system`). This Class is a special class which generates the data and calls the API to send the message.
-- `delivery_options` which should be an Array with Symbols or Strings (It can be a Hash with this Array as well. In this case the key of the Hash is the `delivery_system` from the `Mail::Message` object or the `default_delivery_system`). It will search these options in the `Mail::Message` object like `from`, `to`, `cc`, `bcc`, `subject`, `body`, `text_part`, `html_part`, `attachments` or anything what we will add to this object.
+- `delivery_options` which should be an Array with Symbols or Strings (It can be a Hash with this Array as well. In this case the key of the Hash is the `delivery_system` from the `Mail::Message` object or the `default_delivery_system`). It will search these options in the `Mail::Message` object like `from`, `to`, `cc`, `bcc`, `subject`, `body`, `text_part`, `html_part`, `attachments` or anything what we will add to this object. Also we can retrieve the `Mail::Message` object with `message_obj`.
 - `delivery_settings` which should be a Hash. The Mail gem can use these settings like `{ return_response: true }` (The keys are should be Symbols).
 - `default_delivery_system` which should be a String or Symbol. This option is needed when `delivery_options` and `client` are Hashes. When `delivery_system` in the `Mail::Message` object is not defined then the `default_delivery_system` value is the key of those Hashes. When `default_delivery_system` is not defined then `default_delivery_system_get` will return with the frist key of `delivery_options` or `client` Hash.
 

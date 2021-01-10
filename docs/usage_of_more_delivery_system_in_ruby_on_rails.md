@@ -1,4 +1,4 @@
-## How to use more delivey systems in Ruby on Rails
+# How to use more delivey systems in Ruby on Rails
 
 Let's modify the configuration which was defined [here](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
 

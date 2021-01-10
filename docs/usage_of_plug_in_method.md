@@ -1,4 +1,4 @@
-## How to use MailPlugger.plug_in method
+# How to use MailPlugger.plug_in method
 
 With `plug_in` method we can add configurations for the delivery method.
 
@@ -6,7 +6,7 @@ It has a parameter which calls to `delivery_system`. This parameter is a name of
 
 It can accept 3 configurations:
 - `client` which should a Class. This Class is a special class which generates the data and calls the API to send the message.
-- `delivery_options` which should be an Array with Symbols or Strings. It will search these options in the `Mail::Message` object like `from`, `to`, `cc`, `bcc`, `subject`, `body`, `text_part`, `html_part`, `attachments` or anything what we will add to this object.
+- `delivery_options` which should be an Array with Symbols or Strings. It will search these options in the `Mail::Message` object like `from`, `to`, `cc`, `bcc`, `subject`, `body`, `text_part`, `html_part`, `attachments` or anything what we will add to this object. Also we can retrieve the `Mail::Message` object with `message_obj`.
 - `delivery_settings` which should be a Hash. The Mail gem can use these settings like `{ return_response: true }` (The keys are should be Symbols).
 
 Example:
