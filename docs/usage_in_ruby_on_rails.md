@@ -1,4 +1,4 @@
-# Use MailPlugger in Ruby on Rails
+# How to use MailPlugger in Ruby on Rails
 
 After to add `mail_plugger` gem and the gem of API of the mail provider, create `config/initializers/mail_plugger.rb` file and add something similar.
 
