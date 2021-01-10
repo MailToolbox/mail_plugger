@@ -67,15 +67,7 @@ module MailPlugger
     #   end
     #
     def plug_in(delivery_system)
-      if delivery_system.nil? ||
-         (delivery_system.is_a?(String) && delivery_system.strip.empty?)
-        raise Error::WrongDeliverySystem, '"delivery_system" is nil or empty.'
-      end
-
-      unless delivery_system.is_a?(String) || delivery_system.is_a?(Symbol)
-        raise Error::WrongDeliverySystem, '"delivery_system" does not a ' \
-          'String or Symbol.'
-      end
+      check_value(delivery_system)
 
       @delivery_system = delivery_system
 
@@ -93,6 +85,23 @@ module MailPlugger
         variable = instance_variable_set("@#{method}", {}) if variable.nil?
         variable[@delivery_system] = value
       end
+    end
+
+    private
+
+    def check_value(delivery_system)
+      if delivery_system.nil?
+        raise Error::WrongDeliverySystem, '"delivery_system" is nil.'
+      end
+
+      if delivery_system.is_a?(String) && delivery_system.strip.empty?
+        raise Error::WrongDeliverySystem, '"delivery_system" is empty.'
+      end
+
+      return if delivery_system.is_a?(String) || delivery_system.is_a?(Symbol)
+
+      raise Error::WrongDeliverySystem, '"delivery_system" does not a ' \
+        'String or Symbol.'
     end
   end
 end
