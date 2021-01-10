@@ -77,7 +77,7 @@ end
 In the `rails console` we can try it out.
 
 ```ruby
-TestMailer.send_test.deliver_now
+TestMailer.send_test.deliver_now!
 #  Rendering test_mailer/send_test.html.erb within layouts/mailer
 #  Rendered test_mailer/send_test.html.erb within layouts/mailer (0.9ms)
 #  Rendering test_mailer/send_test.text.erb within layouts/mailer
