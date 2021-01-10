@@ -36,6 +36,7 @@ Or install it yourself as:
   - [How to use one delivey system with more send methods in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_one_delivery_system_with_more_send_methods_in_ruby_on_rails.md)
   - [How to use AWS SES with MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_aws_ses_in_ruby_on_rails.md)
   - [How to use SparkPost with MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_sparkpost_in_ruby_on_rails.md)
+  - [How to use SendGrid with MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_sendgrid_in_ruby_on_rails.md)
 
 ## Development
 
