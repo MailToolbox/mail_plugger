@@ -39,6 +39,7 @@ Or install it yourself as:
   - [How to use SendGrid with MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_sendgrid_in_ruby_on_rails.md)
   - [How to use Mandrill with MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_mandrill_in_ruby_on_rails.md)
   - [How to use Postmark with MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_postmark_in_ruby_on_rails.md)
+  - [How to use Mailgun with MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_mailgun_in_ruby_on_rails.md)
 
 ## Development
 
