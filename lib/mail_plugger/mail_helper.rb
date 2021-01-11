@@ -130,7 +130,7 @@ module MailPlugger
       end
     end
 
-    # How to Extract the (uparsed) value of the mail message fields.
+    # How to Extract the (unparsed) value of the mail message fields.
     #
     # @return [String] version dependent method call
     def mail_field_value
