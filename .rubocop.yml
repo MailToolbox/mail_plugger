@@ -24,9 +24,6 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Max: 150
 
-Metrics/PerceivedComplexity:
-  Max: 15
-
 Lint/AmbiguousBlockAssociation:
   Exclude:
     - spec/**/*

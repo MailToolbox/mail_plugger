@@ -98,19 +98,27 @@ module MailPlugger
         (@message && message_field_value_from(@message[:delivery_system])) ||
         @default_delivery_system
 
-      if @delivery_options.is_a?(Hash) || @client.is_a?(Hash)
-        if @delivery_system.nil?
-          raise Error::WrongDeliverySystem,
-                '"delivery_system" was not defined as a Mail::Message parameter'
-        end
-
-        unless extract_keys&.include?(@delivery_system)
-          raise Error::WrongDeliverySystem,
-                "\"delivery_system\" '#{@delivery_system}' does not exist"
-        end
-      end
+      delivery_system_value_check
 
       @delivery_system
+    end
+
+    # Check the given 'delivery_options' or 'client' are hashes and
+    # if one of that does then check the 'delivery_system' is valid or not.
+    # If the given 'delivery_system' is nil or doesn't match with extracted keys
+    # then it will raise error.
+    def delivery_system_value_check
+      return unless @delivery_options.is_a?(Hash) || @client.is_a?(Hash)
+
+      if @delivery_system.nil?
+        raise Error::WrongDeliverySystem,
+              '"delivery_system" was not defined as a Mail::Message parameter'
+      end
+
+      return if extract_keys&.include?(@delivery_system)
+
+      raise Error::WrongDeliverySystem,
+            "\"delivery_system\" '#{@delivery_system}' does not exist"
     end
 
     # Extract attachments.
