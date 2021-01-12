@@ -91,17 +91,17 @@ module MailPlugger
 
     def check_value(delivery_system)
       if delivery_system.nil?
-        raise Error::WrongDeliverySystem, '"delivery_system" is nil.'
+        raise Error::WrongDeliverySystem, '"delivery_system" is nil'
       end
 
       if delivery_system.is_a?(String) && delivery_system.strip.empty?
-        raise Error::WrongDeliverySystem, '"delivery_system" is empty.'
+        raise Error::WrongDeliverySystem, '"delivery_system" is empty'
       end
 
       return if delivery_system.is_a?(String) || delivery_system.is_a?(Symbol)
 
       raise Error::WrongDeliverySystem, '"delivery_system" does not a ' \
-        'String or Symbol.'
+        'String or Symbol'
     end
   end
 end
