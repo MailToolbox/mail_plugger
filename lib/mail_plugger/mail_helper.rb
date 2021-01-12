@@ -126,14 +126,10 @@ module MailPlugger
     # @return [Array] with extracted attachment hashes
     def extract_attachments
       @message.attachments&.map do |attachment|
-        hash =
-          if attachment.inline?
-            { cid: attachment.cid }
-          else
-            { filename: attachment.filename }
-          end
+        hash = attachment.inline? ? { cid: attachment.cid } : {}
 
         hash.merge(
+          filename: attachment.filename,
           type: attachment.mime_type,
           content: Base64.encode64(attachment.decoded)
         )

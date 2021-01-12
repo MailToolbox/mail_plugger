@@ -260,6 +260,7 @@ RSpec.describe MailPlugger::MailHelper do
               },
               {
                 cid: message.attachments.inline['README.md'].cid,
+                filename: 'README.md',
                 type: 'text/markdown',
                 content: Base64.encode64(
                   File.read(
