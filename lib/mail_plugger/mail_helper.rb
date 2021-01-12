@@ -69,11 +69,7 @@ module MailPlugger
     #
     # @return [Stirng] the first key of the 'delivery_options' or 'client'
     def default_delivery_system_get
-      if @delivery_options.is_a?(Hash)
-        @delivery_options
-      elsif @client.is_a?(Hash)
-        @client
-      end&.keys&.first
+      extract_keys&.first
     end
 
     # Extract 'delivery_options'. If it's a hash then it'll return the right
@@ -102,10 +98,16 @@ module MailPlugger
         (@message && message_field_value_from(@message[:delivery_system])) ||
         @default_delivery_system
 
-      if @delivery_system.nil? &&
-         (@delivery_options.is_a?(Hash) || @client.is_a?(Hash))
-        raise Error::WrongDeliverySystem,
-              '"delivery_system" was not defined as a Mail::Message parameter'
+      if @delivery_options.is_a?(Hash) || @client.is_a?(Hash)
+        if @delivery_system.nil?
+          raise Error::WrongDeliverySystem,
+                '"delivery_system" was not defined as a Mail::Message parameter'
+        end
+
+        unless extract_keys&.include?(@delivery_system)
+          raise Error::WrongDeliverySystem,
+                "\"delivery_system\" '#{@delivery_system}' does not exist"
+        end
       end
 
       @delivery_system
@@ -128,6 +130,18 @@ module MailPlugger
           content: Base64.encode64(attachment.decoded)
         )
       end
+    end
+
+    # Extract keys from 'delivery_options' or 'client', depends on which is a
+    # hash. If none of these are hashes then returns nil.
+    #
+    # @return [Array/NilClass] with the keys of 'delivery_options' or 'client'
+    def extract_keys
+      if @delivery_options.is_a?(Hash)
+        @delivery_options
+      elsif @client.is_a?(Hash)
+        @client
+      end&.keys
     end
 
     # How to Extract the (unparsed) value of the mail message fields.

@@ -219,7 +219,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
 
                 it 'raises error' do
                   expect { deliver }
-                    .to raise_error(MailPlugger::Error::WrongApiClient)
+                    .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                 end
               end
 
@@ -377,7 +377,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
 
                   it 'raises error' do
                     expect { deliver }
-                      .to raise_error(MailPlugger::Error::WrongApiClient)
+                      .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                   end
                 end
 
@@ -420,7 +420,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
 
                   it 'raises error' do
                     expect { deliver }
-                      .to raise_error(MailPlugger::Error::WrongDeliveryOptions)
+                      .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                   end
                 end
 
@@ -517,7 +517,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
                   # default_delivery_system
                   it 'raises error' do
                     expect { deliver }
-                      .to raise_error(MailPlugger::Error::WrongApiClient)
+                      .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                   end
                 end
 
@@ -579,7 +579,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
 
                   it 'raises error' do
                     expect { deliver }
-                      .to raise_error(MailPlugger::Error::WrongDeliveryOptions)
+                      .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                   end
                 end
 
@@ -661,7 +661,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
                 # and delivery_options method gets nil value which is not Array
                 it 'raises error' do
                   expect { deliver }
-                    .to raise_error(MailPlugger::Error::WrongApiClient)
+                    .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                 end
               end
 
@@ -673,7 +673,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
                   # default_delivery_system and this also wrong
                   it 'raises error' do
                     expect { deliver }
-                      .to raise_error(MailPlugger::Error::WrongApiClient)
+                      .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                   end
                 end
 
@@ -704,7 +704,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
                 # and delivery_options method gets nil value which is not Array
                 it 'raises error' do
                   expect { deliver }
-                    .to raise_error(MailPlugger::Error::WrongDeliveryOptions)
+                    .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                 end
               end
 
@@ -716,7 +716,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
                   # default_delivery_system and this also wrong
                   it 'raises error' do
                     expect { deliver }
-                      .to raise_error(MailPlugger::Error::WrongDeliveryOptions)
+                      .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                   end
                 end
 

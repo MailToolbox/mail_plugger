@@ -582,6 +582,56 @@ RSpec.describe MailPlugger::MailHelper do
     end
   end
 
+  describe '#extract_keys' do
+    subject(:extract_keys) do
+      TestClass
+        .new(
+          delivery_options: delivery_options,
+          client: client
+        )
+        .extract_keys
+    end
+
+    context 'when delivery_options is a hash' do
+      let(:delivery_options) { { key1: :value1, key2: :value2 } }
+      let(:client) { nil }
+
+      it 'returns with the keys' do
+        expect(extract_keys).to eq(%i[key1 key2])
+      end
+    end
+
+    context 'when client is a hash' do
+      let(:delivery_options) { nil }
+      let(:client) { { 'key1' => 'value1', 'key2' => 'value2' } }
+
+      it 'returns with the keys' do
+        expect(extract_keys).to eq(%w[key1 key2])
+      end
+    end
+
+    context 'when both delivery_options and client are hashes' do
+      let(:delivery_options) { { key1: :value1, key2: :value2 } }
+      # both delivery_options and client should have the same keys,
+      # but now we can see that the delivery_options keys will be returned,
+      # which should be ok.
+      let(:client) { { key3: :value3, key4: :value4 } }
+
+      it 'returns with the first hash keys' do
+        expect(extract_keys).to eq(%i[key1 key2])
+      end
+    end
+
+    context 'when neither delivery_options nor client are hashes' do
+      let(:delivery_options) { nil }
+      let(:client) { nil }
+
+      it 'returns with nil' do
+        expect(extract_keys).to be nil
+      end
+    end
+  end
+
   describe '#mail_field_value' do
     subject(:field_value) { TestClass.new.mail_field_value }
 
