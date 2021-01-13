@@ -102,7 +102,7 @@ TestMailer.send_test.deliver_now!
 #  Rendered test_mailer/send_test.text.erb within layouts/mailer (0.2ms)
 #TestMailer#send_test: processed outbound mail in 31.6ms
 # >>> settings: {:api_key=>"12345"}
-# >>> options: {:from=>["from@example.com"], :to=>["to@example.com"], :subject=>"Test email", :text_part=>"Test email body\n\n", :html_part=>"<!DOCTYPE html>\n<html>\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <style>\n      /* Email styles need to be inline */\n    </style>\n  </head>\n\n  <body>\n    <p>Test email body</p>\n\n  </body>\n</html>\n", :send_method=>"send_email1"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "text_part"=>"Test email body\n\n", "html_part"=>"<!DOCTYPE html>\n<html>\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <style>\n      /* Email styles need to be inline */\n    </style>\n  </head>\n\n  <body>\n    <p>Test email body</p>\n\n  </body>\n</html>\n", "send_method"=>"send_email1"}
 # >>>>> send_email1 params: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body\n\n"}, {:type=>"text/html; charset=UTF-8", :value=>"<!DOCTYPE html>\n<html>\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <style>\n      /* Email styles need to be inline */\n    </style>\n  </head>\n\n  <body>\n    <p>Test email body</p>\n\n  </body>\n</html>\n"}]}
 #=> {:response=>"Send email version 1"}
 
@@ -113,7 +113,7 @@ TestMailer.send_test2.deliver_now!
 #  Rendered test_mailer/send_test2.text.erb within layouts/mailer (0.3ms)
 #TestMailer#send_test2: processed outbound mail in 17.5ms
 # >>> settings: {:api_key=>"12345"}
-# >>> options: {:from=>["from@example.com"], :to=>["to@example.com"], :subject=>"Test email", :text_part=>"Test email body\n\n", :html_part=>"<!DOCTYPE html>\n<html>\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <style>\n      /* Email styles need to be inline */\n    </style>\n  </head>\n\n  <body>\n    <p>Test email body</p>\n\n  </body>\n</html>\n", :send_method=>"send_email2"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "text_part"=>"Test email body\n\n", "html_part"=>"<!DOCTYPE html>\n<html>\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <style>\n      /* Email styles need to be inline */\n    </style>\n  </head>\n\n  <body>\n    <p>Test email body</p>\n\n  </body>\n</html>\n", "send_method"=>"send_email2"}
 # >>>>> send_email2 params: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body\n\n"}, {:type=>"text/html; charset=UTF-8", :value=>"<!DOCTYPE html>\n<html>\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <style>\n      /* Email styles need to be inline */\n    </style>\n  </head>\n\n  <body>\n    <p>Test email body</p>\n\n  </body>\n</html>\n"}]}
 #=> {:response=>"Send email version 2"}
 ```

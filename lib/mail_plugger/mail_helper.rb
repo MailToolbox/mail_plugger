@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'base64'
+require 'mail/indifferent_hash'
 
 module MailPlugger
   module MailHelper
@@ -59,7 +60,7 @@ module MailPlugger
           end
       end
 
-      data
+      Mail::IndifferentHash.new(data)
     end
 
     # Tries to set up a default delivery system, if the 'delivery_system'

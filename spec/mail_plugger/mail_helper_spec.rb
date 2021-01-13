@@ -169,10 +169,10 @@ RSpec.describe MailPlugger::MailHelper do
       let(:delivery_options) { %i[from to subject body] }
       let(:expected_hash) do
         {
-          from: ['from@example.com'],
-          to: ['to@example.com'],
-          subject: 'This is the message subject',
-          body: 'This is the message body'
+          'from' => ['from@example.com'],
+          'to' => ['to@example.com'],
+          'subject' => 'This is the message subject',
+          'body' => 'This is the message body'
         }
       end
 
@@ -202,16 +202,21 @@ RSpec.describe MailPlugger::MailHelper do
         let(:delivery_options) { %i[from to subject text_part html_part] }
         let(:expected_hash) do
           {
-            from: ['from@example.com'],
-            to: ['to@example.com'],
-            subject: 'This is the message subject',
-            text_part: 'This is plain text',
-            html_part: '<h1>This is HTML</h1>'
+            'from' => ['from@example.com'],
+            'to' => ['to@example.com'],
+            'subject' => 'This is the message subject',
+            'text_part' => 'This is plain text',
+            'html_part' => '<h1>This is HTML</h1>'
           }
         end
 
         it 'returns back with the right data' do
           expect(delivery_data).to eq(expected_hash)
+        end
+
+        it 'returns with indifferent hash' do
+          expect(delivery_data[:from]).to eq(['from@example.com'])
+          expect(delivery_data['from']).to eq(['from@example.com'])
         end
       end
 
@@ -243,26 +248,26 @@ RSpec.describe MailPlugger::MailHelper do
         end
         let(:expected_hash) do
           {
-            from: ['from@example.com'],
-            to: ['to@example.com'],
-            subject: 'This is the message subject',
-            text_part: 'This is plain text',
-            html_part: '<h1>This is HTML</h1>',
-            attachments: [
+            'from' => ['from@example.com'],
+            'to' => ['to@example.com'],
+            'subject' => 'This is the message subject',
+            'text_part' => 'This is plain text',
+            'html_part' => '<h1>This is HTML</h1>',
+            'attachments' => [
               {
-                filename: 'LICENSE.txt',
-                type: 'text/plain',
-                content: Base64.encode64(
+                'filename' => 'LICENSE.txt',
+                'type' => 'text/plain',
+                'content' => Base64.encode64(
                   File.read(
                     File.expand_path('../LICENSE.txt', File.dirname(__dir__))
                   )
                 )
               },
               {
-                cid: message.attachments.inline['README.md'].cid,
-                filename: 'README.md',
-                type: 'text/markdown',
-                content: Base64.encode64(
+                'cid' => message.attachments.inline['README.md'].cid,
+                'filename' => 'README.md',
+                'type' => 'text/markdown',
+                'content' => Base64.encode64(
                   File.read(
                     File.expand_path('../README.md', File.dirname(__dir__))
                   )
@@ -274,6 +279,13 @@ RSpec.describe MailPlugger::MailHelper do
 
         it 'returns back with the right data' do
           expect(delivery_data).to eq(expected_hash)
+        end
+
+        it 'returns with indifferent hash' do
+          expect(delivery_data[:attachments].first[:filename])
+            .to eq('LICENSE.txt')
+          expect(delivery_data['attachments'].first['filename'])
+            .to eq('LICENSE.txt')
         end
       end
     end
@@ -298,20 +310,25 @@ RSpec.describe MailPlugger::MailHelper do
       end
       let(:expected_hash) do
         {
-          from: ['from@example.com'],
-          to: ['to@example.com'],
-          subject: 'This is the message subject',
-          body: 'This is the message body',
-          string: 'This is the string',
-          boolean: true,
-          array: ['This', 'is', 'the array'],
-          hash: { this: 'is the hash' },
-          message_obj: message
+          'from' => ['from@example.com'],
+          'to' => ['to@example.com'],
+          'subject' => 'This is the message subject',
+          'body' => 'This is the message body',
+          'string' => 'This is the string',
+          'boolean' => true,
+          'array' => ['This', 'is', 'the array'],
+          'hash' => { 'this' => 'is the hash' },
+          'message_obj' => message
         }
       end
 
       it 'returns back with the right data' do
         expect(delivery_data).to eq(expected_hash)
+      end
+
+      it 'returns with indifferent hash' do
+        expect(delivery_data[:hash][:this]).to eq('is the hash')
+        expect(delivery_data['hash']['this']).to eq('is the hash')
       end
     end
 
@@ -327,10 +344,10 @@ RSpec.describe MailPlugger::MailHelper do
       let(:delivery_options) { %w[from to subject body] }
       let(:expected_hash) do
         {
-          from: ['from@example.com'],
-          to: ['to@example.com'],
-          subject: 'This is the message subject',
-          body: 'This is the message body'
+          'from' => ['from@example.com'],
+          'to' => ['to@example.com'],
+          'subject' => 'This is the message subject',
+          'body' => 'This is the message body'
         }
       end
 

@@ -61,7 +61,7 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 
 MailPlugger::DeliveryMethod.new.deliver!(message)
 # >>> settings: {:api_key=>"12345"}
-# >>> options: {:from=>["from@example.com"], :to=>["to@example.com"], :subject=>"Test email", :body=>"Test email body"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 # >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}]}
 # => {:response=>"OK"}
 ```
@@ -74,7 +74,7 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 
 MailPlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], client: TestApiClientClass).deliver!(message)
 # >>> settings: {:api_key=>"12345"}
-# >>> options: {:from=>["from@example.com"], :to=>["to@example.com"], :subject=>"Test email", :body=>"Test email body"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 # >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}]}
 # => {:response=>"OK"}
 ```
@@ -90,7 +90,7 @@ mail.delivery_method MailPlugger::DeliveryMethod, { delivery_options: %i[from to
 
 mail.deliver
 # >>> settings: {:api_key=>"12345"}
-# >>> options: {:from=>["from@example.com"], :to=>["to@example.com"], :subject=>"Test email", :body=>"Test email body"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 # >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}]}
 # => #<Mail::Message:1960, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
 
@@ -98,7 +98,7 @@ mail.deliver
 
 mail.deliver!
 # >>> settings: {:api_key=>"12345"}
-# >>> options: {:from=>["from@example.com"], :to=>["to@example.com"], :subject=>"Test email", :body=>"Test email body"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 # >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}]}
 # => #<Mail::Message:1960, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
 ```
@@ -114,7 +114,7 @@ mail.delivery_method MailPlugger::DeliveryMethod, { delivery_options: %i[from to
 
 mail.deliver
 # >>> settings: {:api_key=>"12345"}
-# >>> options: {:from=>["from@example.com"], :to=>["to@example.com"], :subject=>"Test email", :body=>"Test email body"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 # >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}]}
 # => #<Mail::Message:1960, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
 
@@ -122,7 +122,7 @@ mail.deliver
 
 mail.deliver!
 # >>> settings: {:api_key=>"12345"}
-# >>> options: {:from=>["from@example.com"], :to=>["to@example.com"], :subject=>"Test email", :body=>"Test email body"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 # >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}]}
 # => {:response=>"OK"}
 ```
@@ -144,7 +144,7 @@ mail.delivery_method MailPlugger::DeliveryMethod
 
 mail.deliver
 # >>> settings: {:api_key=>"12345"}
-# >>> options: {:from=>["from@example.com"], :to=>["to@example.com"], :subject=>"Test email", :body=>"Test email body"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 # >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}]}
 # => #<Mail::Message:1960, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
 
@@ -152,7 +152,7 @@ mail.deliver
 
 mail.deliver!
 # >>> settings: {:api_key=>"12345"}
-# >>> options: {:from=>["from@example.com"], :to=>["to@example.com"], :subject=>"Test email", :body=>"Test email body"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 # >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}]}
 # => {:response=>"OK"}
 ```
