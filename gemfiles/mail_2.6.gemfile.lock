@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    mail_plugger (1.0.0.beta1)
+    mail_plugger (1.0.0.rc1)
       mail (~> 2.5)
 
 GEM
