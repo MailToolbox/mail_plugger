@@ -1,5 +1,11 @@
 # Change log
 
+## 1.0.0 (2021-01-14)
+
+* Update gems.
+* Remove `webmock` gem to clean up unused things.
+* Update documentations.
+
 ## 1.0.0.rc1 (2021-01-13)
 
 * Change description and fix changelog_uri in gemspec file.
