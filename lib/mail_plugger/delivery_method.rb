@@ -8,7 +8,7 @@ module MailPlugger
     # method, then these attributes can be nil, if not then we should set these
     # attributes.
     #
-    # @param [Hash] options below
+    # @param [Hash] options check options below
     # @option options [Class/Hash] client
     #   e.g. DefinedApiClientClass or { 'key' => DefinedApiClientClass }
     #
@@ -58,7 +58,7 @@ module MailPlugger
     #
     #   MailPlugger::DeliveryMethod.new.deliver!(message)
     #
-    # or
+    #   # or
     #
     #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
     #                      subject: 'Test email', body: 'Test email body')

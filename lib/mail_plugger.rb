@@ -15,9 +15,10 @@ module MailPlugger
     #
     # @param [String/Symbol] delivery_system the name of the API
     #
-    # @example using Rails config/initializers/mail_plugger.rb
+    # @example using Rails `config/initializers/mail_plugger.rb`
     #
-    # The defined API class should have an 'initializer' and a 'deliver' method.
+    #   # The defined API class should have an 'initializer' and a 'deliver'
+    #   # method.
     #   class DefinedApiClientClass
     #     def initialize(options = {})
     #       @settings = { api_key: '12345' }
