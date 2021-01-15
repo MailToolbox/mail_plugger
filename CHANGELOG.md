@@ -1,5 +1,10 @@
 # Change log
 
+## 1.0.1 (2021-01-15)
+
+* Tidy up the gemspec file and change which files contains in the gem. Now the gem is much smaller.
+* Add a new mail plugger image which has a different canvas and use it in the README.md.
+
 ## 1.0.0 (2021-01-14)
 
 * Update gems.
