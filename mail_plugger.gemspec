@@ -14,9 +14,10 @@ Gem::Specification.new do |spec|
                        'ActionMailer or other solutions.'
   spec.homepage      = 'https://github.com/norbertszivos/mail_plugger'
   spec.license       = 'MIT'
+
   spec.required_ruby_version = Gem::Requirement.new('>= 2.5.0')
 
-  # spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+  spec.extra_rdoc_files = ['LICENSE.txt', 'README.md']
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] =
@@ -24,16 +25,7 @@ Gem::Specification.new do |spec|
   spec.metadata['changelog_uri'] =
     'https://github.com/norbertszivos/mail_plugger/blob/main/CHANGELOG.md'
 
-  # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem
-  # that have been added into git.
-  spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    `git ls-files -z`.split("\x0").reject do |f|
-      f.match(%r{^(test|spec|features)/})
-    end
-  end
-  spec.bindir        = 'exe'
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.files = %w[README.md CHANGELOG.md LICENSE.txt] + Dir.glob('lib/**/*')
   spec.require_paths = ['lib']
 
   spec.add_dependency 'mail', '~> 2.5'
