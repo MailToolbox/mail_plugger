@@ -42,6 +42,12 @@ Or install it yourself as:
   - [How to use Postmark with MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_postmark_in_ruby_on_rails.md)
   - [How to use Mailgun with MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_mailgun_in_ruby_on_rails.md)
 
+# F<img src="https://raw.githubusercontent.com/norbertszivos/mail_plugger/main/images/fake_plugger800x500.png" height="22" />kePlugger
+
+## Usage
+
+TODO: add documentation for FakePlugger...
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
