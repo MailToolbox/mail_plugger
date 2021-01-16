@@ -17,7 +17,7 @@ module MailPlugger
     #
     # @example using Rails `config/initializers/mail_plugger.rb`
     #
-    #   # The defined API class should have an 'initializer' and a 'deliver'
+    #   # The defined API class should have an 'initialize' and a 'deliver'
     #   # method.
     #   class DefinedApiClientClass
     #     def initialize(options = {})
@@ -90,6 +90,10 @@ module MailPlugger
 
     private
 
+    # Check 'delivery_system' is valid or not. If it's not valid then
+    # it will raise an error.
+    #
+    # @param [String/Symbol] delivery_system the name of the API
     def check_value(delivery_system)
       if delivery_system.nil?
         raise Error::WrongDeliverySystem, '"delivery_system" is nil'
