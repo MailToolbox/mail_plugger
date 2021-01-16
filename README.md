@@ -1,4 +1,4 @@
-# M<img src="https://raw.githubusercontent.com/norbertszivos/mail_plugger/master/images/mail_plugger800x500.png" height="22" />ilPlugger
+# M<img src="https://raw.githubusercontent.com/norbertszivos/mail_plugger/main/images/mail_plugger800x500.png" height="22" />ilPlugger
 
 [![Gem Version](https://badge.fury.io/rb/mail_plugger.svg)](https://badge.fury.io/rb/mail_plugger)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE.txt)
