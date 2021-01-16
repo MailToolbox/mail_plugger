@@ -1,0 +1,157 @@
+# frozen_string_literal: true
+
+module FakePlugger
+  class DeliveryMethod < MailPlugger::DeliveryMethod
+    # Initialize FakePlugger delivery method attributes. If we are using
+    # MailPlugger.plug_in method, then these attributes can be nil, if not then
+    # we should set these attributes.
+    #
+    # @param [Hash] options check options below
+    # @option options [Class/Hash] client
+    #   e.g. DefinedApiClientClass or { 'key' => DefinedApiClientClass }
+    #
+    # @option options [Array/Hash] delivery_options
+    #   e.g. [:to, :from, :subject, :body] or
+    #   { 'key' => [:to, :from, :subject, :body] }
+    #
+    # @option options [Hash] delivery_settings
+    #   e.g. { return_response: true }
+    #
+    # @option options [String/Symbol] default_delivery_system
+    #   e.g. 'defined_api'
+    #
+    # @option options [Boolean] debug
+    #   if true it will show debug informations
+    #
+    # @option options [Boolean] raw_message
+    #   if true it will show raw message
+    #
+    # @option options [String/Symbol/Array/Hash] response
+    #   the deliver! method will return with this value or if this value is nil
+    #   then it will return with the client object
+    def initialize(options = {})
+      super
+
+      @debug       = options[:debug] || settings[:fake_plugger_debug] || false
+      @raw_message = options[:raw_message] ||
+                     settings[:fake_plugger_raw_message] || false
+      @response    = options[:response] || settings[:fake_plugger_response]
+    end
+
+    # Mock send message with the given client if the message parameter is a
+    # Mail::Message object. If 'response' parameter is nil then it will extract
+    # those information from the Mail::Message object which was provided in the
+    # 'delivery_options'. After that it generates a hash with these data and
+    # returns with the provided client class which has a 'deliver' method, but
+    # it won't call the 'deliver' method.
+    # If the 'response' parameter is a has with 'return_message_obj: true' then
+    # it will retrun with the Mail::Message object.
+    # If the 'response' parameter is not nil then retruns with that given data
+    # without call any other methods.
+    # Except if 'debug' is true. In this case it will call those methods which
+    # is calling in normal operation as well.
+    # If 'debug' is true then it prints out some debug informations.
+    # If 'raw_message' is true then it prints out raw message.
+    #
+    # @param [Mail::Message] message what we would like to send
+    #
+    # @return [Mail::Message/Hash] depend on give value
+    #
+    # @example
+    #
+    #   MailPlugger.plug_in('test_api_client') do |api|
+    #     api.delivery_options = %i[from to subject body]
+    #     api.delivery_settings = {
+    #       fake_plugger_debug: true,
+    #       fake_plugger_raw_message: true,
+    #       fake_plugger_response: { response: 'OK' }
+    #     }
+    #     api.client = DefinedApiClientClass
+    #   end
+    #
+    #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
+    #                      subject: 'Test email', body: 'Test email body')
+    #
+    #   FakePlugger::DeliveryMethod.new.deliver!(message)
+    #
+    #   # or
+    #
+    #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
+    #                      subject: 'Test email', body: 'Test email body')
+    #
+    #   FakePlugger::DeliveryMethod.new(
+    #     delivery_options: %i[from to subject body],
+    #     client: DefinedApiClientClass,
+    #     debug: true,
+    #     raw_message: true,
+    #     response: { response: 'OK' }
+    #   ).deliver!(message)
+    #
+    def deliver!(message)
+      unless message.is_a?(Mail::Message)
+        raise MailPlugger::Error::WrongParameter,
+              'The given parameter is not a Mail::Message'
+      end
+
+      @message = message
+
+      show_debug_info if @debug
+      show_raw_message if @raw_message
+
+      return client.new(delivery_data) if @response.nil?
+      return @message if @response.is_a?(Hash) && @response[:return_message_obj]
+
+      @response
+    end
+
+    private
+
+    # Show debug informations from variables and methods.
+    def show_debug_info
+      puts <<~DEBUG_INFO
+
+        ===================== FakePlugger::DeliveryMethod =====================
+
+        ------------------------------ Variables ------------------------------
+
+        ==> @client: #{@client.inspect}
+
+        ==> @delivery_options: #{@delivery_options.inspect}"
+
+        ==> @delivery_settings: #{@delivery_settings.inspect}"
+
+        ==> @default_delivery_system: #{@default_delivery_system.inspect}
+
+        ==> @message: #{@message.inspect}
+
+        ------------------------------- Methods -------------------------------
+
+        ==> client: #{client.inspect}
+
+        ==> delivery_system: #{delivery_system.inspect}
+
+        ==> delivery_options: #{delivery_options.inspect}
+
+        ==> delivery_data: #{delivery_data.inspect}
+
+        ==> settings: #{settings.inspect}
+
+        =======================================================================
+
+      DEBUG_INFO
+    end
+
+    # Show raw message for debug purpose.
+    def show_raw_message
+      puts <<~RAW_MESSAGE
+
+        ============================ Mail::Message ============================
+
+        #{@message}
+
+        =======================================================================
+
+      RAW_MESSAGE
+    end
+  end
+end
