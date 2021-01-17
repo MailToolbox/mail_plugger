@@ -97,21 +97,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
         )
       end
 
-      context 'when using MailPlugger.plug_in method' do
-        before do
-          MailPlugger.plug_in('different_api') do |api|
-            api.delivery_options = 'different options'
-            api.delivery_settings = 'different settings'
-            api.client = 'different client'
-          end
-        end
-
-        after do
-          MailPlugger.instance_variables.each do |variable|
-            MailPlugger.remove_instance_variable(variable)
-          end
-        end
-
+      shared_examples 'arguments' do
         it 'sets delivery_options with given value' do
           expect(init_method.instance_variable_get('@delivery_options'))
             .to eq(delivery_options)
@@ -136,29 +122,26 @@ RSpec.describe MailPlugger::DeliveryMethod do
         end
       end
 
+      context 'when using MailPlugger.plug_in method' do
+        before do
+          MailPlugger.plug_in('different_api') do |api|
+            api.delivery_options = 'different options'
+            api.delivery_settings = 'different settings'
+            api.client = 'different client'
+          end
+        end
+
+        after do
+          MailPlugger.instance_variables.each do |variable|
+            MailPlugger.remove_instance_variable(variable)
+          end
+        end
+
+        it_behaves_like 'arguments'
+      end
+
       context 'when NOT using MailPlugger.plug_in method' do
-        it 'sets delivery_options with given value' do
-          expect(init_method.instance_variable_get('@delivery_options'))
-            .to eq(delivery_options)
-        end
-
-        it 'sets client with given value' do
-          expect(init_method.instance_variable_get('@client')).to eq(client)
-        end
-
-        it 'sets default_delivery_system with given value' do
-          expect(init_method.instance_variable_get('@default_delivery_system'))
-            .to eq(delivery_system)
-        end
-
-        it 'sets delivery_settings with given value' do
-          expect(init_method.instance_variable_get('@delivery_settings'))
-            .to eq(delivery_settings)
-        end
-
-        it 'sets message with nil' do
-          expect(init_method.instance_variable_get('@message')).to be nil
-        end
+        it_behaves_like 'arguments'
       end
     end
   end
