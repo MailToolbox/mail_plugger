@@ -1,6 +1,6 @@
 # How to use MailPlugger::DeliveryMethod class
 
-With this class it can extract data from the Mail::Message object and send message based on the given configurations. We can add these options directly in the `new` method or we can use `MailPlugger.plug_in` method as well.
+With this Class it can extract data from the `Mail::Message` object and send message based on the given configurations. We can add these options directly in the `new` method or we can use `MailPlugger.plug_in` method as well.
 
 The `new` method parameter is a Hash where the keys are Symbols.
 
@@ -101,4 +101,4 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 MailPlugger::DeliveryMethod.new.deliver!(message)
 ```
 
-If we are using `mail_plugger` gem in Ruby on Rails we don't have to do anything with this class. Rails will load this method automatically. Basically we should use `MailPlugger.plug_in` method to configure this delivery method.
+If we are using `mail_plugger` gem in Ruby on Rails we don't have to do anything with this class. Rails will load this method automatically if we add this config `config.action_mailer.delivery_method = :mail_plugger` e.g. into the `config/application.rb`. Basically we should use `MailPlugger.plug_in` method to configure this delivery method.
