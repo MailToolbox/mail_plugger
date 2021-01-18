@@ -44,6 +44,8 @@ Or install it yourself as:
 
 # F<img src="https://raw.githubusercontent.com/norbertszivos/mail_plugger/main/images/fake_plugger800x500.png" height="22" />kePlugger
 
+**FakePlugger** is a delivery method to mock **MailPlugger**. It is working similarly like **MailPlugger**, but it won't send any emails (but if we would like it is possible, just we should do manually). Also it can write out debug informations or we can manipulate the response with it.
+
 ## Usage
 
 - [How to use FakePlugger::DeliveryMethod class](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_fake_plugger_delivery_method.md)
