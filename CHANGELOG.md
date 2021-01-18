@@ -1,17 +1,38 @@
 # Change log
 
+
+## 1.1.0 (2021-01-18)
+
+### New features
+
+* Add FakePlugger to mock MailPlugger.
+
+### Changes
+
+* Fix typos in the documentations.
+* Add more metadata to gempspec file.
+
+
 ## 1.0.1 (2021-01-15)
+
+### Changes
 
 * Tidy up the gemspec file and change which files contains in the gem. Now the gem is much smaller.
 * Add a new mail plugger image which has a different canvas and use it in the README.md.
 
+
 ## 1.0.0 (2021-01-14)
+
+### Changes
 
 * Update gems.
 * Remove `webmock` gem to clean up unused things.
 * Update documentations.
 
+
 ## 1.0.0.rc1 (2021-01-13)
+
+### Changes
 
 * Change description and fix changelog_uri in gemspec file.
 * Add/Change documentations.
@@ -22,6 +43,7 @@
 * Change `MailPlugger::MailHelper.extract_attachments` method. If an attachment is inline then the hash contains the `filename` and `cid` as well.
 * Add/Change tests.
 * Change `MailPlugger::MailHelper.delivery_option` that returns with indifferent hash
+
 
 ## 1.0.0.beta1 (2021-01-02)
 
