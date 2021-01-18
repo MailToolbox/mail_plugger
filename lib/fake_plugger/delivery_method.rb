@@ -98,13 +98,18 @@ module FakePlugger
       show_debug_info if @debug
       show_raw_message if @raw_message
 
+      return_with_response
+    end
+
+    private
+
+    # Return with a response which depends on the conditions.
+    def return_with_response
       return client.new(delivery_data) if @response.nil?
       return @message if @response.is_a?(Hash) && @response[:return_message_obj]
 
       @response
     end
-
-    private
 
     # Show debug informations from variables and methods.
     def show_debug_info
