@@ -44,7 +44,7 @@ module FakePlugger
     # 'delivery_options'. After that it generates a hash with these data and
     # returns with the provided client class which has a 'deliver' method, but
     # it won't call the 'deliver' method.
-    # If the 'response' parameter is a has with 'return_message_obj: true' then
+    # If the 'response' parameter is a hash with 'return_message_obj: true' then
     # it will retrun with the Mail::Message object.
     # If the 'response' parameter is not nil then retruns with that given data
     # without call any other methods.

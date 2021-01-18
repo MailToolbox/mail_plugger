@@ -101,7 +101,7 @@ TestMailer.send_test.deliver_now
 #Date: Sat, 02 Jan 2021 15:08:53 +0100
 #From: from@example.com
 #To: to@example.com
-#Message-ID: <5ff07e7597b40_104cfebb4988d3@100S-Mac.local.mail>
+#Message-ID: <5ff07e7597b40_104cfebb4988d3@server.local.mail>
 #Subject: Test email
 #Mime-Version: 1.0
 #Content-Type: multipart/alternative;
@@ -140,7 +140,7 @@ TestMailer.send_test.deliver_now
 #
 #----==_mimepart_5ff07e75956a7_104cfebb498739--
 
-#=> #<Mail::Message:61100, Multipart: true, Headers: <Date: Sat, 02 Jan 2021 15:08:53 +0100>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <5ff07e7597b40_104cfebb4988d3@100S-Mac.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_5ff07e75956a7_104cfebb498739"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
+#=> #<Mail::Message:61100, Multipart: true, Headers: <Date: Sat, 02 Jan 2021 15:08:53 +0100>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <5ff07e7597b40_104cfebb4988d3@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_5ff07e75956a7_104cfebb498739"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
 
 # or use ! to not render mail
 

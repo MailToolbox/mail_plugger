@@ -31,7 +31,7 @@ Or install it yourself as:
 - [How to use MailPlugger::DeliveryMethod class](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_delivery_method.md)
 - [How to use MailPlugger in a Ruby script or IRB console](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_script_or_console.md)
 - [How to use MailPlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md)
-  - [How to add API specific options to the mailer method in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_secial_options_in_ruby_on_rails.md)
+  - [How to add API specific options to the mailer method in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_special_options_in_ruby_on_rails.md)
   - [How to add attachments to the mailer method in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_attachments_in_ruby_on_rails.md)
   - [How to use more delivey systems in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_more_delivery_system_in_ruby_on_rails.md)
   - [How to use one delivey system with more send methods in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_one_delivery_system_with_more_send_methods_in_ruby_on_rails.md)
@@ -46,7 +46,9 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: add documentation for FakePlugger...
+- [How to use FakePlugger::DeliveryMethod class](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_fake_plugger_delivery_method.md)
+- [How to use FakePlugger in a Ruby script or IRB console](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_fake_plugger_in_script_or_console.md)
+- [How to use FakePlugger in Ruby on Rails](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_fake_plugger_in_ruby_on_rails.md)
 
 ## Development
 
