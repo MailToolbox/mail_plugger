@@ -55,7 +55,7 @@ module FakePlugger
     #
     # @param [Mail::Message] message what we would like to send
     #
-    # @return [Mail::Message/Hash] depend on give value
+    # @return [Mail::Message/Hash] depends on the given value
     #
     # @example
     #
