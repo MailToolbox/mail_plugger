@@ -1,6 +1,15 @@
 # Change log
 
 
+## 1.1.1 (2021-01-21)
+
+### Changes
+
+* Change FakePlugger::DeliveryMethod to returns with the extracted delivery data instead of the message object.
+* Update code documentations.
+* Add missing FakePlugger description in the README.md.
+
+
 ## 1.1.0 (2021-01-18)
 
 ### New features
