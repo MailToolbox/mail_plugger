@@ -353,10 +353,25 @@ RSpec.describe FakePlugger::DeliveryMethod do
         delivery_settings[:fake_plugger_raw_message] = false
       end
 
-      let(:message) { Mail.new }
+      let(:message) do
+        Mail.new(
+          from: 'from@example.com',
+          to: 'to@example.com',
+          subject: 'This is the message subject',
+          body: 'This is the message body'
+        )
+      end
+      let(:expected_hash) do
+        {
+          'from' => ['from@example.com'],
+          'to' => ['to@example.com'],
+          'subject' => 'This is the message subject',
+          'body' => 'This is the message body'
+        }
+      end
 
       shared_examples 'fake response' do |use_settings_method|
-        shared_examples 'expected method calls' do
+        shared_examples 'expected method calls' do |use_delivery_data|
           # rubocop:disable RSpec/AnyInstance
           it 'does NOT call client method' do
             expect_any_instance_of(MailPlugger::MailHelper)
@@ -374,23 +389,39 @@ RSpec.describe FakePlugger::DeliveryMethod do
               deliver
             end
           else
-            it 'does NOT calls delivery_system method' do
+            it 'does NOT call delivery_system method' do
               expect_any_instance_of(MailPlugger::MailHelper)
                 .not_to receive(:delivery_system)
               deliver
             end
           end
 
-          it 'does NOT call delivery_options method' do
-            expect_any_instance_of(MailPlugger::MailHelper)
-              .not_to receive(:delivery_options)
-            deliver
-          end
+          if use_delivery_data == 'and returns with delivery_data'
+            it 'calls delivery_options method' do
+              expect_any_instance_of(MailPlugger::MailHelper)
+                .to receive(:delivery_options)
+                .at_least(:once)
+                .and_return(delivery_options)
+              deliver
+            end
 
-          it 'does NOT call delivery_data method' do
-            expect_any_instance_of(MailPlugger::MailHelper)
-              .not_to receive(:delivery_data)
-            deliver
+            it 'calls delivery_data method' do
+              expect_any_instance_of(MailPlugger::MailHelper)
+                .to receive(:delivery_data)
+              deliver
+            end
+          else
+            it 'does NOT call delivery_options method' do
+              expect_any_instance_of(MailPlugger::MailHelper)
+                .not_to receive(:delivery_options)
+              deliver
+            end
+
+            it 'does NOT call delivery_data method' do
+              expect_any_instance_of(MailPlugger::MailHelper)
+                .not_to receive(:delivery_data)
+              deliver
+            end
           end
           # rubocop:enable RSpec/AnyInstance
 
@@ -409,18 +440,19 @@ RSpec.describe FakePlugger::DeliveryMethod do
           end
         end
 
-        context 'and sets response with return_message_obj' do
+        context 'and sets response with return_delivery_data' do
           before do
             delivery_settings[:fake_plugger_response] = {
-              return_message_obj: true
+              return_delivery_data: true
             }
           end
 
-          it 'returns with message' do
-            expect(deliver).to eq(message)
+          it 'returns with delivery_data hash' do
+            expect(deliver).to eq(expected_hash)
           end
 
-          it_behaves_like 'expected method calls'
+          it_behaves_like 'expected method calls',
+                          'and returns with delivery_data'
         end
 
         context 'and sets response with anything else' do
@@ -428,7 +460,8 @@ RSpec.describe FakePlugger::DeliveryMethod do
             expect(deliver).to eq(delivery_settings[:fake_plugger_response])
           end
 
-          it_behaves_like 'expected method calls'
+          it_behaves_like 'expected method calls',
+                          'and does NOT retrun with delivery_data'
         end
       end
 

@@ -44,8 +44,8 @@ module FakePlugger
     # 'delivery_options'. After that it generates a hash with these data and
     # returns with the provided client class which has a 'deliver' method, but
     # it won't call the 'deliver' method.
-    # If the 'response' parameter is a hash with 'return_message_obj: true' then
-    # it will retrun with the Mail::Message object.
+    # If the 'response' parameter is a hash with 'return_delivery_data: true'
+    # then it will retrun with the extracted delivery data.
     # If the 'response' parameter is not nil then retruns with that given data
     # without call any other methods.
     # Except if 'debug' is true. In this case it will call those methods which
@@ -106,7 +106,9 @@ module FakePlugger
     # Return with a response which depends on the conditions.
     def return_with_response
       return client.new(delivery_data) if @response.nil?
-      return @message if @response.is_a?(Hash) && @response[:return_message_obj]
+      if @response.is_a?(Hash) && @response[:return_delivery_data]
+        return delivery_data
+      end
 
       @response
     end

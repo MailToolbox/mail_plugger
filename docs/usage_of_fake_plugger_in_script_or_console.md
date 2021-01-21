@@ -129,7 +129,7 @@ FakePlugger::DeliveryMethod.new.deliver!(message)
 
 MailPlugger.plug_in('test_api_client') do |api|
   api.delivery_options = %i[from to subject body]
-  api.delivery_settings = { fake_plugger_response: { return_message_obj: true } }
+  api.delivery_settings = { fake_plugger_response: { return_delivery_data: true } }
   api.client = TestApiClientClass
 end
 
@@ -137,7 +137,7 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 FakePlugger::DeliveryMethod.new.deliver!(message)
-# => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
+# => {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 ```
 
 Or we can use the `FakePlugger::DeliveryMethod` directly as well.
@@ -202,8 +202,8 @@ FakePlugger::DeliveryMethod.new(response: { status: :ok }).deliver!(message)
 
 # or
 
-FakePlugger::DeliveryMethod.new(response: { return_message_obj: true }).deliver!(message)
-# => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
+FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], response: { return_delivery_data: true }).deliver!(message)
+# => {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 ```
 
 Or add `FakePlugger::DeliveryMethod` to `mail.delivery_method`.

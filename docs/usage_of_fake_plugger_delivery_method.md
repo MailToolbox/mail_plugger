@@ -13,7 +13,7 @@ Hash parameters:
 - `default_delivery_system` which should be a String or Symbol. This option is needed when `delivery_options` and `client` are Hashes. When `delivery_system` in the `Mail::Message` object is not defined then the `default_delivery_system` value is the key of those Hashes. When `default_delivery_system` is not defined then `default_delivery_system_get` will return with the first key of `delivery_options` or `client` Hash.
 - `debug` which should be a Boolean. If this parameter is true then it will prints out debug informations like variable values and output of some methods. If we are using `MailPlugger.plug_in` method then we can set this value to add `fake_plugger_debug: true` into the `delivery_settings` Hash.
 - `raw_message` which should be a Boolean. If this parameter is true then it will prints out the raw message content. If we are using `MailPlugger.plug_in` method then we can set this value to add `fake_plugger_raw_message: true` into the `delivery_settings` Hash.
-- `response` which returns back with the give value. But if this parameter is `nil` then it will extract those information from the `Mail::Message` object which was provided in the `delivery_options`. After that it generates a hash with these data and returns with the provided `client` Class which has a `deliver` method, but it won't call the `deliver` method. If the `response` parameter is a Hash with `return_message_obj: true` then it will retrun with the `Mail::Message` object. If we are using `MailPlugger.plug_in` method then we can set this value to add e.g. `fake_plugger_response: { status: :ok }` into the `delivery_settings` Hash.
+- `response` which returns back with the give value. But if this parameter is `nil` then it will extract those information from the `Mail::Message` object which was provided in the `delivery_options`. After that it generates a hash with these data and returns with the provided `client` Class which has a `deliver` method, but it won't call the `deliver` method. If the `response` parameter is a Hash with `return_delivery_data: true` then it will retrun with the extracted delivery data. If we are using `MailPlugger.plug_in` method then we can set this value to add e.g. `fake_plugger_response: { status: :ok }` into the `delivery_settings` Hash.
 
 Examples:
 
@@ -101,15 +101,15 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 FakePlugger::DeliveryMethod.new(response: { status: :ok }).deliver!(message)
 ```
 
-It can returns with the `Mail::Message` object.
+It can returns with the extracted delivery data.
 
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 
-FakePlugger::DeliveryMethod.new(response: { return_message_obj: :true }).deliver!(message)
+FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], response: { return_delivery_data: :true }).deliver!(message)
 ```
 
-Without the response parameter it returns back with `client` object so we can force delivery if we would like to.
+Without the response parameter it returns back with `client` object then we can force delivery if we would like to.
 
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
