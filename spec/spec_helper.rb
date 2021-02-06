@@ -7,6 +7,7 @@ SimpleCov.start
 
 require 'bundler/setup'
 require 'mail_plugger'
+require 'mail_grabber/web'
 require 'mail'
 
 RSpec.configure do |config|
