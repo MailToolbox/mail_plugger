@@ -60,7 +60,7 @@ To install this gem onto your local machine, run `bundle exec rake install`.
 
 To release a new version:
 
-- Update CHANGELOG.md
+- Update [CHANGELOG.md](https://github.com/norbertszivos/mail_plugger/blob/main/CHANGELOG.md)
 - Update the version number in `version.rb` manually or use `gem-release` gem and run `gem bump -v major|minor|patch|rc|beta`.
 - Build gem with `bundle exec rake build`.
 - Run `bundle install` and `bundle exec appraisal install` to update gemfiles and commit the changes.

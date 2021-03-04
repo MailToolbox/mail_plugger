@@ -4,7 +4,7 @@
 
 Let's use mailer method which was defined [here](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
 
-Add `simple_spark` to the `Gemfile`.
+Add `simple_spark` gem to the `Gemfile`.
 
 ```ruby
 gem 'simple_spark'

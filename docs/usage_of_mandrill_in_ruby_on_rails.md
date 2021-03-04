@@ -4,7 +4,7 @@
 
 Let's use mailer method which was defined [here](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
 
-Add `mandrill-api-json` to the `Gemfile`.
+Add `mandrill-api-json` gem to the `Gemfile`.
 
 ```ruby
 gem 'mandrill-api-json'

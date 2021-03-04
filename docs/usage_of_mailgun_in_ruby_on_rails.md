@@ -4,7 +4,7 @@
 
 Let's use mailer method which was defined [here](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
 
-Add `mailgun-ruby` to the `Gemfile`.
+Add `mailgun-ruby` gem to the `Gemfile`.
 
 ```ruby
 gem 'mailgun-ruby'
