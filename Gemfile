@@ -9,6 +9,8 @@ gem 'appraisal'
 
 gem 'rake', '~> 13.0'
 
+gem 'webrick'
+
 # Ruby static code analyzer and code formatter, code linter in short
 gem 'rubocop', '~> 1.7', require: false
 gem 'rubocop-performance', require: false
