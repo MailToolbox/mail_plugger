@@ -1,7 +1,7 @@
 # Contributing
 
 If you discover issues, have ideas for improvements or new features,
-please report them to the [issue tracker](https://github.com/norbertszivos/mail_plugger/issues) of the repository or
+please report them to the [issue tracker](https://github.com/MailToolbox/mail_plugger/issues) of the repository or
 submit a pull request. Please, try to follow these guidelines when you
 do so.
 

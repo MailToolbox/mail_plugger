@@ -1,6 +1,6 @@
 # How to use more delivey systems in Ruby on Rails
 
-Let's modify the configuration which was defined [here](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
+Let's modify the configuration which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
 
 Add a new API Class in `config/initializers/mail_plugger.rb` (you can define it in another place just now it is esasier to do this).
 

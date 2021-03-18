@@ -1,6 +1,6 @@
 # How to use one delivey system with more send methods in Ruby on Rails
 
-Let's modify the configuration which was defined [here](https://github.com/norbertszivos/mail_plugger/blob/main/docs/usage_of_more_delivery_system_in_ruby_on_rails.md).
+Let's modify the configuration which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_delivery_system_in_ruby_on_rails.md).
 
 Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
 
