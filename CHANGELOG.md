@@ -1,5 +1,15 @@
 # Change log
 
+## 1.2.0 (2021-03-18)
+
+### New organization
+
+* Move mail_plugger repository into MailToolbox organization
+
+### Changes
+
+* Update gems
+* Fix some documentation issues
 
 ## 1.1.1 (2021-01-21)
 
