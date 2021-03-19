@@ -12,7 +12,7 @@ This is important! Providing us with a reliable way to reproduce a problem will 
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Actual behavior
+**Actual behavior**
 Describe here what actually happened.
 
 **Screenshots**
