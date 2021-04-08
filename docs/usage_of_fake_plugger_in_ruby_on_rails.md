@@ -485,9 +485,9 @@ TestMailer.send_test.deliver_now
 #
 #==> @client: {"test_api_client"=>TestApiClientClass}
 #
-#==> @delivery_options: {"test_api_client"=>[:from, :to, :subject, :text_part, :html_part]}"
+#==> @delivery_options: {"test_api_client"=>[:from, :to, :subject, :text_part, :html_part]}
 #
-#==> @delivery_settings: {"test_api_client"=>{:return_response=>true, :fake_plugger_debug=>true}}"
+#==> @delivery_settings: {"test_api_client"=>{:return_response=>true, :fake_plugger_debug=>true}}
 #
 #==> @default_delivery_system: "test_api_client"
 #
@@ -567,9 +567,9 @@ TestMailer.send_test.deliver_now!
 #
 #==> @client: {"test_api_client"=>TestApiClientClass}
 #
-#==> @delivery_options: {"test_api_client"=>[:from, :to, :subject, :text_part, :html_part]}"
+#==> @delivery_options: {"test_api_client"=>[:from, :to, :subject, :text_part, :html_part]}
 #
-#==> @delivery_settings: {"test_api_client"=>{:return_response=>true, :fake_plugger_debug=>true}}"
+#==> @delivery_settings: {"test_api_client"=>{:return_response=>true, :fake_plugger_debug=>true}}
 #
 #==> @default_delivery_system: "test_api_client"
 #

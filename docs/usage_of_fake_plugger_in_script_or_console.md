@@ -70,9 +70,9 @@ FakePlugger::DeliveryMethod.new.deliver!(message)
 #
 #==> @client: {"test_api_client"=>TestApiClientClass}
 #
-#==> @delivery_options: {"test_api_client"=>[:from, :to, :subject, :body]}"
+#==> @delivery_options: {"test_api_client"=>[:from, :to, :subject, :body]}
 #
-#==> @delivery_settings: {"test_api_client"=>{:fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}"
+#==> @delivery_settings: {"test_api_client"=>{:fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}
 #
 #==> @default_delivery_system: "test_api_client"
 #
@@ -154,9 +154,9 @@ FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], clie
 #
 #==> @client: TestApiClientClass
 #
-#==> @delivery_options: [:from, :to, :subject, :body]"
+#==> @delivery_options: [:from, :to, :subject, :body]
 #
-#==> @delivery_settings: nil"
+#==> @delivery_settings: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -223,9 +223,9 @@ mail.deliver
 #
 #==> @client: TestApiClientClass
 #
-#==> @delivery_options: [:from, :to, :subject, :body]"
+#==> @delivery_options: [:from, :to, :subject, :body]
 #
-#==> @delivery_settings: nil"
+#==> @delivery_settings: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -274,9 +274,9 @@ mail.deliver!
 #
 #==> @client: TestApiClientClass
 #
-#==> @delivery_options: [:from, :to, :subject, :body]"
+#==> @delivery_options: [:from, :to, :subject, :body]
 #
-#==> @delivery_settings: nil"
+#==> @delivery_settings: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -401,9 +401,9 @@ mail.deliver
 #
 #==> @client: TestApiClientClass
 #
-#==> @delivery_options: [:from, :to, :subject, :body]"
+#==> @delivery_options: [:from, :to, :subject, :body]
 #
-#==> @delivery_settings: nil"
+#==> @delivery_settings: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -452,9 +452,9 @@ mail.deliver!
 #
 #==> @client: TestApiClientClass
 #
-#==> @delivery_options: [:from, :to, :subject, :body]"
+#==> @delivery_options: [:from, :to, :subject, :body]
 #
-#==> @delivery_settings: nil"
+#==> @delivery_settings: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -503,9 +503,9 @@ mail.deliver!.deliver
 #
 #==> @client: TestApiClientClass
 #
-#==> @delivery_options: [:from, :to, :subject, :body]"
+#==> @delivery_options: [:from, :to, :subject, :body]
 #
-#==> @delivery_settings: nil"
+#==> @delivery_settings: nil
 #
 #==> @default_delivery_system: nil
 #

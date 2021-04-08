@@ -123,9 +123,9 @@ module FakePlugger
 
         ==> @client: #{@client.inspect}
 
-        ==> @delivery_options: #{@delivery_options.inspect}"
+        ==> @delivery_options: #{@delivery_options.inspect}
 
-        ==> @delivery_settings: #{@delivery_settings.inspect}"
+        ==> @delivery_settings: #{@delivery_settings.inspect}
 
         ==> @default_delivery_system: #{@default_delivery_system.inspect}
 
