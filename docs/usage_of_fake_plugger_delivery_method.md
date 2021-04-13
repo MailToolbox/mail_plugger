@@ -14,7 +14,7 @@ Hash parameters:
 - `debug` which should be a Boolean. The default value is `false`. If this parameter is `true` then it will prints out debug informations like variable values and output of some methods. If we are using `MailPlugger.plug_in` method then we can set this value to add `fake_plugger_debug: true` into the `delivery_settings` Hash.
 - `raw_message` which should be a Boolean. The default value is `false`. If this parameter is `true` then it will prints out the raw message content. If we are using `MailPlugger.plug_in` method then we can set this value to add `fake_plugger_raw_message: true` into the `delivery_settings` Hash.
 - `response` which returns back with the give value. But if this parameter is `nil` then it will extract those information from the `Mail::Message` object which was provided in the `delivery_options`. After that it generates a hash with these data and returns with the provided `client` Class which has a `deliver` method, but it won't call the `deliver` method. If the `response` parameter is a Hash with `return_delivery_data: true` then it will retrun with the extracted delivery data. If we are using `MailPlugger.plug_in` method then we can set this value to add e.g. `fake_plugger_response: { status: :ok }` into the `delivery_settings` Hash.
-- `use_mail_grabber` which should be a Boolean. The default value is `false`. If this parameter is `true` then it will store the message in a database which [MailGrabber](https://github.com/MailToolbox/mail_grabber) can read. If we are using `MailPlugger.plug_in` method then we can set this value to add `fake_plugger_use_mail_grabber: true` into the `delivery_settings` Hash. **This option needs that [MailGrabber](https://github.com/MailToolbox/mail_grabber) gem to be installed.**
+- `use_mail_grabber` which should be a Boolean. The default value is `false`. If this parameter is `true` then it will store the message in a database which **[MailGrabber](https://github.com/MailToolbox/mail_grabber)** can read. If we are using `MailPlugger.plug_in` method then we can set this value to add `fake_plugger_use_mail_grabber: true` into the `delivery_settings` Hash. **This option needs that [MailGrabber](https://github.com/MailToolbox/mail_grabber) gem to be installed.**
 
 Examples:
 
@@ -118,7 +118,7 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], client: TestApiClientClass).deliver!(message).deliver
 ```
 
-If we installed [MailGrabber](https://github.com/MailToolbox/mail_grabber#usage) gem then we can store messages, which [MailGrabber](https://github.com/MailToolbox/mail_grabber#usage) will show us (please follow the link to check how to do that).
+If we installed **[MailGrabber](https://github.com/MailToolbox/mail_grabber#usage)** gem then we can store messages, which **[MailGrabber](https://github.com/MailToolbox/mail_grabber#usage)** will show us (please follow the link to check how to do that).
 
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')

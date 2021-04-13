@@ -44,7 +44,7 @@ Or install it yourself as:
 
 # F<img src="https://raw.githubusercontent.com/MailToolbox/mail_plugger/main/images/fake_plugger800x500.png" height="22" />kePlugger
 
-**FakePlugger** is a delivery method to mock **MailPlugger**. It is working similarly like **MailPlugger**, but it won't send any emails (but if we would like it is possible, just we should do manually). Also it can write out debug informations or we can manipulate the response with it.
+**FakePlugger** is a delivery method to mock **MailPlugger**. It is working similarly like **MailPlugger**, but it won't send any emails (but if we would like it is possible, just we should do manually). Also it can write out debug informations or we can manipulate the response with it. Another option that we can use **[MailGrabber](https://github.com/MailToolbox/mail_grabber)** web interface if the delivery method is `:fake_plugger`.
 
 ## Usage
 
