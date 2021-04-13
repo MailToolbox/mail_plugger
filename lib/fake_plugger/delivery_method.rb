@@ -61,6 +61,7 @@ module FakePlugger
     # is calling in normal operation as well.
     # If 'debug' is true then it prints out some debug informations.
     # If 'raw_message' is true then it prints out raw message.
+    # if 'use_mail_grabber' is true then it stores the message in a database.
     #
     # @param [Mail::Message] message what we would like to send
     #
@@ -106,16 +107,23 @@ module FakePlugger
 
       @message = message
 
-      show_debug_info if @debug
-      show_raw_message if @raw_message
-      if Gem.loaded_specs.key?('mail_grabber') && @use_mail_grabber
-        MailGrabber::DeliveryMethod.new.deliver!(message)
-      end
+      call_extra_options
 
       return_with_response
     end
 
     private
+
+    # Call extra options like show debug informations, show raw message,
+    # use mail grabber
+    def call_extra_options
+      show_debug_info if @debug
+      show_raw_message if @raw_message
+
+      return unless Gem.loaded_specs.key?('mail_grabber') && @use_mail_grabber
+
+      MailGrabber::DeliveryMethod.new.deliver!(@message)
+    end
 
     # Return with a response which depends on the conditions.
     def return_with_response
