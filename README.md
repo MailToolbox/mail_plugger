@@ -51,6 +51,7 @@ Or install it yourself as:
 - [How to use FakePlugger::DeliveryMethod class](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_delivery_method.md)
 - [How to use FakePlugger in a Ruby script or IRB console](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_in_script_or_console.md)
 - [How to use FakePlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_in_ruby_on_rails.md)
+  - [How to use FakePlugger with MailGrabber in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_with_mail_grabber_in_ruby_on_rails.md)
 
 ## Development
 

@@ -6,6 +6,7 @@ require 'simplecov'
 SimpleCov.start
 
 require 'bundler/setup'
+require 'mail_grabber' if Gem.loaded_specs.key?('mail_grabber')
 require 'mail_plugger'
 require 'mail'
 

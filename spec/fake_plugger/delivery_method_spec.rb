@@ -3,7 +3,10 @@
 require 'spec_helper'
 
 RSpec.describe FakePlugger::DeliveryMethod do
-  before { stub_const('DummyApi', dummy_api_class) }
+  before do
+    stub_const('DummyApi', dummy_api_class)
+    stub_const('MailGrabber::DeliveryMethod', mail_grabber_class)
+  end
 
   let(:dummy_api_class) do
     Class.new do
@@ -12,12 +15,20 @@ RSpec.describe FakePlugger::DeliveryMethod do
       def deliver; end
     end
   end
+  let(:mail_grabber_class) do
+    Class.new do
+      def initialize(options = {}); end
+
+      def deliver!(message); end
+    end
+  end
   let(:delivery_system) { 'dummy_api' }
   let(:delivery_options) { %i[to from subject body] }
   let(:delivery_settings) do
     {
       fake_plugger_debug: true,
       fake_plugger_raw_message: true,
+      fake_plugger_use_mail_grabber: true,
       fake_plugger_response: { response: 'OK' }
     }
   end
@@ -80,6 +91,11 @@ RSpec.describe FakePlugger::DeliveryMethod do
           expect(init_method.instance_variable_get('@response'))
             .to eq(delivery_settings[:fake_plugger_response])
         end
+
+        it 'sets use_mail_grabber with expected value' do
+          expect(init_method.instance_variable_get('@use_mail_grabber'))
+            .to eq(delivery_settings[:fake_plugger_use_mail_grabber])
+        end
       end
 
       context 'when NOT using MailPlugger.plug_in method' do
@@ -116,6 +132,11 @@ RSpec.describe FakePlugger::DeliveryMethod do
 
         it 'does NOT set response' do
           expect(init_method.instance_variable_get('@response')).to be nil
+        end
+
+        it 'sets use_mail_grabber with false' do
+          expect(init_method.instance_variable_get('@use_mail_grabber'))
+            .to be false
         end
       end
     end
@@ -167,6 +188,11 @@ RSpec.describe FakePlugger::DeliveryMethod do
         it 'sets response with given value' do
           expect(init_method.instance_variable_get('@response'))
             .to eq(delivery_settings[:fake_plugger_response])
+        end
+
+        it 'sets use_mail_grabber with expected value' do
+          expect(init_method.instance_variable_get('@use_mail_grabber'))
+            .to eq(delivery_settings[:fake_plugger_use_mail_grabber])
         end
       end
 
@@ -508,6 +534,105 @@ RSpec.describe FakePlugger::DeliveryMethod do
           end
 
           it_behaves_like 'fake response', 'and NOT using settings'
+        end
+      end
+    end
+
+    context 'when sets use_mail_grabber option' do
+      before do
+        delivery_settings[:fake_plugger_debug] = false
+        delivery_settings[:fake_plugger_raw_message] = false
+      end
+
+      let(:message) { Mail.new }
+
+      shared_examples 'use_mail_grabber mode' do
+        context 'and mail_grabber gem installed' do
+          before { allow(Gem.loaded_specs).to receive(:key?).and_return(true) }
+
+          context 'and use_mail_grabber mode is swiched off' do
+            before { delivery_settings[:fake_plugger_use_mail_grabber] = false }
+
+            it 'does NOT call deliver! method of MailGrabber::DeliveryMethod' do
+              expect(MailGrabber::DeliveryMethod).not_to receive(:new)
+              deliver
+            end
+          end
+
+          context 'and use_mail_grabber mode is swiched on' do
+            it 'calls deliver! method of MailGrabber::DeliveryMethod' do
+              expect(MailGrabber::DeliveryMethod)
+                .to receive_message_chain(:new, :deliver!)
+              deliver
+            end
+          end
+        end
+
+        context 'and mail_grabber gem does NOT installed' do
+          before { allow(Gem.loaded_specs).to receive(:key?).and_return(false) }
+
+          context 'and use_mail_grabber mode is swiched off' do
+            before { delivery_settings[:fake_plugger_use_mail_grabber] = false }
+
+            it 'does NOT call deliver! method of MailGrabber::DeliveryMethod' do
+              expect(MailGrabber::DeliveryMethod).not_to receive(:new)
+              deliver
+            end
+          end
+
+          context 'and use_mail_grabber mode is swiched on' do
+            it 'does NOT call deliver! method of MailGrabber::DeliveryMethod' do
+              expect(MailGrabber::DeliveryMethod).not_to receive(:new)
+              deliver
+            end
+          end
+        end
+      end
+
+      context 'and using MailPlugger.plug_in method' do
+        subject(:deliver) { described_class.new.deliver!(message) }
+
+        before do
+          MailPlugger.plug_in(delivery_system) do |api|
+            api.delivery_options = delivery_options
+            api.delivery_settings = delivery_settings
+            api.client = client
+          end
+        end
+
+        after do
+          MailPlugger.instance_variables.each do |variable|
+            MailPlugger.remove_instance_variable(variable)
+          end
+        end
+
+        it_behaves_like 'use_mail_grabber mode'
+      end
+
+      context 'and NOT using MailPlugger.plug_in method' do
+        context 'and sets use_mail_grabber value via settings' do
+          subject(:deliver) do
+            described_class.new(
+              delivery_options: delivery_options,
+              client: client,
+              delivery_settings: delivery_settings
+            ).deliver!(message)
+          end
+
+          it_behaves_like 'use_mail_grabber mode'
+        end
+
+        context 'and sets use_mail_grabber value via options' do
+          subject(:deliver) do
+            described_class.new(
+              delivery_options: delivery_options,
+              client: client,
+              use_mail_grabber:
+                delivery_settings[:fake_plugger_use_mail_grabber]
+            ).deliver!(message)
+          end
+
+          it_behaves_like 'use_mail_grabber mode'
         end
       end
     end

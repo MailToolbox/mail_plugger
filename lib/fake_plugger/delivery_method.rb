@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'mail_grabber' if Gem.loaded_specs.key?('mail_grabber')
+
 module FakePlugger
   class DeliveryMethod < MailPlugger::DeliveryMethod
     # Initialize FakePlugger delivery method attributes. If we are using
@@ -29,13 +31,20 @@ module FakePlugger
     # @option options [String/Symbol/Array/Hash] response
     #   the deliver! method will return with this value or if this value is nil
     #   then it will return with the client object
+    #
+    # @option options [Boolean] use_mail_grabber
+    #   if true it will store the message in a database which MailGrabber can
+    #   read
     def initialize(options = {})
       super
 
-      @debug       = options[:debug] || settings[:fake_plugger_debug] || false
-      @raw_message = options[:raw_message] ||
-                     settings[:fake_plugger_raw_message] || false
-      @response    = options[:response] || settings[:fake_plugger_response]
+      @debug            = options[:debug] ||
+                          settings[:fake_plugger_debug] || false
+      @raw_message      = options[:raw_message] ||
+                          settings[:fake_plugger_raw_message] || false
+      @response         = options[:response] || settings[:fake_plugger_response]
+      @use_mail_grabber = options[:use_mail_grabber] ||
+                          settings[:fake_plugger_use_mail_grabber] || false
     end
 
     # Mock send message with the given client if the message parameter is a
@@ -64,6 +73,7 @@ module FakePlugger
     #     api.delivery_settings = {
     #       fake_plugger_debug: true,
     #       fake_plugger_raw_message: true,
+    #       fake_plugger_use_mail_grabber: true,
     #       fake_plugger_response: { response: 'OK' }
     #     }
     #     api.client = DefinedApiClientClass
@@ -84,6 +94,7 @@ module FakePlugger
     #     client: DefinedApiClientClass,
     #     debug: true,
     #     raw_message: true,
+    #     use_mail_grabber: true,
     #     response: { response: 'OK' }
     #   ).deliver!(message)
     #
@@ -97,6 +108,9 @@ module FakePlugger
 
       show_debug_info if @debug
       show_raw_message if @raw_message
+      if Gem.loaded_specs.key?('mail_grabber') && @use_mail_grabber
+        MailGrabber::DeliveryMethod.new.deliver!(message)
+      end
 
       return_with_response
     end
