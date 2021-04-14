@@ -1,21 +1,35 @@
 # Change log
 
+## 1.3.0 (2021-04-14)
+
+### New features
+
+* Add MailGrabber to FakePlugger. Now we can use FakePlugger and MailGrabber in same time.
+
+### Changes
+
+* Remove unnecessary double quotes from `show_debug_info` method in `FakePlugger::DeliveryMethod` and fix documentations.
+* Update bundler and gems.
+* Update bug_report.md.
+
+
 ## 1.2.0 (2021-03-18)
 
 ### New organization
 
-* Move mail_plugger repository into MailToolbox organization
+* Move mail_plugger repository into MailToolbox organization.
 
 ### Changes
 
-* Update gems
-* Fix some documentation issues
+* Update gems.
+* Fix some documentation issues.
+
 
 ## 1.1.1 (2021-01-21)
 
 ### Changes
 
-* Change FakePlugger::DeliveryMethod to returns with the extracted delivery data instead of the message object.
+* Change `FakePlugger::DeliveryMethod` to returns with the extracted delivery data instead of the message object.
 * Update code documentations.
 * Add missing FakePlugger description in the README.md.
 
@@ -61,7 +75,7 @@
 * Check hash keys in `MailPlugger::MailHelper.delivery_system` method, so now if we are add wrong `delivey_system` then we are getting a meaningful error message.
 * Change `MailPlugger::MailHelper.extract_attachments` method. If an attachment is inline then the hash contains the `filename` and `cid` as well.
 * Add/Change tests.
-* Change `MailPlugger::MailHelper.delivery_option` that returns with indifferent hash
+* Change `MailPlugger::MailHelper.delivery_option` that returns with indifferent hash.
 
 
 ## 1.0.0.beta1 (2021-01-02)
