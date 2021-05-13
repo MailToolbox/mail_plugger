@@ -361,20 +361,27 @@ RSpec.describe MailPlugger::MailHelper do
   describe '#default_delivery_system_get' do
     subject(:default_delivery_system) do
       TestClass
-        .new(delivery_options: delivery_options, client: client)
+        .new(
+          delivery_options: delivery_options,
+          client: client,
+          delivery_settings: delivery_settings
+        )
         .default_delivery_system_get
     end
 
-    context 'when neither delivery options or client is a hash' do
+    context 'when neither delivery_options, client or delivery_settings ' \
+            'is a hash' do
       let(:delivery_options) { %i[to from subject body] }
       let(:client) { DummyApi }
+      let(:delivery_settings) { nil }
 
       it 'returns with nil' do
         expect(default_delivery_system).to be nil
       end
     end
 
-    context 'when delivery options is hash but client does NOT' do
+    context 'when delivery_options is hash but client and delivery_settings ' \
+            'does NOT' do
       let(:delivery_options) do
         {
           'dummy_api' => %i[to from subject body],
@@ -382,22 +389,48 @@ RSpec.describe MailPlugger::MailHelper do
         }
       end
       let(:client) { DummyApi }
+      let(:delivery_settings) { nil }
 
       it 'returns with the first key' do
         expect(default_delivery_system).to eq('dummy_api')
       end
     end
 
-    context 'when client is hash but delivery options does NOT' do
+    context 'when client is hash but delivery_options and delivery_settings ' \
+            'does NOT' do
       let(:delivery_options) { %i[to from subject body] }
       let(:client) { { 'dummy_api' => DummyApi } }
+      let(:delivery_settings) { nil }
 
       it 'returns with the first key' do
         expect(default_delivery_system).to eq('dummy_api')
       end
     end
 
-    context 'when both delivery options and client are hashes' do
+    context 'when delivery_settings is hash but delivery_options and client ' \
+            'does NOT' do
+      let(:delivery_options) { %i[to from subject body] }
+      let(:client) { DummyApi }
+
+      context 'and it contains DELIVERY_SETTINGS_KEYS' do
+        let(:delivery_settings) { { return_response: true } }
+
+        it 'returns with nil' do
+          expect(default_delivery_system).to be nil
+        end
+      end
+
+      context 'and it does NOT contain DELIVERY_SETTINGS_KEYS' do
+        let(:delivery_settings) { { 'dummy_api' => { return_response: true } } }
+
+        it 'returns with the first key' do
+          expect(default_delivery_system).to eq('dummy_api')
+        end
+      end
+    end
+
+    context 'when all delivery_options, client and delivery_settings ' \
+            'are hashes' do
       let(:delivery_options) do
         {
           'dummy_api' => %i[to from subject body],
@@ -405,6 +438,7 @@ RSpec.describe MailPlugger::MailHelper do
         }
       end
       let(:client) { { 'dummy_api' => DummyApi } }
+      let(:delivery_settings) { { 'dummy_api' => { return_response: true } } }
 
       it 'returns with the first key' do
         expect(default_delivery_system).to eq('dummy_api')
@@ -421,7 +455,7 @@ RSpec.describe MailPlugger::MailHelper do
 
     let(:message) { Mail.new(delivery_system: 'dummy_api') }
 
-    context 'when delivery options does NOT an array' do
+    context 'when delivery_options does NOT an array' do
       let(:options) { 'to from subject body' }
 
       it 'raises error' do
@@ -430,7 +464,7 @@ RSpec.describe MailPlugger::MailHelper do
       end
     end
 
-    context 'when delivery options does NOT a hash' do
+    context 'when delivery_options does NOT a hash' do
       let(:options) { %i[to from subject body] }
 
       it 'returns with the given array' do
@@ -438,7 +472,7 @@ RSpec.describe MailPlugger::MailHelper do
       end
     end
 
-    context 'when delivery options is a hash' do
+    context 'when delivery_options is a hash' do
       let(:options) do
         {
           'dummy_api' => %i[to from subject body],
@@ -459,6 +493,7 @@ RSpec.describe MailPlugger::MailHelper do
           delivery_options: delivery_options,
           client: client,
           default_delivery_system: default_delivery_system,
+          delivery_settings: delivery_settings,
           message: message
         )
         .delivery_system
@@ -468,6 +503,7 @@ RSpec.describe MailPlugger::MailHelper do
       let(:delivery_options) { nil }
       let(:client) { nil }
       let(:default_delivery_system) { nil }
+      let(:delivery_settings) { nil }
       let(:message) { nil }
 
       it 'does NOT raise error' do
@@ -478,15 +514,17 @@ RSpec.describe MailPlugger::MailHelper do
     context 'when message exists' do
       let(:message) { Mail.new(mail_options) }
 
-      context 'and both delivery_options and client are hashes' do
+      context 'and all delivery_options, client and delivery_settings ' \
+              'are hashes' do
         let(:delivery_options) { { 'dummy_api' => %i[to from subject body] } }
         let(:client) { { 'dummy_api' => DummyApi } }
+        let(:delivery_settings) { { 'dummy_api' => { return_response: true } } }
 
         context 'and default_delivery_system is defined' do
           let(:mail_options) { {} }
           let(:default_delivery_system) { 'dummy_api' }
 
-          it 'returns with the default delivery system' do
+          it 'returns with the default_delivery_system' do
             expect(delivery_system).to eq('dummy_api')
           end
         end
@@ -495,7 +533,7 @@ RSpec.describe MailPlugger::MailHelper do
           let(:mail_options) { { delivery_system: 'dummy_api' } }
           let(:default_delivery_system) { nil }
 
-          it 'returns with the delivery system from Mail::Message' do
+          it 'returns with the delivery_system from Mail::Message' do
             expect(delivery_system).to eq('dummy_api')
           end
         end
@@ -511,15 +549,17 @@ RSpec.describe MailPlugger::MailHelper do
         end
       end
 
-      context 'and one of the delivery_options and client is a hash' do
+      context 'and one of the delivery_options, client or delivery_settings ' \
+              'is a hash' do
         let(:delivery_options) { { 'dummy_api' => %i[to from subject body] } }
         let(:client) { DummyApi }
+        let(:delivery_settings) { nil }
 
         context 'and default_delivery_system is defined' do
           let(:mail_options) { {} }
           let(:default_delivery_system) { 'dummy_api' }
 
-          it 'returns with the default delivery system' do
+          it 'returns with the default_delivery_system' do
             expect(delivery_system).to eq('dummy_api')
           end
         end
@@ -528,7 +568,7 @@ RSpec.describe MailPlugger::MailHelper do
           let(:mail_options) { { delivery_system: 'dummy_api' } }
           let(:default_delivery_system) { nil }
 
-          it 'returns with the delivery system from Mail::Message' do
+          it 'returns with the delivery_system from Mail::Message' do
             expect(delivery_system).to eq('dummy_api')
           end
         end
@@ -544,15 +584,17 @@ RSpec.describe MailPlugger::MailHelper do
         end
       end
 
-      context 'and none of the delivery_options and client are hashes' do
+      context 'and none of the delivery_options, client and ' \
+              'delivery_settings are hashes' do
         let(:delivery_options) { %i[to from subject body] }
         let(:client) { DummyApi }
+        let(:delivery_settings) { nil }
 
         context 'and default_delivery_system is defined' do
           let(:mail_options) { {} }
           let(:default_delivery_system) { 'dummy_api' }
 
-          it 'returns with the default delivery system' do
+          it 'returns with the default_delivery_system' do
             expect(delivery_system).to eq('dummy_api')
           end
         end
@@ -561,7 +603,7 @@ RSpec.describe MailPlugger::MailHelper do
           let(:mail_options) { { delivery_system: 'dummy_api' } }
           let(:default_delivery_system) { nil }
 
-          it 'returns with the delivery system from Mail::Message' do
+          it 'returns with the delivery_system from Mail::Message' do
             expect(delivery_system).to eq('dummy_api')
           end
         end
@@ -580,6 +622,7 @@ RSpec.describe MailPlugger::MailHelper do
       context 'and calls delivery_system more time' do
         let(:delivery_options) { nil }
         let(:client) { nil }
+        let(:delivery_settings) { nil }
         let(:mail_options) { {} }
         let(:default_delivery_system) { nil }
 
@@ -605,7 +648,8 @@ RSpec.describe MailPlugger::MailHelper do
       TestClass
         .new(
           delivery_options: delivery_options,
-          client: client
+          client: client,
+          delivery_settings: delivery_settings
         )
         .extract_keys
     end
@@ -613,6 +657,7 @@ RSpec.describe MailPlugger::MailHelper do
     context 'when delivery_options is a hash' do
       let(:delivery_options) { { key1: :value1, key2: :value2 } }
       let(:client) { nil }
+      let(:delivery_settings) { nil }
 
       it 'returns with the keys' do
         expect(extract_keys).to eq(%i[key1 key2])
@@ -622,6 +667,7 @@ RSpec.describe MailPlugger::MailHelper do
     context 'when client is a hash' do
       let(:delivery_options) { nil }
       let(:client) { { 'key1' => 'value1', 'key2' => 'value2' } }
+      let(:delivery_settings) { nil }
 
       it 'returns with the keys' do
         expect(extract_keys).to eq(%w[key1 key2])
@@ -634,15 +680,49 @@ RSpec.describe MailPlugger::MailHelper do
       # but now we can see that the delivery_options keys will be returned,
       # which should be ok.
       let(:client) { { key3: :value3, key4: :value4 } }
+      let(:delivery_settings) { nil }
 
       it 'returns with the first hash keys' do
         expect(extract_keys).to eq(%i[key1 key2])
       end
     end
 
-    context 'when neither delivery_options nor client are hashes' do
+    context 'when delivery_settings is a hash' do
       let(:delivery_options) { nil }
       let(:client) { nil }
+
+      context 'but it contains only DELIVERY_SETTINGS_KEYS' do
+        let(:delivery_settings) { { return_response: true } }
+
+        it 'returns with nil' do
+          expect(extract_keys).to be nil
+        end
+      end
+
+      context 'but it contains one of DELIVERY_SETTINGS_KEYS' do
+        let(:delivery_settings) do
+          { 'key' => 'value', 'return_response' => true }
+        end
+
+        it 'returns with nil' do
+          expect(extract_keys).to be nil
+        end
+      end
+
+      context 'and it does NOT contain DELIVERY_SETTINGS_KEYS ' \
+              '(in the first level)' do
+        let(:delivery_settings) { { 'key' => { return_response: true } } }
+
+        it 'returns with the keys' do
+          expect(extract_keys).to eq(%w[key])
+        end
+      end
+    end
+
+    context 'when none of the options are hashes' do
+      let(:delivery_options) { nil }
+      let(:client) { nil }
+      let(:delivery_settings) { nil }
 
       it 'returns with nil' do
         expect(extract_keys).to be nil
@@ -789,10 +869,59 @@ RSpec.describe MailPlugger::MailHelper do
     end
   end
 
+  describe '#send_via_smtp?' do
+    subject(:send_via_smtp) do
+      TestClass.new(delivery_settings: delivery_settings).send_via_smtp?
+    end
+
+    context 'when settings does NOT contain smtp_settings' do
+      let(:delivery_settings) { nil }
+
+      it 'returns with false' do
+        expect(send_via_smtp).to be false
+      end
+    end
+
+    context 'when settings contains smtp_settings' do
+      context 'but it does NOT a hash' do
+        let(:delivery_settings) { { smtp_settings: nil } }
+
+        it 'returns with false' do
+          expect(send_via_smtp).to be false
+        end
+      end
+
+      context 'and it is a hash' do
+        context 'but empty' do
+          let(:delivery_settings) { { smtp_settings: {} } }
+
+          it 'returns with false' do
+            expect(send_via_smtp).to be false
+          end
+        end
+
+        context 'and it has settings' do
+          let(:delivery_settings) { { smtp_settings: { key: 'value' } } }
+
+          it 'returns with true' do
+            expect(send_via_smtp).to be true
+          end
+        end
+      end
+    end
+  end
+
   describe '#settings' do
     subject(:settings) do
-      TestClass.new(delivery_settings: delivery_settings).settings
+      TestClass
+        .new(
+          delivery_settings: delivery_settings,
+          default_delivery_system: default_delivery_system
+        )
+        .settings
     end
+
+    let(:default_delivery_system) { nil }
 
     context 'when delivery_settings does NOT a hash' do
       context 'but it is nil' do
@@ -814,10 +943,80 @@ RSpec.describe MailPlugger::MailHelper do
     end
 
     context 'when delivery_settings is a hash' do
-      let(:delivery_settings) { { key: :value } }
+      context 'and delivery_system does NOT defined anywhere' do
+        context 'but it contains only DELIVERY_SETTINGS_KEYS' do
+          let(:delivery_settings) { { return_response: true } }
 
-      it 'returns with the hash' do
-        expect(settings).to eq(delivery_settings)
+          it 'returns with the delivery_settings' do
+            expect(settings).to eq(delivery_settings)
+          end
+        end
+
+        context 'but it contains one of DELIVERY_SETTINGS_KEYS' do
+          let(:delivery_settings) do
+            { 'key' => 'value', 'return_response' => true }
+          end
+
+          it 'returns with the delivery_settings' do
+            expect(settings).to eq(delivery_settings)
+          end
+        end
+
+        context 'and it does NOT contain DELIVERY_SETTINGS_KEYS ' \
+                '(in the first level)' do
+          let(:delivery_settings) { { 'key' => { return_response: true } } }
+
+          it 'raises error' do
+            expect { settings }
+              .to raise_error(MailPlugger::Error::WrongDeliverySystem)
+          end
+        end
+      end
+
+      context 'and delivery_system is defined somehow' do
+        let(:default_delivery_system) { 'key' }
+
+        context 'but it contains only DELIVERY_SETTINGS_KEYS' do
+          let(:delivery_settings) { { return_response: true } }
+
+          it 'returns with the delivery_settings' do
+            expect(settings).to eq(delivery_settings)
+          end
+        end
+
+        context 'but it contains one of DELIVERY_SETTINGS_KEYS' do
+          context 'and the value of the key of the delivery_system ' \
+                  'does NOT a hash' do
+            let(:delivery_settings) do
+              { 'key' => 'value', 'return_response' => true }
+            end
+
+            it 'raises error' do
+              expect { settings }
+                .to raise_error(MailPlugger::Error::WrongDeliverySettings)
+            end
+          end
+
+          context 'and the value of the key of the delivery_system ' \
+                  'is a hash' do
+            let(:delivery_settings) do
+              { 'key' => {}, 'return_response' => true }
+            end
+
+            it 'returns with the extracted delivery_settings' do
+              expect(settings).to eq(delivery_settings['key'])
+            end
+          end
+        end
+
+        context 'and it does NOT contain DELIVERY_SETTINGS_KEYS ' \
+                '(in the first level)' do
+          let(:delivery_settings) { { 'key' => { return_response: true } } }
+
+          it 'returns with the extracted delivery_settings' do
+            expect(settings).to eq(delivery_settings['key'])
+          end
+        end
       end
     end
 

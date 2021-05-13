@@ -250,49 +250,96 @@ RSpec.describe FakePlugger::DeliveryMethod do
         # rubocop:enable RSpec/AnyInstance
       end
 
-      context 'and using MailPlugger.plug_in method' do
-        subject(:deliver) { described_class.new.deliver!(message) }
+      context 'and using SMTP' do
+        before { delivery_settings[:smtp_settings] = { key: 'value' } }
 
-        before do
-          MailPlugger.plug_in(delivery_system) do |api|
-            api.delivery_options = delivery_options
-            api.delivery_settings = delivery_settings
-            api.client = client
+        context 'and using MailPlugger.plug_in method' do
+          subject(:deliver) { described_class.new.deliver!(message) }
+
+          before do
+            MailPlugger.plug_in(delivery_system) do |smtp|
+              smtp.delivery_settings = delivery_settings
+            end
           end
+
+          after do
+            MailPlugger.instance_variables.each do |variable|
+              MailPlugger.remove_instance_variable(variable)
+            end
+          end
+
+          it_behaves_like 'debug mode'
         end
 
-        after do
-          MailPlugger.instance_variables.each do |variable|
-            MailPlugger.remove_instance_variable(variable)
+        context 'and NOT using MailPlugger.plug_in method' do
+          context 'and sets debug value via settings' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_settings: delivery_settings
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'debug mode'
+          end
+
+          context 'and sets debug value via options' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_settings: delivery_settings.slice(:smtp_settings),
+                debug: delivery_settings[:fake_plugger_debug]
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'debug mode'
           end
         end
-
-        it_behaves_like 'debug mode'
       end
 
-      context 'and NOT using MailPlugger.plug_in method' do
-        context 'and sets debug value via settings' do
-          subject(:deliver) do
-            described_class.new(
-              delivery_options: delivery_options,
-              client: client,
-              delivery_settings: delivery_settings
-            ).deliver!(message)
+      context 'and using API' do
+        context 'and using MailPlugger.plug_in method' do
+          subject(:deliver) { described_class.new.deliver!(message) }
+
+          before do
+            MailPlugger.plug_in(delivery_system) do |api|
+              api.delivery_options = delivery_options
+              api.delivery_settings = delivery_settings
+              api.client = client
+            end
+          end
+
+          after do
+            MailPlugger.instance_variables.each do |variable|
+              MailPlugger.remove_instance_variable(variable)
+            end
           end
 
           it_behaves_like 'debug mode'
         end
 
-        context 'and sets debug value via options' do
-          subject(:deliver) do
-            described_class.new(
-              delivery_options: delivery_options,
-              client: client,
-              debug: delivery_settings[:fake_plugger_debug]
-            ).deliver!(message)
+        context 'and NOT using MailPlugger.plug_in method' do
+          context 'and sets debug value via settings' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_options: delivery_options,
+                client: client,
+                delivery_settings: delivery_settings
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'debug mode'
           end
 
-          it_behaves_like 'debug mode'
+          context 'and sets debug value via options' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_options: delivery_options,
+                client: client,
+                debug: delivery_settings[:fake_plugger_debug]
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'debug mode'
+          end
         end
       end
     end
@@ -326,49 +373,96 @@ RSpec.describe FakePlugger::DeliveryMethod do
         # rubocop:enable RSpec/AnyInstance
       end
 
-      context 'and using MailPlugger.plug_in method' do
-        subject(:deliver) { described_class.new.deliver!(message) }
+      context 'and using SMTP' do
+        before { delivery_settings[:smtp_settings] = { key: 'value' } }
 
-        before do
-          MailPlugger.plug_in(delivery_system) do |api|
-            api.delivery_options = delivery_options
-            api.delivery_settings = delivery_settings
-            api.client = client
+        context 'and using MailPlugger.plug_in method' do
+          subject(:deliver) { described_class.new.deliver!(message) }
+
+          before do
+            MailPlugger.plug_in(delivery_system) do |smtp|
+              smtp.delivery_settings = delivery_settings
+            end
           end
+
+          after do
+            MailPlugger.instance_variables.each do |variable|
+              MailPlugger.remove_instance_variable(variable)
+            end
+          end
+
+          it_behaves_like 'raw_message mode'
         end
 
-        after do
-          MailPlugger.instance_variables.each do |variable|
-            MailPlugger.remove_instance_variable(variable)
+        context 'and NOT using MailPlugger.plug_in method' do
+          context 'and sets raw_message value via settings' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_settings: delivery_settings
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'raw_message mode'
+          end
+
+          context 'and sets raw_message value via options' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_settings: delivery_settings.slice(:smtp_settings),
+                raw_message: delivery_settings[:fake_plugger_raw_message]
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'raw_message mode'
           end
         end
-
-        it_behaves_like 'raw_message mode'
       end
 
-      context 'and NOT using MailPlugger.plug_in method' do
-        context 'and sets raw_message value via settings' do
-          subject(:deliver) do
-            described_class.new(
-              delivery_options: delivery_options,
-              client: client,
-              delivery_settings: delivery_settings
-            ).deliver!(message)
+      context 'and using API' do
+        context 'and using MailPlugger.plug_in method' do
+          subject(:deliver) { described_class.new.deliver!(message) }
+
+          before do
+            MailPlugger.plug_in(delivery_system) do |api|
+              api.delivery_options = delivery_options
+              api.delivery_settings = delivery_settings
+              api.client = client
+            end
+          end
+
+          after do
+            MailPlugger.instance_variables.each do |variable|
+              MailPlugger.remove_instance_variable(variable)
+            end
           end
 
           it_behaves_like 'raw_message mode'
         end
 
-        context 'and sets raw_message value via options' do
-          subject(:deliver) do
-            described_class.new(
-              delivery_options: delivery_options,
-              client: client,
-              raw_message: delivery_settings[:fake_plugger_raw_message]
-            ).deliver!(message)
+        context 'and NOT using MailPlugger.plug_in method' do
+          context 'and sets raw_message value via settings' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_options: delivery_options,
+                client: client,
+                delivery_settings: delivery_settings
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'raw_message mode'
           end
 
-          it_behaves_like 'raw_message mode'
+          context 'and sets raw_message value via options' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_options: delivery_options,
+                client: client,
+                raw_message: delivery_settings[:fake_plugger_raw_message]
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'raw_message mode'
+          end
         end
       end
     end
@@ -396,7 +490,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
         }
       end
 
-      shared_examples 'fake response' do |use_settings_method|
+      shared_examples 'fake response' do |use_settings_method, delivery_method|
         shared_examples 'expected method calls' do |use_delivery_data|
           # rubocop:disable RSpec/AnyInstance
           it 'does NOT call client method' do
@@ -422,7 +516,8 @@ RSpec.describe FakePlugger::DeliveryMethod do
             end
           end
 
-          if use_delivery_data == 'and returns with delivery_data'
+          if use_delivery_data == 'and returns with delivery_data' &&
+             delivery_method == 'API'
             it 'calls delivery_options method' do
               expect_any_instance_of(MailPlugger::MailHelper)
                 .to receive(:delivery_options)
@@ -460,9 +555,16 @@ RSpec.describe FakePlugger::DeliveryMethod do
         context 'and does NOT set the response value' do
           before { delivery_settings[:fake_plugger_response] = nil }
 
-          it 'calls the new method of the client' do
-            expect(client).to receive(:new)
-            deliver
+          if delivery_method == 'SMTP'
+            it 'calls the delivery_method method of the message' do
+              expect(message).to receive(:delivery_method)
+              deliver
+            end
+          else
+            it 'calls the new method of the client' do
+              expect(client).to receive(:new)
+              deliver
+            end
           end
         end
 
@@ -473,8 +575,14 @@ RSpec.describe FakePlugger::DeliveryMethod do
             }
           end
 
-          it 'returns with delivery_data hash' do
-            expect(deliver).to eq(expected_hash)
+          if delivery_method == 'SMTP'
+            it 'returns with response value' do
+              expect(deliver).to eq(delivery_settings[:fake_plugger_response])
+            end
+          else
+            it 'returns with delivery_data hash' do
+              expect(deliver).to eq(expected_hash)
+            end
           end
 
           it_behaves_like 'expected method calls',
@@ -491,49 +599,96 @@ RSpec.describe FakePlugger::DeliveryMethod do
         end
       end
 
-      context 'and using MailPlugger.plug_in method' do
-        subject(:deliver) { described_class.new.deliver!(message) }
+      context 'and using SMTP' do
+        before { delivery_settings[:smtp_settings] = { key: 'value' } }
 
-        before do
-          MailPlugger.plug_in(delivery_system) do |api|
-            api.delivery_options = delivery_options
-            api.delivery_settings = delivery_settings
-            api.client = client
+        context 'and using MailPlugger.plug_in method' do
+          subject(:deliver) { described_class.new.deliver!(message) }
+
+          before do
+            MailPlugger.plug_in(delivery_system) do |smtp|
+              smtp.delivery_settings = delivery_settings
+            end
           end
+
+          after do
+            MailPlugger.instance_variables.each do |variable|
+              MailPlugger.remove_instance_variable(variable)
+            end
+          end
+
+          it_behaves_like 'fake response', 'and using settings', 'SMTP'
         end
 
-        after do
-          MailPlugger.instance_variables.each do |variable|
-            MailPlugger.remove_instance_variable(variable)
+        context 'and NOT using MailPlugger.plug_in method' do
+          context 'and sets response value via settings' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_settings: delivery_settings
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'fake response', 'and using settings', 'SMTP'
+          end
+
+          context 'and sets response value via options' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_settings: delivery_settings.slice(:smtp_settings),
+                response: delivery_settings[:fake_plugger_response]
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'fake response', 'and using settings', 'SMTP'
           end
         end
-
-        it_behaves_like 'fake response', 'and using settings'
       end
 
-      context 'and NOT using MailPlugger.plug_in method' do
-        context 'and sets response value via settings' do
-          subject(:deliver) do
-            described_class.new(
-              delivery_options: delivery_options,
-              client: client,
-              delivery_settings: delivery_settings
-            ).deliver!(message)
+      context 'and using API' do
+        context 'and using MailPlugger.plug_in method' do
+          subject(:deliver) { described_class.new.deliver!(message) }
+
+          before do
+            MailPlugger.plug_in(delivery_system) do |api|
+              api.delivery_options = delivery_options
+              api.delivery_settings = delivery_settings
+              api.client = client
+            end
           end
 
-          it_behaves_like 'fake response', 'and using settings'
+          after do
+            MailPlugger.instance_variables.each do |variable|
+              MailPlugger.remove_instance_variable(variable)
+            end
+          end
+
+          it_behaves_like 'fake response', 'and using settings', 'API'
         end
 
-        context 'and sets response value via options' do
-          subject(:deliver) do
-            described_class.new(
-              delivery_options: delivery_options,
-              client: client,
-              response: delivery_settings[:fake_plugger_response]
-            ).deliver!(message)
+        context 'and NOT using MailPlugger.plug_in method' do
+          context 'and sets response value via settings' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_options: delivery_options,
+                client: client,
+                delivery_settings: delivery_settings
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'fake response', 'and using settings', 'API'
           end
 
-          it_behaves_like 'fake response', 'and NOT using settings'
+          context 'and sets response value via options' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_options: delivery_options,
+                client: client,
+                response: delivery_settings[:fake_plugger_response]
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'fake response', 'and NOT using settings', 'API'
+          end
         end
       end
     end
@@ -589,60 +744,60 @@ RSpec.describe FakePlugger::DeliveryMethod do
         end
       end
 
-      context 'and using MailPlugger.plug_in method' do
-        subject(:deliver) { described_class.new.deliver!(message) }
+      context 'and using SMTP' do
+        before { delivery_settings[:smtp_settings] = { key: 'value' } }
 
-        before do
-          MailPlugger.plug_in(delivery_system) do |api|
-            api.delivery_options = delivery_options
-            api.delivery_settings = delivery_settings
-            api.client = client
+        context 'and using MailPlugger.plug_in method' do
+          subject(:deliver) { described_class.new.deliver!(message) }
+
+          before do
+            MailPlugger.plug_in(delivery_system) do |smtp|
+              smtp.delivery_settings = delivery_settings
+            end
           end
-        end
 
-        after do
-          MailPlugger.instance_variables.each do |variable|
-            MailPlugger.remove_instance_variable(variable)
-          end
-        end
-
-        it_behaves_like 'use_mail_grabber mode'
-      end
-
-      context 'and NOT using MailPlugger.plug_in method' do
-        context 'and sets use_mail_grabber value via settings' do
-          subject(:deliver) do
-            described_class.new(
-              delivery_options: delivery_options,
-              client: client,
-              delivery_settings: delivery_settings
-            ).deliver!(message)
+          after do
+            MailPlugger.instance_variables.each do |variable|
+              MailPlugger.remove_instance_variable(variable)
+            end
           end
 
           it_behaves_like 'use_mail_grabber mode'
         end
 
-        context 'and sets use_mail_grabber value via options' do
-          subject(:deliver) do
-            described_class.new(
-              delivery_options: delivery_options,
-              client: client,
-              use_mail_grabber:
-                delivery_settings[:fake_plugger_use_mail_grabber]
-            ).deliver!(message)
+        context 'and NOT using MailPlugger.plug_in method' do
+          context 'and sets use_mail_grabber value via settings' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_settings: delivery_settings
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'use_mail_grabber mode'
           end
 
-          it_behaves_like 'use_mail_grabber mode'
+          context 'and sets use_mail_grabber value via options' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_settings: delivery_settings.slice(:smtp_settings),
+                use_mail_grabber:
+                  delivery_settings[:fake_plugger_use_mail_grabber]
+              ).deliver!(message)
+            end
+
+            it_behaves_like 'use_mail_grabber mode'
+          end
         end
       end
-    end
 
-    context 'when it behaves like MailPlugger::DeliveryMethod' do
-      context 'without initialize arguments' do
-        context 'when using MailPlugger.plug_in method' do
+      context 'and using API' do
+        context 'and using MailPlugger.plug_in method' do
+          subject(:deliver) { described_class.new.deliver!(message) }
+
           before do
             MailPlugger.plug_in(delivery_system) do |api|
               api.delivery_options = delivery_options
+              api.delivery_settings = delivery_settings
               api.client = client
             end
           end
@@ -653,76 +808,222 @@ RSpec.describe FakePlugger::DeliveryMethod do
             end
           end
 
-          context 'and without deliver! method paramemter' do
-            subject(:deliver) { described_class.new.deliver! }
+          it_behaves_like 'use_mail_grabber mode'
+        end
 
-            it 'raises error' do
-              expect { deliver }.to raise_error(ArgumentError)
+        context 'and NOT using MailPlugger.plug_in method' do
+          context 'and sets use_mail_grabber value via settings' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_options: delivery_options,
+                client: client,
+                delivery_settings: delivery_settings
+              ).deliver!(message)
             end
+
+            it_behaves_like 'use_mail_grabber mode'
           end
 
-          context 'and the deliver! method has paramemter' do
-            subject(:deliver) { described_class.new.deliver!(message) }
+          context 'and sets use_mail_grabber value via options' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_options: delivery_options,
+                client: client,
+                use_mail_grabber:
+                  delivery_settings[:fake_plugger_use_mail_grabber]
+              ).deliver!(message)
+            end
 
-            context 'and message paramemter does NOT a Mail::Message object' do
-              let(:message) { nil }
+            it_behaves_like 'use_mail_grabber mode'
+          end
+        end
+      end
+    end
 
-              it 'raises error' do
-                expect { deliver }
-                  .to raise_error(MailPlugger::Error::WrongParameter)
+    context 'when it behaves like MailPlugger::DeliveryMethod' do
+      context 'without initialize arguments' do
+        context 'when using SMTP' do
+          let(:delivery_settings) { { smtp_settings: { key: 'value' } } }
+
+          context 'when using MailPlugger.plug_in method' do
+            before do
+              MailPlugger.plug_in(delivery_system) do |smtp|
+                smtp.delivery_settings = delivery_settings
               end
             end
 
-            context 'and message paramemter is a Mail::Message object' do
-              context 'but it does NOT contain delivery_system' do
-                let(:message) { Mail.new }
+            after do
+              MailPlugger.instance_variables.each do |variable|
+                MailPlugger.remove_instance_variable(variable)
+              end
+            end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
+            context 'and without deliver! method paramemter' do
+              subject(:deliver) { described_class.new.deliver! }
 
-                it 'calls only the new method of the client' do
-                  expect(client).to receive(:new)
-                  deliver
+              it 'raises error' do
+                expect { deliver }.to raise_error(ArgumentError)
+              end
+            end
+
+            context 'and the deliver! method has paramemter' do
+              subject(:deliver) { described_class.new.deliver!(message) }
+
+              context 'and message paramemter does NOT a Mail::Message ' \
+                      'object' do
+                let(:message) { nil }
+
+                it 'raises error' do
+                  expect { deliver }
+                    .to raise_error(MailPlugger::Error::WrongParameter)
                 end
               end
 
-              context 'and it contains delivery_system' do
-                context 'but the given delivery_system does NOT exist' do
-                  let(:message) { Mail.new(delivery_system: 'key') }
+              context 'and message paramemter is a Mail::Message object' do
+                before { allow(message).to receive(:deliver!) }
 
-                  it 'raises error' do
-                    expect { deliver }
-                      .to raise_error(MailPlugger::Error::WrongDeliverySystem)
+                context 'but message does NOT contain delivery_system' do
+                  let(:message) { Mail.new }
+
+                  it 'does NOT raise error' do
+                    expect { deliver }.not_to raise_error
+                  end
+
+                  it 'returns with the message' do
+                    expect(deliver).to eq(message)
                   end
                 end
 
-                context 'and the given delivery_system exists' do
-                  let(:message) { Mail.new(delivery_system: delivery_system) }
+                context 'and message contains delivery_system' do
+                  context 'but the given delivery_system does NOT exist' do
+                    let(:message) { Mail.new(delivery_system: 'key') }
 
-                  context 'and delivery_system value is string' do
-                    let(:delivery_system) { 'dummy_api' }
-
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls only the new method of the client' do
-                      expect(client).to receive(:new)
-                      deliver
+                    it 'raises error' do
+                      expect { deliver }
+                        .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                     end
                   end
 
-                  context 'and delivery_system value is symbol' do
-                    let(:delivery_system) { :dummy_api }
+                  context 'and the given delivery_system exists' do
+                    let(:message) { Mail.new(delivery_system: delivery_system) }
 
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
+                    context 'and delivery_system value is string' do
+                      let(:delivery_system) { 'dummy_api' }
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'returns with the message' do
+                        expect(deliver).to eq(message)
+                      end
                     end
 
-                    it 'calls only the new method of the client' do
-                      expect(client).to receive(:new)
-                      deliver
+                    context 'and delivery_system value is symbol' do
+                      let(:delivery_system) { :dummy_api }
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'returns with the message' do
+                        expect(deliver).to eq(message)
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+        end
+
+        context 'when using API' do
+          context 'when using MailPlugger.plug_in method' do
+            before do
+              MailPlugger.plug_in(delivery_system) do |api|
+                api.delivery_options = delivery_options
+                api.client = client
+              end
+            end
+
+            after do
+              MailPlugger.instance_variables.each do |variable|
+                MailPlugger.remove_instance_variable(variable)
+              end
+            end
+
+            context 'and without deliver! method paramemter' do
+              subject(:deliver) { described_class.new.deliver! }
+
+              it 'raises error' do
+                expect { deliver }.to raise_error(ArgumentError)
+              end
+            end
+
+            context 'and the deliver! method has paramemter' do
+              subject(:deliver) { described_class.new.deliver!(message) }
+
+              context 'and message paramemter does NOT a Mail::Message ' \
+                      'object' do
+                let(:message) { nil }
+
+                it 'raises error' do
+                  expect { deliver }
+                    .to raise_error(MailPlugger::Error::WrongParameter)
+                end
+              end
+
+              context 'and message paramemter is a Mail::Message object' do
+                context 'but message does NOT contain delivery_system' do
+                  let(:message) { Mail.new }
+
+                  it 'does NOT raise error' do
+                    expect { deliver }.not_to raise_error
+                  end
+
+                  it 'calls only the new method of the client' do
+                    expect(client).to receive(:new)
+                    deliver
+                  end
+                end
+
+                context 'and message contains delivery_system' do
+                  context 'but the given delivery_system does NOT exist' do
+                    let(:message) { Mail.new(delivery_system: 'key') }
+
+                    it 'raises error' do
+                      expect { deliver }
+                        .to raise_error(MailPlugger::Error::WrongDeliverySystem)
+                    end
+                  end
+
+                  context 'and the given delivery_system exists' do
+                    let(:message) { Mail.new(delivery_system: delivery_system) }
+
+                    context 'and delivery_system value is string' do
+                      let(:delivery_system) { 'dummy_api' }
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
+                    end
+
+                    context 'and delivery_system value is symbol' do
+                      let(:delivery_system) { :dummy_api }
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
                     end
                   end
                 end
@@ -753,7 +1054,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
             end
 
             context 'and message paramemter is a Mail::Message object' do
-              context 'but it does NOT contain delivery_system' do
+              context 'but message does NOT contain delivery_system' do
                 let(:message) { Mail.new }
 
                 it 'raises error' do
@@ -762,7 +1063,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
                 end
               end
 
-              context 'and it contains delivery_system' do
+              context 'and message contains delivery_system' do
                 context 'but the given delivery_system does NOT exist' do
                   let(:message) { Mail.new(delivery_system: 'key') }
 
@@ -787,77 +1088,825 @@ RSpec.describe FakePlugger::DeliveryMethod do
       end
 
       context 'with initialize arguments' do
-        context 'and without deliver! method paramemter' do
-          subject(:deliver) do
-            described_class.new(
-              delivery_options: delivery_options,
-              client: client,
-              default_delivery_system: delivery_system
-            ).deliver!
+        context 'when using SMTP' do
+          context 'and without deliver! method paramemter' do
+            subject(:deliver) do
+              described_class.new(
+                default_delivery_system: delivery_system,
+                delivery_settings: delivery_settings
+              ).deliver!
+            end
+
+            it 'raises error' do
+              expect { deliver }.to raise_error(ArgumentError)
+            end
           end
 
-          it 'raises error' do
-            expect { deliver }.to raise_error(ArgumentError)
+          context 'and the deliver! method has paramemter' do
+            subject(:deliver) do
+              described_class.new(
+                default_delivery_system: default_delivery_system,
+                delivery_settings: delivery_settings
+              ).deliver!(message)
+            end
+
+            context 'but message paramemter does NOT a Mail::Message object' do
+              let(:default_delivery_system) { nil }
+              let(:message) { nil }
+
+              it 'raises error' do
+                expect { deliver }
+                  .to raise_error(MailPlugger::Error::WrongParameter)
+              end
+            end
+
+            context 'and message paramemter is a Mail::Message object' do
+              before { allow(message).to receive(:deliver!) }
+
+              context 'and default_delivery_system does NOT defined' do
+                let(:default_delivery_system) { nil }
+
+                context 'when delivery_settings is a hash' do
+                  context 'and delivery_settings does NOT contain ' \
+                          'delivery_system' do
+                    context 'and delivery_settings does NOT contain ' \
+                            'smtp_settings' do
+                      context 'but delivery_settings contains ' \
+                              'one of DELIVERY_SETTINGS_KEYS' do
+                        let(:delivery_settings) { { return_response: true } }
+
+                        context 'but message does NOT contain ' \
+                                'delivery_system' do
+                          let(:message) { Mail.new }
+
+                          it 'raises error' do
+                            expect { deliver }.to raise_error(
+                              MailPlugger::Error::WrongApiClient
+                            )
+                          end
+                        end
+
+                        context 'and message contains delivery_system' do
+                          context 'but the given delivery_system does NOT ' \
+                                  'exist' do
+                            let(:message) { Mail.new(delivery_system: 'key') }
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongApiClient
+                              )
+                            end
+                          end
+
+                          context 'and the given delivery_system exists' do
+                            let(:message) do
+                              Mail.new(delivery_system: delivery_system)
+                            end
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongApiClient
+                              )
+                            end
+                          end
+                        end
+                      end
+
+                      context 'and delivery_settings does NOT contain ' \
+                              'DELIVERY_SETTINGS_KEYS (in the first level)' do
+                        let(:delivery_settings) { { key: 'value' } }
+
+                        context 'but message does NOT contain ' \
+                                'delivery_system' do
+                          let(:message) { Mail.new }
+
+                          it 'raises error' do
+                            expect { deliver }.to raise_error(
+                              MailPlugger::Error::WrongDeliverySettings
+                            )
+                          end
+                        end
+
+                        context 'and message contains delivery_system' do
+                          context 'but the given delivery_system does NOT ' \
+                                  'exist' do
+                            let(:message) { Mail.new(delivery_system: 'key') }
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongDeliverySystem
+                              )
+                            end
+                          end
+
+                          context 'and the given delivery_system exists' do
+                            let(:message) do
+                              Mail.new(delivery_system: delivery_system)
+                            end
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongDeliverySystem
+                              )
+                            end
+                          end
+                        end
+                      end
+                    end
+
+                    context 'and delivery_settings contains smtp_settings' do
+                      let(:delivery_settings) do
+                        {
+                          smtp_settings: { key: 'value' },
+                          return_response: true
+                        }
+                      end
+
+                      context 'but message does NOT contain delivery_system' do
+                        let(:message) { Mail.new }
+
+                        it 'does NOT raise error' do
+                          expect { deliver }.not_to raise_error
+                        end
+
+                        it 'returns with the message' do
+                          expect(deliver).to eq(message)
+                        end
+                      end
+
+                      context 'and message contains delivery_system' do
+                        # In this case delivey_settings does not contain
+                        # delivery_system, so the delivey_system is not
+                        # important.
+                        context 'but the given delivery_system does NOT ' \
+                                'exist' do
+                          let(:message) { Mail.new(delivery_system: 'key') }
+
+                          it 'does NOT raise error' do
+                            expect { deliver }.not_to raise_error
+                          end
+
+                          it 'returns with the message' do
+                            expect(deliver).to eq(message)
+                          end
+                        end
+
+                        context 'and the given delivery_system exists' do
+                          let(:message) do
+                            Mail.new(delivery_system: delivery_system)
+                          end
+
+                          it 'does NOT raise error' do
+                            expect { deliver }.not_to raise_error
+                          end
+
+                          it 'returns with the message' do
+                            expect(deliver).to eq(message)
+                          end
+                        end
+                      end
+                    end
+                  end
+
+                  context 'and delivery_settings contains delivery_system' do
+                    context 'and delivery_settings does NOT contain ' \
+                            'smtp_settings' do
+                      context 'but delivery_settings contains ' \
+                              'one of DELIVERY_SETTINGS_KEYS' do
+                        let(:delivery_settings) do
+                          { delivery_system => { return_response: true } }
+                        end
+
+                        context 'but message does NOT contain ' \
+                                'delivery_system' do
+                          let(:message) { Mail.new }
+
+                          it 'raises error' do
+                            expect { deliver }.to raise_error(
+                              MailPlugger::Error::WrongApiClient
+                            )
+                          end
+                        end
+
+                        context 'and message contains delivery_system' do
+                          context 'but the given delivery_system does NOT ' \
+                                  'exist' do
+                            let(:message) { Mail.new(delivery_system: 'key') }
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongDeliverySystem
+                              )
+                            end
+                          end
+
+                          context 'and the given delivery_system exists' do
+                            let(:message) do
+                              Mail.new(delivery_system: delivery_system)
+                            end
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongApiClient
+                              )
+                            end
+                          end
+                        end
+                      end
+
+                      context 'and delivery_settings does NOT contain ' \
+                              'DELIVERY_SETTINGS_KEYS (in the first level)' do
+                        let(:delivery_settings) do
+                          { delivery_system => { key: 'value' } }
+                        end
+
+                        context 'but message does NOT contain ' \
+                                'delivery_system' do
+                          let(:message) { Mail.new }
+
+                          it 'raises error' do
+                            expect { deliver }.to raise_error(
+                              MailPlugger::Error::WrongApiClient
+                            )
+                          end
+                        end
+
+                        context 'and message contains delivery_system' do
+                          context 'but the given delivery_system does NOT ' \
+                                  'exist' do
+                            let(:message) { Mail.new(delivery_system: 'key') }
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongDeliverySystem
+                              )
+                            end
+                          end
+
+                          context 'and the given delivery_system exists' do
+                            let(:message) do
+                              Mail.new(delivery_system: delivery_system)
+                            end
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongApiClient
+                              )
+                            end
+                          end
+                        end
+                      end
+                    end
+
+                    context 'and delivery_settings contains smtp_settings' do
+                      let(:delivery_settings) do
+                        {
+                          delivery_system => {
+                            smtp_settings: { key: 'value' },
+                            return_response: true
+                          }
+                        }
+                      end
+
+                      context 'but message does NOT contain delivery_system' do
+                        let(:message) { Mail.new }
+
+                        it 'does NOT raise error' do
+                          expect { deliver }.not_to raise_error
+                        end
+
+                        it 'returns with the message' do
+                          expect(deliver).to eq(message)
+                        end
+                      end
+
+                      context 'and message contains delivery_system' do
+                        context 'but the given delivery_system does NOT ' \
+                                'exist' do
+                          let(:message) { Mail.new(delivery_system: 'key') }
+
+                          it 'raises error' do
+                            expect { deliver }.to raise_error(
+                              MailPlugger::Error::WrongDeliverySystem
+                            )
+                          end
+                        end
+
+                        context 'and the given delivery_system exists' do
+                          let(:message) do
+                            Mail.new(delivery_system: delivery_system)
+                          end
+
+                          it 'does NOT raise error' do
+                            expect { deliver }.not_to raise_error
+                          end
+
+                          it 'returns with the message' do
+                            expect(deliver).to eq(message)
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+
+                context 'when delivery_settings does NOT a hash' do
+                  context 'and delivery_settings is nil' do
+                    let(:delivery_settings) { nil }
+
+                    context 'but message does NOT contain delivery_system' do
+                      let(:message) { Mail.new }
+
+                      it 'raises error' do
+                        expect { deliver }.to raise_error(
+                          MailPlugger::Error::WrongApiClient
+                        )
+                      end
+                    end
+
+                    context 'and message contains delivery_system' do
+                      context 'but the given delivery_system does NOT exist' do
+                        let(:message) { Mail.new(delivery_system: 'key') }
+
+                        it 'raises error' do
+                          expect { deliver }.to raise_error(
+                            MailPlugger::Error::WrongApiClient
+                          )
+                        end
+                      end
+
+                      context 'and the given delivery_system exists' do
+                        let(:message) do
+                          Mail.new(delivery_system: delivery_system)
+                        end
+
+                        it 'raises error' do
+                          expect { deliver }.to raise_error(
+                            MailPlugger::Error::WrongApiClient
+                          )
+                        end
+                      end
+                    end
+                  end
+
+                  context 'and delivery_settings is string' do
+                    let(:delivery_settings) { 'settings' }
+
+                    context 'but message does NOT contain delivery_system' do
+                      let(:message) { Mail.new }
+
+                      it 'raises error' do
+                        expect { deliver }.to raise_error(
+                          MailPlugger::Error::WrongDeliverySettings
+                        )
+                      end
+                    end
+
+                    context 'and message contains delivery_system' do
+                      context 'but the given delivery_system does NOT exist' do
+                        let(:message) { Mail.new(delivery_system: 'key') }
+
+                        it 'raises error' do
+                          expect { deliver }.to raise_error(
+                            MailPlugger::Error::WrongDeliverySettings
+                          )
+                        end
+                      end
+
+                      context 'and the given delivery_system exists' do
+                        let(:message) do
+                          Mail.new(delivery_system: delivery_system)
+                        end
+
+                        it 'raises error' do
+                          expect { deliver }.to raise_error(
+                            MailPlugger::Error::WrongDeliverySettings
+                          )
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+
+              context 'and default_delivery_system is defined' do
+                let(:default_delivery_system) { delivery_system }
+
+                context 'when delivery_settings is a hash' do
+                  context 'and delivery_settings does NOT contain ' \
+                          'delivery_system' do
+                    context 'and delivery_settings does NOT contain ' \
+                            'smtp_settings' do
+                      context 'but delivery_settings contains ' \
+                              'one of DELIVERY_SETTINGS_KEYS' do
+                        let(:delivery_settings) { { return_response: true } }
+
+                        context 'but message does NOT contain ' \
+                                'delivery_system' do
+                          let(:message) { Mail.new }
+
+                          it 'raises error' do
+                            expect { deliver }.to raise_error(
+                              MailPlugger::Error::WrongApiClient
+                            )
+                          end
+                        end
+
+                        context 'and message contains delivery_system' do
+                          context 'but the given delivery_system does NOT ' \
+                                  'exist' do
+                            let(:message) { Mail.new(delivery_system: 'key') }
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongApiClient
+                              )
+                            end
+                          end
+
+                          context 'and the given delivery_system exists' do
+                            let(:message) do
+                              Mail.new(delivery_system: delivery_system)
+                            end
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongApiClient
+                              )
+                            end
+                          end
+                        end
+                      end
+
+                      context 'and delivery_settings does NOT contain ' \
+                              'DELIVERY_SETTINGS_KEYS (in the first level)' do
+                        let(:delivery_settings) { { key: 'value' } }
+
+                        context 'but message does NOT contain ' \
+                                'delivery_system' do
+                          let(:message) { Mail.new }
+
+                          it 'raises error' do
+                            expect { deliver }.to raise_error(
+                              MailPlugger::Error::WrongDeliverySystem
+                            )
+                          end
+                        end
+
+                        context 'and message contains delivery_system' do
+                          context 'but the given delivery_system does NOT ' \
+                                  'exist' do
+                            let(:message) { Mail.new(delivery_system: 'key') }
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongDeliverySystem
+                              )
+                            end
+                          end
+
+                          context 'and the given delivery_system exists' do
+                            let(:message) do
+                              Mail.new(delivery_system: delivery_system)
+                            end
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongDeliverySystem
+                              )
+                            end
+                          end
+                        end
+                      end
+                    end
+
+                    context 'and delivery_settings contains smtp_settings' do
+                      let(:delivery_settings) do
+                        {
+                          smtp_settings: { key: 'value' },
+                          return_response: true
+                        }
+                      end
+
+                      context 'but message does NOT contain delivery_system' do
+                        let(:message) { Mail.new }
+
+                        it 'does NOT raise error' do
+                          expect { deliver }.not_to raise_error
+                        end
+
+                        it 'returns with the message' do
+                          expect(deliver).to eq(message)
+                        end
+                      end
+
+                      context 'and message contains delivery_system' do
+                        # In this case delivey_settings does not contain
+                        # delivery_system, so the delivey_system is not
+                        # important.
+                        context 'but the given delivery_system does NOT ' \
+                                'exist' do
+                          let(:message) { Mail.new(delivery_system: 'key') }
+
+                          it 'does NOT raise error' do
+                            expect { deliver }.not_to raise_error
+                          end
+
+                          it 'returns with the message' do
+                            expect(deliver).to eq(message)
+                          end
+                        end
+
+                        context 'and the given delivery_system exists' do
+                          let(:message) do
+                            Mail.new(delivery_system: delivery_system)
+                          end
+
+                          it 'does NOT raise error' do
+                            expect { deliver }.not_to raise_error
+                          end
+
+                          it 'returns with the message' do
+                            expect(deliver).to eq(message)
+                          end
+                        end
+                      end
+                    end
+                  end
+
+                  context 'and delivery_settings contains delivery_system' do
+                    context 'and delivery_settings does NOT contain ' \
+                            'smtp_settings' do
+                      context 'but delivery_settings contains ' \
+                              'one of DELIVERY_SETTINGS_KEYS' do
+                        let(:delivery_settings) do
+                          { delivery_system => { return_response: true } }
+                        end
+
+                        context 'but message does NOT contain ' \
+                                'delivery_system' do
+                          let(:message) { Mail.new }
+
+                          it 'raises error' do
+                            expect { deliver }.to raise_error(
+                              MailPlugger::Error::WrongApiClient
+                            )
+                          end
+                        end
+
+                        context 'and message contains delivery_system' do
+                          context 'but the given delivery_system does NOT ' \
+                                  'exist' do
+                            let(:message) { Mail.new(delivery_system: 'key') }
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongDeliverySystem
+                              )
+                            end
+                          end
+
+                          context 'and the given delivery_system exists' do
+                            let(:message) do
+                              Mail.new(delivery_system: delivery_system)
+                            end
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongApiClient
+                              )
+                            end
+                          end
+                        end
+                      end
+
+                      context 'and delivery_settings does NOT contain ' \
+                              'DELIVERY_SETTINGS_KEYS (in the first level)' do
+                        let(:delivery_settings) do
+                          { delivery_system => { key: 'value' } }
+                        end
+
+                        context 'but message does NOT contain ' \
+                                'delivery_system' do
+                          let(:message) { Mail.new }
+
+                          it 'raises error' do
+                            expect { deliver }.to raise_error(
+                              MailPlugger::Error::WrongApiClient
+                            )
+                          end
+                        end
+
+                        context 'and message contains delivery_system' do
+                          context 'but the given delivery_system does NOT ' \
+                                  'exist' do
+                            let(:message) { Mail.new(delivery_system: 'key') }
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongDeliverySystem
+                              )
+                            end
+                          end
+
+                          context 'and the given delivery_system exists' do
+                            let(:message) do
+                              Mail.new(delivery_system: delivery_system)
+                            end
+
+                            it 'raises error' do
+                              expect { deliver }.to raise_error(
+                                MailPlugger::Error::WrongApiClient
+                              )
+                            end
+                          end
+                        end
+                      end
+                    end
+
+                    context 'and delivery_settings contains smtp_settings' do
+                      let(:delivery_settings) do
+                        {
+                          delivery_system => {
+                            smtp_settings: { key: 'value' },
+                            return_response: true
+                          }
+                        }
+                      end
+
+                      context 'but message does NOT contain delivery_system' do
+                        let(:message) { Mail.new }
+
+                        it 'does NOT raise error' do
+                          expect { deliver }.not_to raise_error
+                        end
+
+                        it 'returns with the message' do
+                          expect(deliver).to eq(message)
+                        end
+                      end
+
+                      context 'and message contains delivery_system' do
+                        context 'but the given delivery_system does NOT ' \
+                                'exist' do
+                          let(:message) { Mail.new(delivery_system: 'key') }
+
+                          it 'raises error' do
+                            expect { deliver }.to raise_error(
+                              MailPlugger::Error::WrongDeliverySystem
+                            )
+                          end
+                        end
+
+                        context 'and the given delivery_system exists' do
+                          let(:message) do
+                            Mail.new(delivery_system: delivery_system)
+                          end
+
+                          it 'does NOT raise error' do
+                            expect { deliver }.not_to raise_error
+                          end
+
+                          it 'returns with the message' do
+                            expect(deliver).to eq(message)
+                          end
+                        end
+                      end
+                    end
+                  end
+                end
+
+                context 'when delivery_settings does NOT a hash' do
+                  context 'and delivery_settings is nil' do
+                    let(:delivery_settings) { nil }
+
+                    context 'but message does NOT contain delivery_system' do
+                      let(:message) { Mail.new }
+
+                      it 'raises error' do
+                        expect { deliver }.to raise_error(
+                          MailPlugger::Error::WrongApiClient
+                        )
+                      end
+                    end
+
+                    context 'and message contains delivery_system' do
+                      context 'but the given delivery_system does NOT exist' do
+                        let(:message) { Mail.new(delivery_system: 'key') }
+
+                        it 'raises error' do
+                          expect { deliver }.to raise_error(
+                            MailPlugger::Error::WrongApiClient
+                          )
+                        end
+                      end
+
+                      context 'and the given delivery_system exists' do
+                        let(:message) do
+                          Mail.new(delivery_system: delivery_system)
+                        end
+
+                        it 'raises error' do
+                          expect { deliver }.to raise_error(
+                            MailPlugger::Error::WrongApiClient
+                          )
+                        end
+                      end
+                    end
+                  end
+
+                  context 'and delivery_settings is string' do
+                    let(:delivery_settings) { 'settings' }
+
+                    context 'but message does NOT contain delivery_system' do
+                      let(:message) { Mail.new }
+
+                      it 'raises error' do
+                        expect { deliver }.to raise_error(
+                          MailPlugger::Error::WrongDeliverySettings
+                        )
+                      end
+                    end
+
+                    context 'and message contains delivery_system' do
+                      context 'but the given delivery_system does NOT exist' do
+                        let(:message) { Mail.new(delivery_system: 'key') }
+
+                        it 'raises error' do
+                          expect { deliver }.to raise_error(
+                            MailPlugger::Error::WrongDeliverySettings
+                          )
+                        end
+                      end
+
+                      context 'and the given delivery_system exists' do
+                        let(:message) do
+                          Mail.new(delivery_system: delivery_system)
+                        end
+
+                        it 'raises error' do
+                          expect { deliver }.to raise_error(
+                            MailPlugger::Error::WrongDeliverySettings
+                          )
+                        end
+                      end
+                    end
+                  end
+                end
+              end
+            end
           end
         end
 
-        context 'and the deliver! method has paramemter' do
-          subject(:deliver) do
-            described_class.new(
-              delivery_options: delivery_options,
-              client: client,
-              default_delivery_system: default_delivery_system
-            ).deliver!(message)
-          end
-
-          context 'but message paramemter does NOT a Mail::Message object' do
-            let(:default_delivery_system) { nil }
-            let(:message) { nil }
+        context 'when using API' do
+          context 'and without deliver! method paramemter' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_options: delivery_options,
+                client: client,
+                default_delivery_system: delivery_system
+              ).deliver!
+            end
 
             it 'raises error' do
-              expect { deliver }
-                .to raise_error(MailPlugger::Error::WrongParameter)
+              expect { deliver }.to raise_error(ArgumentError)
             end
           end
 
-          context 'and message paramemter is a Mail::Message object' do
-            context 'and default_delivery_system does NOT defined' do
+          context 'and the deliver! method has paramemter' do
+            subject(:deliver) do
+              described_class.new(
+                delivery_options: delivery_options,
+                client: client,
+                default_delivery_system: default_delivery_system
+              ).deliver!(message)
+            end
+
+            context 'but message paramemter does NOT a Mail::Message object' do
               let(:default_delivery_system) { nil }
+              let(:message) { nil }
 
-              context 'when both delivery_options and client are hashes' do
-                let(:delivery_options) do
-                  { delivery_system => %i[to from subject body] }
-                end
-                let(:client) { { delivery_system => DummyApi } }
+              it 'raises error' do
+                expect { deliver }
+                  .to raise_error(MailPlugger::Error::WrongParameter)
+              end
+            end
 
-                context 'but it does NOT contain delivery_system' do
-                  let(:message) { Mail.new }
+            context 'and message paramemter is a Mail::Message object' do
+              context 'and default_delivery_system does NOT defined' do
+                let(:default_delivery_system) { nil }
 
-                  # It won't raise error because it gets delivery_system from
-                  # the hash key
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
+                context 'when both delivery_options and client are hashes' do
+                  let(:delivery_options) do
+                    { delivery_system => %i[to from subject body] }
                   end
+                  let(:client) { { delivery_system => DummyApi } }
 
-                  it 'calls only the new method of the client' do
-                    expect(DummyApi).to receive(:new)
-                    deliver
-                  end
-                end
+                  context 'but message does NOT contain delivery_system' do
+                    let(:message) { Mail.new }
 
-                context 'and it contains delivery_system' do
-                  context 'but the given delivery_system does NOT exist' do
-                    let(:message) { Mail.new(delivery_system: 'key') }
-
-                    it 'raises error' do
-                      expect { deliver }
-                        .to raise_error(MailPlugger::Error::WrongDeliverySystem)
-                    end
-                  end
-
-                  context 'and the given delivery_system exists' do
-                    let(:message) { Mail.new(delivery_system: delivery_system) }
-
+                    # It won't raise error because it gets delivery_system from
+                    # the hash key
                     it 'does NOT raise error' do
                       expect { deliver }.not_to raise_error
                     end
@@ -867,153 +1916,22 @@ RSpec.describe FakePlugger::DeliveryMethod do
                       deliver
                     end
                   end
-                end
-              end
 
-              context 'when one of the delivery_options and client is a hash' do
-                let(:delivery_options) do
-                  { delivery_system => %i[to from subject body] }
-                end
+                  context 'and message contains delivery_system' do
+                    context 'but the given delivery_system does NOT exist' do
+                      let(:message) { Mail.new(delivery_system: 'key') }
 
-                context 'but it does NOT contain delivery_system' do
-                  let(:message) { Mail.new }
-
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
-                  end
-
-                  it 'calls only the new method of the client' do
-                    expect(client).to receive(:new)
-                    deliver
-                  end
-                end
-
-                context 'and it contains delivery_system' do
-                  context 'but the given delivery_system does NOT exist' do
-                    let(:message) { Mail.new(delivery_system: 'key') }
-
-                    it 'raises error' do
-                      expect { deliver }
-                        .to raise_error(MailPlugger::Error::WrongDeliverySystem)
-                    end
-                  end
-
-                  context 'and the given delivery_system exists' do
-                    let(:message) { Mail.new(delivery_system: delivery_system) }
-
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls only the new method of the client' do
-                      expect(client).to receive(:new)
-                      deliver
-                    end
-                  end
-                end
-              end
-
-              context 'when none of the delivery_options and client are ' \
-                      'hashes' do
-                # In this case delivey_options and client are not hashes, so the
-                # delivey_system is not important.
-                context 'but it does NOT contain delivery_system' do
-                  let(:message) { Mail.new }
-
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
-                  end
-
-                  it 'calls only the new method of the client' do
-                    expect(client).to receive(:new)
-                    deliver
-                  end
-                end
-
-                context 'and it contains delivery_system' do
-                  context 'but the given delivery_system does NOT exist' do
-                    let(:message) { Mail.new(delivery_system: 'key') }
-
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls only the new method of the client' do
-                      expect(client).to receive(:new)
-                      deliver
-                    end
-                  end
-
-                  context 'and the given delivery_system exists' do
-                    let(:message) { Mail.new(delivery_system: delivery_system) }
-
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls only the new method of the client' do
-                      expect(client).to receive(:new)
-                      deliver
-                    end
-                  end
-                end
-              end
-            end
-
-            context 'and default_delivery_system is defined' do
-              let(:default_delivery_system) { delivery_system }
-
-              context 'when both delivery_options and client are hashes' do
-                let(:delivery_options) do
-                  { delivery_system => %i[to from subject body] }
-                end
-                let(:client) { { delivery_system => DummyApi } }
-
-                context 'but it does NOT contain delivery_system' do
-                  let(:message) { Mail.new }
-
-                  # It won't raise error because the default_delivery_system is
-                  # defined
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
-                  end
-
-                  it 'calls only the new method of the client' do
-                    expect(DummyApi).to receive(:new)
-                    deliver
-                  end
-                end
-
-                context 'and it contains delivery_system' do
-                  context 'but the given delivery_system does NOT exist' do
-                    let(:message) { Mail.new(delivery_system: 'key') }
-
-                    # It raises error because it overrides the
-                    # default_delivery_system
-                    it 'raises error' do
-                      expect { deliver }
-                        .to raise_error(MailPlugger::Error::WrongDeliverySystem)
-                    end
-                  end
-
-                  context 'and the given delivery_system exists' do
-                    let(:message) { Mail.new(delivery_system: delivery_system) }
-
-                    context 'and delivery_system value is string' do
-                      let(:delivery_system) { 'dummy_api' }
-
-                      it 'does NOT raise error' do
-                        expect { deliver }.not_to raise_error
-                      end
-
-                      it 'calls only the new method of the client' do
-                        expect(DummyApi).to receive(:new)
-                        deliver
+                      it 'raises error' do
+                        expect { deliver }.to raise_error(
+                          MailPlugger::Error::WrongDeliverySystem
+                        )
                       end
                     end
 
-                    context 'and delivery_system value is symbol' do
-                      let(:delivery_system) { :dummy_api }
+                    context 'and the given delivery_system exists' do
+                      let(:message) do
+                        Mail.new(delivery_system: delivery_system)
+                      end
 
                       it 'does NOT raise error' do
                         expect { deliver }.not_to raise_error
@@ -1026,73 +1944,15 @@ RSpec.describe FakePlugger::DeliveryMethod do
                     end
                   end
                 end
-              end
 
-              context 'when one of the delivery_options and client is a hash' do
-                let(:delivery_options) do
-                  { delivery_system => %i[to from subject body] }
-                end
-
-                context 'but it does NOT contain delivery_system' do
-                  let(:message) { Mail.new }
-
-                  # It won't raise error because the default_delivery_system is
-                  # defined
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
+                context 'when one of the delivery_options and client is a ' \
+                        'hash' do
+                  let(:delivery_options) do
+                    { delivery_system => %i[to from subject body] }
                   end
 
-                  it 'calls only the new method of the client' do
-                    expect(client).to receive(:new)
-                    deliver
-                  end
-                end
-
-                context 'and it contains delivery_system' do
-                  context 'but the given delivery_system does NOT exist' do
-                    let(:message) { Mail.new(delivery_system: 'key') }
-
-                    it 'raises error' do
-                      expect { deliver }
-                        .to raise_error(MailPlugger::Error::WrongDeliverySystem)
-                    end
-                  end
-
-                  context 'and the given delivery_system exists' do
-                    let(:message) { Mail.new(delivery_system: delivery_system) }
-
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls only the new method of the client' do
-                      expect(client).to receive(:new)
-                      deliver
-                    end
-                  end
-                end
-              end
-
-              context 'when none of the delivery_options and client are ' \
-                      'hashes' do
-                # In this case delivey_options and client are not hashes, so the
-                # delivey_system is not important.
-                context 'but it does NOT contain delivery_system' do
-                  let(:message) { Mail.new }
-
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
-                  end
-
-                  it 'calls only the new method of the client' do
-                    expect(client).to receive(:new)
-                    deliver
-                  end
-                end
-
-                context 'and it contains delivery_system' do
-                  context 'but the given delivery_system does NOT exist' do
-                    let(:message) { Mail.new(delivery_system: 'key') }
+                  context 'but message does NOT contain delivery_system' do
+                    let(:message) { Mail.new }
 
                     it 'does NOT raise error' do
                       expect { deliver }.not_to raise_error
@@ -1104,8 +1964,40 @@ RSpec.describe FakePlugger::DeliveryMethod do
                     end
                   end
 
-                  context 'and the given delivery_system exists' do
-                    let(:message) { Mail.new(delivery_system: delivery_system) }
+                  context 'and message contains delivery_system' do
+                    context 'but the given delivery_system does NOT exist' do
+                      let(:message) { Mail.new(delivery_system: 'key') }
+
+                      it 'raises error' do
+                        expect { deliver }.to raise_error(
+                          MailPlugger::Error::WrongDeliverySystem
+                        )
+                      end
+                    end
+
+                    context 'and the given delivery_system exists' do
+                      let(:message) do
+                        Mail.new(delivery_system: delivery_system)
+                      end
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
+                    end
+                  end
+                end
+
+                context 'when none of the delivery_options and client are ' \
+                        'hashes' do
+                  # In this case delivey_options and client are not hashes,
+                  # so the delivey_system is not important.
+                  context 'but message does NOT contain delivery_system' do
+                    let(:message) { Mail.new }
 
                     it 'does NOT raise error' do
                       expect { deliver }.not_to raise_error
@@ -1116,47 +2008,53 @@ RSpec.describe FakePlugger::DeliveryMethod do
                       deliver
                     end
                   end
-                end
-              end
-            end
 
-            context 'and default_delivery_system is defined but with a wrong ' \
-                    'value' do
-              let(:default_delivery_system) { 'wrong_value' }
+                  context 'and message contains delivery_system' do
+                    context 'but the given delivery_system does NOT exist' do
+                      let(:message) { Mail.new(delivery_system: 'key') }
 
-              context 'when both delivery_options and client are hashes' do
-                let(:delivery_options) do
-                  { delivery_system => %i[to from subject body] }
-                end
-                let(:client) { { delivery_system => DummyApi } }
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
 
-                context 'but it does NOT contain delivery_system' do
-                  let(:message) { Mail.new }
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
+                    end
 
-                  # It raises error because the default_delivery_system is wrong
-                  # and delivery_options method gets nil value
-                  # which is not Array
-                  it 'raises error' do
-                    expect { deliver }
-                      .to raise_error(MailPlugger::Error::WrongDeliverySystem)
-                  end
-                end
+                    context 'and the given delivery_system exists' do
+                      let(:message) do
+                        Mail.new(delivery_system: delivery_system)
+                      end
 
-                context 'and it contains delivery_system' do
-                  context 'but the given delivery_system does NOT exist' do
-                    let(:message) { Mail.new(delivery_system: 'key') }
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
 
-                    # It raises error because it overrides the
-                    # default_delivery_system and this also wrong
-                    it 'raises error' do
-                      expect { deliver }
-                        .to raise_error(MailPlugger::Error::WrongDeliverySystem)
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
                     end
                   end
+                end
+              end
 
-                  context 'and the given delivery_system exists' do
-                    let(:message) { Mail.new(delivery_system: delivery_system) }
+              context 'and default_delivery_system is defined' do
+                let(:default_delivery_system) { delivery_system }
 
+                context 'when both delivery_options and client are hashes' do
+                  let(:delivery_options) do
+                    { delivery_system => %i[to from subject body] }
+                  end
+                  let(:client) { { delivery_system => DummyApi } }
+
+                  context 'but message does NOT contain delivery_system' do
+                    let(:message) { Mail.new }
+
+                    # It won't raise error because the default_delivery_system
+                    # is defined
                     it 'does NOT raise error' do
                       expect { deliver }.not_to raise_error
                     end
@@ -1166,73 +2064,258 @@ RSpec.describe FakePlugger::DeliveryMethod do
                       deliver
                     end
                   end
-                end
-              end
 
-              context 'when one of the delivery_options and client is a hash' do
-                let(:delivery_options) do
-                  { delivery_system => %i[to from subject body] }
-                end
+                  context 'and message contains delivery_system' do
+                    context 'but the given delivery_system does NOT exist' do
+                      let(:message) { Mail.new(delivery_system: 'key') }
 
-                context 'but it does NOT contain delivery_system' do
-                  let(:message) { Mail.new }
+                      # It raises error because it overrides the
+                      # default_delivery_system
+                      it 'raises error' do
+                        expect { deliver }.to raise_error(
+                          MailPlugger::Error::WrongDeliverySystem
+                        )
+                      end
+                    end
 
-                  # It raises error because the default_delivery_system is wrong
-                  # and delivery_options method gets nil value
-                  # which is not Array
-                  it 'raises error' do
-                    expect { deliver }
-                      .to raise_error(MailPlugger::Error::WrongDeliverySystem)
+                    context 'and the given delivery_system exists' do
+                      let(:message) do
+                        Mail.new(delivery_system: delivery_system)
+                      end
+
+                      context 'and delivery_system value is string' do
+                        let(:delivery_system) { 'dummy_api' }
+
+                        it 'does NOT raise error' do
+                          expect { deliver }.not_to raise_error
+                        end
+
+                        it 'calls only the new method of the client' do
+                          expect(DummyApi).to receive(:new)
+                          deliver
+                        end
+                      end
+
+                      context 'and delivery_system value is symbol' do
+                        let(:delivery_system) { :dummy_api }
+
+                        it 'does NOT raise error' do
+                          expect { deliver }.not_to raise_error
+                        end
+
+                        it 'calls only the new method of the client' do
+                          expect(DummyApi).to receive(:new)
+                          deliver
+                        end
+                      end
+                    end
                   end
                 end
 
-                context 'and it contains delivery_system' do
-                  context 'but the given delivery_system does NOT exist' do
-                    let(:message) { Mail.new(delivery_system: 'key') }
+                context 'when one of the delivery_options and client is a ' \
+                        'hash' do
+                  let(:delivery_options) do
+                    { delivery_system => %i[to from subject body] }
+                  end
 
-                    # It raises error because it overrides the
-                    # default_delivery_system and this also wrong
+                  context 'but message does NOT contain delivery_system' do
+                    let(:message) { Mail.new }
+
+                    # It won't raise error because the default_delivery_system
+                    # is defined
+                    it 'does NOT raise error' do
+                      expect { deliver }.not_to raise_error
+                    end
+
+                    it 'calls only the new method of the client' do
+                      expect(client).to receive(:new)
+                      deliver
+                    end
+                  end
+
+                  context 'and message contains delivery_system' do
+                    context 'but the given delivery_system does NOT exist' do
+                      let(:message) { Mail.new(delivery_system: 'key') }
+
+                      it 'raises error' do
+                        expect { deliver }.to raise_error(
+                          MailPlugger::Error::WrongDeliverySystem
+                        )
+                      end
+                    end
+
+                    context 'and the given delivery_system exists' do
+                      let(:message) do
+                        Mail.new(delivery_system: delivery_system)
+                      end
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
+                    end
+                  end
+                end
+
+                context 'when none of the delivery_options and client are ' \
+                        'hashes' do
+                  # In this case delivey_options and client are not hashes,
+                  # so the delivey_system is not important.
+                  context 'but message does NOT contain delivery_system' do
+                    let(:message) { Mail.new }
+
+                    it 'does NOT raise error' do
+                      expect { deliver }.not_to raise_error
+                    end
+
+                    it 'calls only the new method of the client' do
+                      expect(client).to receive(:new)
+                      deliver
+                    end
+                  end
+
+                  context 'and message contains delivery_system' do
+                    context 'but the given delivery_system does NOT exist' do
+                      let(:message) { Mail.new(delivery_system: 'key') }
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
+                    end
+
+                    context 'and the given delivery_system exists' do
+                      let(:message) do
+                        Mail.new(delivery_system: delivery_system)
+                      end
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
+                    end
+                  end
+                end
+              end
+
+              context 'and default_delivery_system is defined but with a ' \
+                      'wrong value' do
+                let(:default_delivery_system) { 'wrong_value' }
+
+                context 'when both delivery_options and client are hashes' do
+                  let(:delivery_options) do
+                    { delivery_system => %i[to from subject body] }
+                  end
+                  let(:client) { { delivery_system => DummyApi } }
+
+                  context 'but message does NOT contain delivery_system' do
+                    let(:message) { Mail.new }
+
+                    # It raises error because the default_delivery_system is
+                    # wrong and delivery_options method gets nil value which
+                    # is not Array
                     it 'raises error' do
                       expect { deliver }
                         .to raise_error(MailPlugger::Error::WrongDeliverySystem)
                     end
                   end
 
-                  context 'and the given delivery_system exists' do
-                    let(:message) { Mail.new(delivery_system: delivery_system) }
+                  context 'and message contains delivery_system' do
+                    context 'but the given delivery_system does NOT exist' do
+                      let(:message) { Mail.new(delivery_system: 'key') }
 
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
+                      # It raises error because it overrides the
+                      # default_delivery_system and this also wrong
+                      it 'raises error' do
+                        expect { deliver }.to raise_error(
+                          MailPlugger::Error::WrongDeliverySystem
+                        )
+                      end
                     end
 
-                    it 'calls only the new method of the client' do
-                      expect(client).to receive(:new)
-                      deliver
+                    context 'and the given delivery_system exists' do
+                      let(:message) do
+                        Mail.new(delivery_system: delivery_system)
+                      end
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'calls only the new method of the client' do
+                        expect(DummyApi).to receive(:new)
+                        deliver
+                      end
                     end
                   end
                 end
-              end
 
-              context 'when none of the delivery_options and client are ' \
-                      'hashes' do
-                # In this case delivey_options and client are not hashes, so the
-                # delivey_system is not important.
-                context 'but it does NOT contain delivery_system' do
-                  let(:message) { Mail.new }
-
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
+                context 'when one of the delivery_options and client is a ' \
+                        'hash' do
+                  let(:delivery_options) do
+                    { delivery_system => %i[to from subject body] }
                   end
 
-                  it 'calls only the new method of the client' do
-                    expect(client).to receive(:new)
-                    deliver
+                  context 'but message does NOT contain delivery_system' do
+                    let(:message) { Mail.new }
+
+                    # It raises error because the default_delivery_system is
+                    # wrong and delivery_options method gets nil value which
+                    # is not Array
+                    it 'raises error' do
+                      expect { deliver }
+                        .to raise_error(MailPlugger::Error::WrongDeliverySystem)
+                    end
+                  end
+
+                  context 'and message contains delivery_system' do
+                    context 'but the given delivery_system does NOT exist' do
+                      let(:message) { Mail.new(delivery_system: 'key') }
+
+                      # It raises error because it overrides the
+                      # default_delivery_system and this also wrong
+                      it 'raises error' do
+                        expect { deliver }.to raise_error(
+                          MailPlugger::Error::WrongDeliverySystem
+                        )
+                      end
+                    end
+
+                    context 'and the given delivery_system exists' do
+                      let(:message) do
+                        Mail.new(delivery_system: delivery_system)
+                      end
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
+                    end
                   end
                 end
 
-                context 'and it contains delivery_system' do
-                  context 'but the given delivery_system does NOT exist' do
-                    let(:message) { Mail.new(delivery_system: 'key') }
+                context 'when none of the delivery_options and client are ' \
+                        'hashes' do
+                  # In this case delivey_options and client are not hashes,
+                  # so the delivey_system is not important.
+                  context 'but message does NOT contain delivery_system' do
+                    let(:message) { Mail.new }
 
                     it 'does NOT raise error' do
                       expect { deliver }.not_to raise_error
@@ -1244,16 +2327,33 @@ RSpec.describe FakePlugger::DeliveryMethod do
                     end
                   end
 
-                  context 'and the given delivery_system exists' do
-                    let(:message) { Mail.new(delivery_system: delivery_system) }
+                  context 'and message contains delivery_system' do
+                    context 'but the given delivery_system does NOT exist' do
+                      let(:message) { Mail.new(delivery_system: 'key') }
 
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
                     end
 
-                    it 'calls only the new method of the client' do
-                      expect(client).to receive(:new)
-                      deliver
+                    context 'and the given delivery_system exists' do
+                      let(:message) do
+                        Mail.new(delivery_system: delivery_system)
+                      end
+
+                      it 'does NOT raise error' do
+                        expect { deliver }.not_to raise_error
+                      end
+
+                      it 'calls only the new method of the client' do
+                        expect(client).to receive(:new)
+                        deliver
+                      end
                     end
                   end
                 end

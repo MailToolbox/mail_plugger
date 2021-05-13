@@ -38,15 +38,34 @@ module FakePlugger
     def initialize(options = {})
       super
 
+      # Sepcial semaphore for the settings method that
+      # FakePlugger::DeliveryMethod can behaves like MailPlugger::DeliveryMethod
+      @initialize       = true
+
       @debug            = options[:debug] ||
                           settings[:fake_plugger_debug] || false
+
       @raw_message      = options[:raw_message] ||
                           settings[:fake_plugger_raw_message] || false
+
       @response         = options[:response] || settings[:fake_plugger_response]
+
       @use_mail_grabber = options[:use_mail_grabber] ||
                           settings[:fake_plugger_use_mail_grabber] || false
+
+      @initialize       = false
+
+      # Clear memoized values
+      @delivery_system  = nil
+
+      @settings         = nil
     end
 
+    # Using SMTP:
+    # Mock send message via SMTP protocol if the 'delivery_settings' contains a
+    # 'smtp_settings' key and the value is a hash with the settings.
+    #
+    # Using API:
     # Mock send message with the given client if the message parameter is a
     # Mail::Message object. If 'response' parameter is nil then it will extract
     # those information from the Mail::Message object which was provided in the
@@ -55,6 +74,8 @@ module FakePlugger
     # it won't call the 'deliver' method.
     # If the 'response' parameter is a hash with 'return_delivery_data: true'
     # then it will retrun with the extracted delivery data.
+    #
+    #
     # If the 'response' parameter is not nil then retruns with that given data
     # without call any other methods.
     # Except if 'debug' is true. In this case it will call those methods which
@@ -68,6 +89,48 @@ module FakePlugger
     # @return [Mail::Message/Hash] depends on the given value
     #
     # @example
+    #
+    #   # Using SMTP:
+    #
+    #   MailPlugger.plug_in('test_api_client') do |smtp|
+    #     smtp.delivery_settings = {
+    #       smtp_settings: {
+    #         address: 'smtp.server.com',
+    #         port: 587,
+    #         domain: 'test.domain.com',
+    #         enable_starttls_auto: true,
+    #         user_name: 'test_user',
+    #         password: '1234',
+    #         authentication: :plain
+    #       }
+    #     }
+    #   end
+    #
+    #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
+    #                      subject: 'Test email', body: 'Test email body')
+    #
+    #   FakePlugger::DeliveryMethod.new.deliver!(message)
+    #
+    #   # or
+    #
+    #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
+    #                      subject: 'Test email', body: 'Test email body')
+    #
+    #   FakePlugger::DeliveryMethod.new(
+    #     delivery_settings: {
+    #       smtp_settings: {
+    #         address: 'smtp.server.com',
+    #         port: 587,
+    #         domain: 'test.domain.com',
+    #         enable_starttls_auto: true,
+    #         user_name: 'test_user',
+    #         password: '1234',
+    #         authentication: :plain
+    #       }
+    #     }
+    #   ).deliver!(message)
+    #
+    #   # Using API:
     #
     #   MailPlugger.plug_in('test_api_client') do |api|
     #     api.delivery_options = %i[from to subject body]
@@ -115,7 +178,7 @@ module FakePlugger
     private
 
     # Call extra options like show debug informations, show raw message,
-    # use mail grabber
+    # use mail grabber.
     def call_extra_options
       show_debug_info if @debug
       show_raw_message if @raw_message
@@ -125,18 +188,8 @@ module FakePlugger
       MailGrabber::DeliveryMethod.new.deliver!(@message)
     end
 
-    # Return with a response which depends on the conditions.
-    def return_with_response
-      return client.new(delivery_data) if @response.nil?
-      if @response.is_a?(Hash) && @response[:return_delivery_data]
-        return delivery_data
-      end
-
-      @response
-    end
-
-    # Show debug informations from variables and methods.
-    def show_debug_info
+    # Debug informations for API
+    def debug_info_for_api
       puts <<~DEBUG_INFO
 
         ===================== FakePlugger::DeliveryMethod =====================
@@ -168,6 +221,62 @@ module FakePlugger
         =======================================================================
 
       DEBUG_INFO
+    end
+
+    # Debug information for SMTP
+    def debug_info_for_smtp
+      puts <<~DEBUG_INFO
+
+        ===================== FakePlugger::DeliveryMethod =====================
+
+        ------------------------------ Variables ------------------------------
+
+        ==> @delivery_settings: #{@delivery_settings.inspect}
+
+        ==> @default_delivery_system: #{@default_delivery_system.inspect}
+
+        ==> @message: #{@message.inspect}
+
+        ------------------------------- Methods -------------------------------
+
+        ==> delivery_system: #{delivery_system.inspect}
+
+        ==> settings: #{settings.inspect}
+
+        =======================================================================
+
+      DEBUG_INFO
+    end
+
+    # Prepare delivery. It depends on that is SMTP or API.
+    def prepare_delivery
+      if send_via_smtp?
+        @message.delivery_method :smtp, settings[:smtp_settings]
+        @message
+      else
+        client.new(delivery_data)
+      end
+    end
+
+    # Check that it should retrun with the delivery data.
+    def return_delivery_data?
+      !send_via_smtp? &&
+        @response.is_a?(Hash) &&
+        @response[:return_delivery_data]
+    end
+
+    # Return with a response which depends on the conditions.
+    def return_with_response
+      return prepare_delivery if @response.nil?
+
+      return delivery_data if return_delivery_data?
+
+      @response
+    end
+
+    # Show debug informations from variables and methods.
+    def show_debug_info
+      send_via_smtp? ? debug_info_for_smtp : debug_info_for_api
     end
 
     # Show raw message for debug purpose.

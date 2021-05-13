@@ -36,6 +36,11 @@ module MailPlugger
       @message                 = nil
     end
 
+    # Using SMTP:
+    # Send message via SMTP protocol if the 'delivery_settings' contains a
+    # 'smtp_settings' key and the value is a hash with the settings.
+    #
+    # Using API:
     # Send message with the given client if the message parameter is a
     # Mail::Message object. Before doing that extract those information from the
     # Mail::Message object which was provided in the 'delivery_options'. After
@@ -44,9 +49,51 @@ module MailPlugger
     #
     # @param [Mail::Message] message what we would like to send
     #
-    # @return [Mail::Message/Hash] depend on delivery_settings and method calls
+    # @return [Mail::Message/Hash] depends on delivery_settings and method calls
     #
     # @example
+    #
+    #   # Using SMTP:
+    #
+    #   MailPlugger.plug_in('test_api_client') do |smtp|
+    #     smtp.delivery_settings = {
+    #       smtp_settings: {
+    #         address: 'smtp.server.com',
+    #         port: 587,
+    #         domain: 'test.domain.com',
+    #         enable_starttls_auto: true,
+    #         user_name: 'test_user',
+    #         password: '1234',
+    #         authentication: :plain
+    #       }
+    #     }
+    #   end
+    #
+    #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
+    #                      subject: 'Test email', body: 'Test email body')
+    #
+    #   MailPlugger::DeliveryMethod.new.deliver!(message)
+    #
+    #   # or
+    #
+    #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
+    #                      subject: 'Test email', body: 'Test email body')
+    #
+    #   MailPlugger::DeliveryMethod.new(
+    #     delivery_settings: {
+    #       smtp_settings: {
+    #         address: 'smtp.server.com',
+    #         port: 587,
+    #         domain: 'test.domain.com',
+    #         enable_starttls_auto: true,
+    #         user_name: 'test_user',
+    #         password: '1234',
+    #         authentication: :plain
+    #       }
+    #     }
+    #   ).deliver!(message)
+    #
+    #   # Using API:
     #
     #   MailPlugger.plug_in('test_api_client') do |api|
     #     api.delivery_options = %i[from to subject body]
@@ -76,7 +123,12 @@ module MailPlugger
 
       @message = message
 
-      client.new(delivery_data).deliver
+      if send_via_smtp?
+        message.delivery_method :smtp, settings[:smtp_settings]
+        message.deliver!
+      else
+        client.new(delivery_data).deliver
+      end
     end
   end
 end
