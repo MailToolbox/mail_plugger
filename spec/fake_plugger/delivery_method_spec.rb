@@ -22,7 +22,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
       def deliver!(message); end
     end
   end
-  let(:delivery_system) { 'dummy_api' }
+  let(:delivery_system) { 'delivery_system' }
   let(:delivery_options) { %i[to from subject body] }
   let(:delivery_settings) do
     {
@@ -908,7 +908,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
                     let(:message) { Mail.new(delivery_system: delivery_system) }
 
                     context 'and delivery_system value is string' do
-                      let(:delivery_system) { 'dummy_api' }
+                      let(:delivery_system) { 'delivery_system' }
 
                       it 'does NOT raise error' do
                         expect { deliver }.not_to raise_error
@@ -920,7 +920,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
                     end
 
                     context 'and delivery_system value is symbol' do
-                      let(:delivery_system) { :dummy_api }
+                      let(:delivery_system) { :delivery_system }
 
                       it 'does NOT raise error' do
                         expect { deliver }.not_to raise_error
@@ -1001,7 +1001,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
                     let(:message) { Mail.new(delivery_system: delivery_system) }
 
                     context 'and delivery_system value is string' do
-                      let(:delivery_system) { 'dummy_api' }
+                      let(:delivery_system) { 'delivery_system' }
 
                       it 'does NOT raise error' do
                         expect { deliver }.not_to raise_error
@@ -1014,7 +1014,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
                     end
 
                     context 'and delivery_system value is symbol' do
-                      let(:delivery_system) { :dummy_api }
+                      let(:delivery_system) { :delivery_system }
 
                       it 'does NOT raise error' do
                         expect { deliver }.not_to raise_error
@@ -2084,7 +2084,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
                       end
 
                       context 'and delivery_system value is string' do
-                        let(:delivery_system) { 'dummy_api' }
+                        let(:delivery_system) { 'delivery_system' }
 
                         it 'does NOT raise error' do
                           expect { deliver }.not_to raise_error
@@ -2097,7 +2097,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
                       end
 
                       context 'and delivery_system value is symbol' do
-                        let(:delivery_system) { :dummy_api }
+                        let(:delivery_system) { :delivery_system }
 
                         it 'does NOT raise error' do
                           expect { deliver }.not_to raise_error

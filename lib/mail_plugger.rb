@@ -21,6 +21,24 @@ module MailPlugger
     #
     # @example using Rails `config/initializers/mail_plugger.rb`
     #
+    #   # Using SMTP:
+    #
+    #   MailPlugger.plug_in('smtp_client') do |smtp|
+    #     smtp.delivery_settings = {
+    #       smtp_settings: {
+    #         address: 'smtp.server.com',
+    #         port: 587,
+    #         domain: 'test.domain.com',
+    #         enable_starttls_auto: true,
+    #         user_name: 'test_user',
+    #         password: '1234',
+    #         authentication: :plain
+    #       }
+    #     }
+    #   end
+    #
+    #   # Using API:
+    #
     #   # The defined API class should have an 'initialize' and a 'deliver'
     #   # method.
     #   class DefinedApiClientClass

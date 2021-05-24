@@ -55,7 +55,7 @@ module MailPlugger
     #
     #   # Using SMTP:
     #
-    #   MailPlugger.plug_in('test_api_client') do |smtp|
+    #   MailPlugger.plug_in('test_smtp_client') do |smtp|
     #     smtp.delivery_settings = {
     #       smtp_settings: {
     #         address: 'smtp.server.com',

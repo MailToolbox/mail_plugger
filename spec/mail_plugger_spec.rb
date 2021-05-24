@@ -52,7 +52,7 @@ RSpec.describe MailPlugger do
 
     context 'when delivery system is an array' do
       it 'raises error' do
-        expect { described_class.plug_in([:dummy_api]) {} }
+        expect { described_class.plug_in([:delivery_system]) {} }
           .to raise_error(described_class::Error::WrongDeliverySystem)
       end
     end
@@ -71,8 +71,8 @@ RSpec.describe MailPlugger do
       end
     end
 
-    context 'when api options are missing' do
-      let(:delivery_system) { 'dummy_api' }
+    context 'when options are missing' do
+      let(:delivery_system) { 'delivery_system' }
 
       before do
         described_class.plug_in(delivery_system) {}
@@ -93,7 +93,7 @@ RSpec.describe MailPlugger do
     # rubocop:enable Lint/EmptyBlock
 
     context 'when use unexisting options' do
-      let(:delivery_system) { 'dummy_api' }
+      let(:delivery_system) { 'delivery_system' }
       let(:plug_in) do
         described_class.plug_in(delivery_system) do |api|
           api.unexisting = 'something'
@@ -107,99 +107,247 @@ RSpec.describe MailPlugger do
     end
 
     context 'when plug in a delivery system' do
-      let(:delivery_options) { %i[to from subject body] }
-      let(:delivery_settings) { { key: :value } }
+      shared_examples 'setting with the right data' do |delivery_method|
+        if delivery_method == 'SMTP'
+          it 'does NOT set delivery_options' do
+            expect(described_class.delivery_options).to be nil
+          end
 
-      before do
-        described_class.plug_in(delivery_system) do |api|
-          api.delivery_options = delivery_options
-          api.delivery_settings = delivery_settings
-          api.client = DummyApi
-        end
-      end
+          it 'does NOT set client' do
+            expect(described_class.client).to be nil
+          end
+        else
+          it 'sets delivery_options' do
+            expect(described_class.delivery_options)
+              .to eq({ delivery_system => delivery_options })
+          end
 
-      shared_examples 'setting with the right data' do
-        it 'sets delivery_options' do
-          expect(described_class.delivery_options)
-            .to eq({ delivery_system => delivery_options })
+          it 'sets client' do
+            expect(described_class.client).to eq({ delivery_system => client })
+          end
         end
 
         it 'sets delivery_settings' do
           expect(described_class.delivery_settings)
             .to eq({ delivery_system => delivery_settings })
         end
+      end
 
-        it 'sets client' do
-          expect(described_class.client).to eq({ delivery_system => DummyApi })
+      context 'and using SMTP' do
+        let(:delivery_options) { nil }
+        let(:delivery_settings) { { smtp_settings: { key: :value } } }
+        let(:client) { nil }
+
+        before do
+          described_class.plug_in(delivery_system) do |smtp|
+            smtp.delivery_settings = delivery_settings
+          end
+        end
+
+        context 'and delivery_system value is string' do
+          let(:delivery_system) { 'delivery_system' }
+
+          it_behaves_like 'setting with the right data', 'SMTP'
+        end
+
+        context 'and delivery_system value is symbol' do
+          let(:delivery_system) { :delivery_system }
+
+          it_behaves_like 'setting with the right data', 'SMTP'
         end
       end
 
-      context 'and delivery_system value is string' do
-        let(:delivery_system) { 'dummy_api' }
+      context 'and using API' do
+        let(:delivery_options) { %i[to from subject body] }
+        let(:delivery_settings) { { key: :value } }
+        let(:client) { DummyApi }
 
-        it_behaves_like 'setting with the right data'
-      end
+        before do
+          described_class.plug_in(delivery_system) do |api|
+            api.delivery_options = delivery_options
+            api.delivery_settings = delivery_settings
+            api.client = client
+          end
+        end
 
-      context 'and delivery_system value is symbol' do
-        let(:delivery_system) { :dummy_api }
+        context 'and delivery_system value is string' do
+          let(:delivery_system) { 'delivery_system' }
 
-        it_behaves_like 'setting with the right data'
+          it_behaves_like 'setting with the right data', 'API'
+        end
+
+        context 'and delivery_system value is symbol' do
+          let(:delivery_system) { :delivery_system }
+
+          it_behaves_like 'setting with the right data', 'API'
+        end
       end
     end
 
     context 'when plug in more delivery systems' do
-      let(:delivery_options) { %i[to from subject body] }
-      let(:delivery_settings) { { key: :value } }
-      let(:another_delivery_options) { %i[to from subject text_part html_part] }
+      shared_examples 'setting with the right data' do |delivery_method|
+        case delivery_method
+        when 'SMTP'
+          it 'does NOT set delivery_options' do
+            expect(described_class.delivery_options).to be nil
+          end
 
-      before do
-        described_class.plug_in(delivery_system) do |api|
-          api.delivery_options = delivery_options
-          api.delivery_settings = delivery_settings
-          api.client = DummyApi
-        end
+          it 'does NOT set client' do
+            expect(described_class.client).to be nil
+          end
 
-        described_class.plug_in(another_delivery_system) do |api|
-          api.delivery_options = another_delivery_options
-          api.client = AnotherDummyApi
+          it 'sets both delivery_settings' do
+            expect(described_class.delivery_settings)
+              .to eq({
+                       delivery_system => delivery_settings,
+                       another_delivery_system => another_delivery_settings
+                     })
+          end
+        when 'API'
+          it 'sets both delivery_options' do
+            expect(described_class.delivery_options)
+              .to eq({
+                       delivery_system => delivery_options,
+                       another_delivery_system => another_delivery_options
+                     })
+          end
+
+          it 'sets both client' do
+            expect(described_class.client)
+              .to eq({
+                       delivery_system => client,
+                       another_delivery_system => another_client
+                     })
+          end
+
+          it 'sets both delivery_settings' do
+            expect(described_class.delivery_settings)
+              .to eq({ delivery_system => delivery_settings })
+          end
+        when 'SMTP and API'
+          it 'sets delivery_options for API' do
+            expect(described_class.delivery_options)
+              .to eq({ delivery_system => delivery_options })
+          end
+
+          it 'sets client for API' do
+            expect(described_class.client).to eq({ delivery_system => client })
+          end
+
+          it 'sets both delivery_settings' do
+            expect(described_class.delivery_settings)
+              .to eq({
+                       delivery_system => delivery_settings,
+                       another_delivery_system => another_delivery_settings
+                     })
+          end
         end
       end
 
-      shared_examples 'setting with the right data' do
-        it 'sets delivery_options' do
-          expect(described_class.delivery_options)
-            .to eq({
-                     delivery_system => delivery_options,
-                     another_delivery_system => another_delivery_options
-                   })
+      context 'and using more SMTPs' do
+        let(:delivery_options) { nil }
+        let(:delivery_settings) { { smtp_settings: { key: :value } } }
+        let(:client) { nil }
+        let(:another_delivery_options) { nil }
+        let(:another_delivery_settings) { { smtp_settings: { key2: :value2 } } }
+        let(:another_client) { nil }
+
+        before do
+          described_class.plug_in(delivery_system) do |smtp|
+            smtp.delivery_settings = delivery_settings
+          end
+
+          described_class.plug_in(another_delivery_system) do |smtp|
+            smtp.delivery_settings = another_delivery_settings
+          end
         end
 
-        it 'sets delivery_settings where was added' do
-          expect(described_class.delivery_settings)
-            .to eq({ delivery_system => delivery_settings })
+        context 'and delivery_systems values are string' do
+          let(:delivery_system) { 'delivery_system' }
+          let(:another_delivery_system) { 'another_delivery_system' }
+
+          it_behaves_like 'setting with the right data', 'SMTP'
         end
 
-        it 'sets client' do
-          expect(described_class.client)
-            .to eq({
-                     delivery_system => DummyApi,
-                     another_delivery_system => AnotherDummyApi
-                   })
+        context 'and delivery_systems values are symbol' do
+          let(:delivery_system) { :delivery_system }
+          let(:another_delivery_system) { :another_delivery_system }
+
+          it_behaves_like 'setting with the right data', 'SMTP'
         end
       end
 
-      context 'and delivery_systems value are string' do
-        let(:delivery_system) { 'dummy_api' }
-        let(:another_delivery_system) { 'another_dummy_api' }
+      context 'and using more APIs' do
+        let(:delivery_options) { %i[to from subject body] }
+        let(:delivery_settings) { { key: :value } }
+        let(:client) { DummyApi }
+        let(:another_delivery_options) do
+          %i[to from subject text_part html_part]
+        end
+        let(:another_delivery_settings) { { key2: :value2 } }
+        let(:another_client) { AnotherDummyApi }
 
-        it_behaves_like 'setting with the right data'
+        before do
+          described_class.plug_in(delivery_system) do |api|
+            api.delivery_options = delivery_options
+            api.delivery_settings = delivery_settings
+            api.client = client
+          end
+
+          described_class.plug_in(another_delivery_system) do |api|
+            api.delivery_options = another_delivery_options
+            api.client = another_client
+          end
+        end
+
+        context 'and delivery_systems values are string' do
+          let(:delivery_system) { 'delivery_system' }
+          let(:another_delivery_system) { 'another_delivery_system' }
+
+          it_behaves_like 'setting with the right data', 'API'
+        end
+
+        context 'and delivery_systems values are symbol' do
+          let(:delivery_system) { :delivery_system }
+          let(:another_delivery_system) { :another_delivery_system }
+
+          it_behaves_like 'setting with the right data', 'API'
+        end
       end
 
-      context 'and delivery_systems value are symbol' do
-        let(:delivery_system) { :dummy_api }
-        let(:another_delivery_system) { :another_dummy_api }
+      context 'and using SMTP and API' do
+        let(:delivery_options) { %i[to from subject body] }
+        let(:delivery_settings) { { key: :value } }
+        let(:client) { DummyApi }
+        let(:another_delivery_options) { nil }
+        let(:another_delivery_settings) { { smtp_settings: { key2: :value2 } } }
+        let(:another_client) { nil }
 
-        it_behaves_like 'setting with the right data'
+        before do
+          described_class.plug_in(delivery_system) do |api|
+            api.delivery_options = delivery_options
+            api.delivery_settings = delivery_settings
+            api.client = client
+          end
+
+          described_class.plug_in(another_delivery_system) do |smtp|
+            smtp.delivery_settings = another_delivery_settings
+          end
+        end
+
+        context 'and delivery_systems values are string' do
+          let(:delivery_system) { 'delivery_system' }
+          let(:another_delivery_system) { 'another_delivery_system' }
+
+          it_behaves_like 'setting with the right data', 'SMTP and API'
+        end
+
+        context 'and delivery_systems values are symbol' do
+          let(:delivery_system) { :delivery_system }
+          let(:another_delivery_system) { :another_delivery_system }
+
+          it_behaves_like 'setting with the right data', 'SMTP and API'
+        end
       end
     end
   end

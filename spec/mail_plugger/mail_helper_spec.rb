@@ -109,7 +109,7 @@ RSpec.describe MailPlugger::MailHelper do
       TestClass.new(client: dummy_client, message: message).client
     end
 
-    let(:message) { Mail.new(delivery_system: 'dummy_api') }
+    let(:message) { Mail.new(delivery_system: 'delivery_system') }
 
     context 'when client does NOT a class' do
       let(:dummy_client) { 'DummyApi' }
@@ -138,13 +138,13 @@ RSpec.describe MailPlugger::MailHelper do
     context 'when client is a hash' do
       let(:dummy_client) do
         {
-          'dummy_api' => DummyApi,
-          'another_dummy_api' => AnotherDummyApi
+          'delivery_system' => DummyApi,
+          'another_delivery_system' => AnotherDummyApi
         }
       end
 
       it 'returns with the right class from the hash' do
-        expect(client).to eq(dummy_client['dummy_api'])
+        expect(client).to eq(dummy_client['delivery_system'])
       end
     end
   end
@@ -384,26 +384,26 @@ RSpec.describe MailPlugger::MailHelper do
             'does NOT' do
       let(:delivery_options) do
         {
-          'dummy_api' => %i[to from subject body],
-          'another_dummy_api' => %i[to from subject body]
+          'delivery_system' => %i[to from subject body],
+          'another_delivery_system' => %i[to from subject body]
         }
       end
       let(:client) { DummyApi }
       let(:delivery_settings) { nil }
 
       it 'returns with the first key' do
-        expect(default_delivery_system).to eq('dummy_api')
+        expect(default_delivery_system).to eq('delivery_system')
       end
     end
 
     context 'when client is hash but delivery_options and delivery_settings ' \
             'does NOT' do
       let(:delivery_options) { %i[to from subject body] }
-      let(:client) { { 'dummy_api' => DummyApi } }
+      let(:client) { { 'delivery_system' => DummyApi } }
       let(:delivery_settings) { nil }
 
       it 'returns with the first key' do
-        expect(default_delivery_system).to eq('dummy_api')
+        expect(default_delivery_system).to eq('delivery_system')
       end
     end
 
@@ -421,10 +421,12 @@ RSpec.describe MailPlugger::MailHelper do
       end
 
       context 'and it does NOT contain DELIVERY_SETTINGS_KEYS' do
-        let(:delivery_settings) { { 'dummy_api' => { return_response: true } } }
+        let(:delivery_settings) do
+          { 'delivery_system' => { return_response: true } }
+        end
 
         it 'returns with the first key' do
-          expect(default_delivery_system).to eq('dummy_api')
+          expect(default_delivery_system).to eq('delivery_system')
         end
       end
     end
@@ -433,15 +435,17 @@ RSpec.describe MailPlugger::MailHelper do
             'are hashes' do
       let(:delivery_options) do
         {
-          'dummy_api' => %i[to from subject body],
-          'another_dummy_api' => %i[to from subject body]
+          'delivery_system' => %i[to from subject body],
+          'another_delivery_system' => %i[to from subject body]
         }
       end
-      let(:client) { { 'dummy_api' => DummyApi } }
-      let(:delivery_settings) { { 'dummy_api' => { return_response: true } } }
+      let(:client) { { 'delivery_system' => DummyApi } }
+      let(:delivery_settings) do
+        { 'delivery_system' => { return_response: true } }
+      end
 
       it 'returns with the first key' do
-        expect(default_delivery_system).to eq('dummy_api')
+        expect(default_delivery_system).to eq('delivery_system')
       end
     end
   end
@@ -453,7 +457,7 @@ RSpec.describe MailPlugger::MailHelper do
         .delivery_options
     end
 
-    let(:message) { Mail.new(delivery_system: 'dummy_api') }
+    let(:message) { Mail.new(delivery_system: 'delivery_system') }
 
     context 'when delivery_options does NOT an array' do
       let(:options) { 'to from subject body' }
@@ -475,13 +479,13 @@ RSpec.describe MailPlugger::MailHelper do
     context 'when delivery_options is a hash' do
       let(:options) do
         {
-          'dummy_api' => %i[to from subject body],
-          'another_dummy_api' => %i[to from subject text_part html_part]
+          'delivery_system' => %i[to from subject body],
+          'another_delivery_system' => %i[to from subject text_part html_part]
         }
       end
 
       it 'returns with the right array from the hash' do
-        expect(delivery_options).to eq(options['dummy_api'])
+        expect(delivery_options).to eq(options['delivery_system'])
       end
     end
   end
@@ -516,25 +520,29 @@ RSpec.describe MailPlugger::MailHelper do
 
       context 'and all delivery_options, client and delivery_settings ' \
               'are hashes' do
-        let(:delivery_options) { { 'dummy_api' => %i[to from subject body] } }
-        let(:client) { { 'dummy_api' => DummyApi } }
-        let(:delivery_settings) { { 'dummy_api' => { return_response: true } } }
+        let(:delivery_options) do
+          { 'delivery_system' => %i[to from subject body] }
+        end
+        let(:client) { { 'delivery_system' => DummyApi } }
+        let(:delivery_settings) do
+          { 'delivery_system' => { return_response: true } }
+        end
 
         context 'and default_delivery_system is defined' do
           let(:mail_options) { {} }
-          let(:default_delivery_system) { 'dummy_api' }
+          let(:default_delivery_system) { 'delivery_system' }
 
           it 'returns with the default_delivery_system' do
-            expect(delivery_system).to eq('dummy_api')
+            expect(delivery_system).to eq('delivery_system')
           end
         end
 
         context 'and delivery_system is defined in Mail::Message object' do
-          let(:mail_options) { { delivery_system: 'dummy_api' } }
+          let(:mail_options) { { delivery_system: 'delivery_system' } }
           let(:default_delivery_system) { nil }
 
           it 'returns with the delivery_system from Mail::Message' do
-            expect(delivery_system).to eq('dummy_api')
+            expect(delivery_system).to eq('delivery_system')
           end
         end
 
@@ -551,25 +559,27 @@ RSpec.describe MailPlugger::MailHelper do
 
       context 'and one of the delivery_options, client or delivery_settings ' \
               'is a hash' do
-        let(:delivery_options) { { 'dummy_api' => %i[to from subject body] } }
+        let(:delivery_options) do
+          { 'delivery_system' => %i[to from subject body] }
+        end
         let(:client) { DummyApi }
         let(:delivery_settings) { nil }
 
         context 'and default_delivery_system is defined' do
           let(:mail_options) { {} }
-          let(:default_delivery_system) { 'dummy_api' }
+          let(:default_delivery_system) { 'delivery_system' }
 
           it 'returns with the default_delivery_system' do
-            expect(delivery_system).to eq('dummy_api')
+            expect(delivery_system).to eq('delivery_system')
           end
         end
 
         context 'and delivery_system is defined in Mail::Message object' do
-          let(:mail_options) { { delivery_system: 'dummy_api' } }
+          let(:mail_options) { { delivery_system: 'delivery_system' } }
           let(:default_delivery_system) { nil }
 
           it 'returns with the delivery_system from Mail::Message' do
-            expect(delivery_system).to eq('dummy_api')
+            expect(delivery_system).to eq('delivery_system')
           end
         end
 
@@ -592,19 +602,19 @@ RSpec.describe MailPlugger::MailHelper do
 
         context 'and default_delivery_system is defined' do
           let(:mail_options) { {} }
-          let(:default_delivery_system) { 'dummy_api' }
+          let(:default_delivery_system) { 'delivery_system' }
 
           it 'returns with the default_delivery_system' do
-            expect(delivery_system).to eq('dummy_api')
+            expect(delivery_system).to eq('delivery_system')
           end
         end
 
         context 'and delivery_system is defined in Mail::Message object' do
-          let(:mail_options) { { delivery_system: 'dummy_api' } }
+          let(:mail_options) { { delivery_system: 'delivery_system' } }
           let(:default_delivery_system) { nil }
 
           it 'returns with the delivery_system from Mail::Message' do
-            expect(delivery_system).to eq('dummy_api')
+            expect(delivery_system).to eq('delivery_system')
           end
         end
 
@@ -629,7 +639,7 @@ RSpec.describe MailPlugger::MailHelper do
         before do
           allow_any_instance_of(described_class)
             .to receive(:message_field_value_from)
-            .and_return('dummy_api')
+            .and_return('delivery_system')
           delivery_system
         end
 
