@@ -121,10 +121,7 @@ module MailPlugger
     # If the given 'delivery_system' is nil or doesn't match with extracted keys
     # then it will raise error.
     def delivery_system_value_check
-      return unless @delivery_options.is_a?(Hash) ||
-                    @client.is_a?(Hash) ||
-                    (@delivery_settings.is_a?(Hash) &&
-                      exclude_delivey_settings_keys?)
+      return unless need_delivery_system?
 
       if @delivery_system.nil?
         raise Error::WrongDeliverySystem,
@@ -202,6 +199,17 @@ module MailPlugger
       message_field.public_send(*mail_field_value)
     end
 
+    # Check if either 'deliviery_options' or 'client' is a hash.
+    # Or delivery_settings is a hash but not contains DELIVERY_SETTINGS_KEYS in
+    # first level.
+    #
+    # @return [Boolean] true/false
+    def need_delivery_system?
+      @delivery_options.is_a?(Hash) ||
+        @client.is_a?(Hash) ||
+        (@delivery_settings.is_a?(Hash) && exclude_delivey_settings_keys?)
+    end
+
     # Extract the value from the given options.
     #
     # @param [Hash/Array/Class] option
@@ -236,9 +244,7 @@ module MailPlugger
 
       return {} if @settings.nil?
 
-      if @delivery_settings.is_a?(Hash) && !@settings.is_a?(Hash) && @initialize
-        return @delivery_settings
-      end
+      return @delivery_settings if should_return_delivery_settings?
 
       unless @settings.is_a?(Hash)
         raise Error::WrongDeliverySettings,
@@ -246,6 +252,15 @@ module MailPlugger
       end
 
       @settings
+    end
+
+    # For FakePlugger in the initialize method sometimes the extracted
+    # 'settings' value is wrong because we need that hash what we added to the
+    # 'delivery_settings'.
+    #
+    # @return [Boolean] true/false
+    def should_return_delivery_settings?
+      @delivery_settings.is_a?(Hash) && !@settings.is_a?(Hash) && @initialize
     end
   end
 end
