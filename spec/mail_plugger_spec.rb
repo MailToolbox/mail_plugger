@@ -78,6 +78,10 @@ RSpec.describe MailPlugger do
         described_class.plug_in(delivery_system) {}
       end
 
+      it 'does not set client' do
+        expect(described_class.client).to be nil
+      end
+
       it 'does not set delivery_options' do
         expect(described_class.delivery_options).to be nil
       end
@@ -86,8 +90,8 @@ RSpec.describe MailPlugger do
         expect(described_class.delivery_settings).to be nil
       end
 
-      it 'does not set client' do
-        expect(described_class.client).to be nil
+      it 'sets delivery_systems' do
+        expect(described_class.delivery_systems).to eq([delivery_system])
       end
     end
     # rubocop:enable Lint/EmptyBlock
@@ -130,6 +134,10 @@ RSpec.describe MailPlugger do
         it 'sets delivery_settings' do
           expect(described_class.delivery_settings)
             .to eq({ delivery_system => delivery_settings })
+        end
+
+        it 'sets delivery_systems' do
+          expect(described_class.delivery_systems).to eq([delivery_system])
         end
       end
 
@@ -241,6 +249,11 @@ RSpec.describe MailPlugger do
                        another_delivery_system => another_delivery_settings
                      })
           end
+        end
+
+        it 'sets delivery_systems' do
+          expect(described_class.delivery_systems)
+            .to eq([delivery_system, another_delivery_system])
         end
       end
 

@@ -8,18 +8,13 @@ RSpec.describe MailPlugger::MailHelper do
       Class.new do
         include MailPlugger::MailHelper
 
-        def initialize(
-          delivery_options: nil,
-          client: nil,
-          default_delivery_system: nil,
-          delivery_settings: nil,
-          message: nil
-        )
-          @delivery_options = delivery_options
-          @client = client
-          @default_delivery_system = default_delivery_system
-          @delivery_settings = delivery_settings
-          @message = message
+        def initialize(options = {})
+          @client = options[:client]
+          @delivery_options = options[:delivery_options]
+          @delivery_settings = options[:delivery_settings]
+          @delivery_systems = options[:delivery_systems]
+          @default_delivery_system = options[:default_delivery_system]
+          @message = options[:message]
         end
       end
     stub_const('TestClass', test_class)
@@ -364,31 +359,16 @@ RSpec.describe MailPlugger::MailHelper do
         .new(
           delivery_options: delivery_options,
           client: client,
-          delivery_settings: delivery_settings
+          delivery_settings: delivery_settings,
+          delivery_systems: delivery_systems
         )
         .default_delivery_system_get
     end
 
-    context 'when neither delivery_options, client or delivery_settings ' \
-            'is a hash' do
-      let(:delivery_options) { %i[to from subject body] }
-      let(:client) { DummyApi }
-      let(:delivery_settings) { nil }
-
-      it 'returns with nil' do
-        expect(default_delivery_system).to be nil
-      end
-    end
-
-    context 'when delivery_options is hash but client and delivery_settings ' \
-            'does NOT' do
-      let(:delivery_options) do
-        {
-          'delivery_system' => %i[to from subject body],
-          'another_delivery_system' => %i[to from subject body]
-        }
-      end
-      let(:client) { DummyApi }
+    context 'when delivery_systems exists' do
+      let(:delivery_systems) { %w[delivery_system another_delivery_system] }
+      let(:delivery_options) { nil }
+      let(:client) { nil }
       let(:delivery_settings) { nil }
 
       it 'returns with the first key' do
@@ -396,31 +376,80 @@ RSpec.describe MailPlugger::MailHelper do
       end
     end
 
-    context 'when client is hash but delivery_options and delivery_settings ' \
-            'does NOT' do
-      let(:delivery_options) { %i[to from subject body] }
-      let(:client) { { 'delivery_system' => DummyApi } }
-      let(:delivery_settings) { nil }
+    context 'when delivery_systems does NOT exist' do
+      let(:delivery_systems) { nil }
 
-      it 'returns with the first key' do
-        expect(default_delivery_system).to eq('delivery_system')
-      end
-    end
-
-    context 'when delivery_settings is hash but delivery_options and client ' \
-            'does NOT' do
-      let(:delivery_options) { %i[to from subject body] }
-      let(:client) { DummyApi }
-
-      context 'and it contains DELIVERY_SETTINGS_KEYS' do
-        let(:delivery_settings) { { return_response: true } }
+      context 'and neither delivery_options, client or delivery_settings ' \
+              'is a hash' do
+        let(:delivery_options) { %i[to from subject body] }
+        let(:client) { DummyApi }
+        let(:delivery_settings) { nil }
 
         it 'returns with nil' do
           expect(default_delivery_system).to be nil
         end
       end
 
-      context 'and it does NOT contain DELIVERY_SETTINGS_KEYS' do
+      context 'and delivery_options is hash but client and delivery_settings ' \
+              'does NOT' do
+        let(:delivery_options) do
+          {
+            'delivery_system' => %i[to from subject body],
+            'another_delivery_system' => %i[to from subject body]
+          }
+        end
+        let(:client) { DummyApi }
+        let(:delivery_settings) { nil }
+
+        it 'returns with the first key' do
+          expect(default_delivery_system).to eq('delivery_system')
+        end
+      end
+
+      context 'and client is hash but delivery_options and delivery_settings ' \
+              'does NOT' do
+        let(:delivery_options) { %i[to from subject body] }
+        let(:client) { { 'delivery_system' => DummyApi } }
+        let(:delivery_settings) { nil }
+
+        it 'returns with the first key' do
+          expect(default_delivery_system).to eq('delivery_system')
+        end
+      end
+
+      context 'and delivery_settings is hash but delivery_options and client ' \
+              'does NOT' do
+        let(:delivery_options) { %i[to from subject body] }
+        let(:client) { DummyApi }
+
+        context 'and it contains DELIVERY_SETTINGS_KEYS' do
+          let(:delivery_settings) { { return_response: true } }
+
+          it 'returns with nil' do
+            expect(default_delivery_system).to be nil
+          end
+        end
+
+        context 'and it does NOT contain DELIVERY_SETTINGS_KEYS' do
+          let(:delivery_settings) do
+            { 'delivery_system' => { return_response: true } }
+          end
+
+          it 'returns with the first key' do
+            expect(default_delivery_system).to eq('delivery_system')
+          end
+        end
+      end
+
+      context 'and all delivery_options, client and delivery_settings ' \
+              'are hashes' do
+        let(:delivery_options) do
+          {
+            'delivery_system' => %i[to from subject body],
+            'another_delivery_system' => %i[to from subject body]
+          }
+        end
+        let(:client) { { 'delivery_system' => DummyApi } }
         let(:delivery_settings) do
           { 'delivery_system' => { return_response: true } }
         end
@@ -428,24 +457,6 @@ RSpec.describe MailPlugger::MailHelper do
         it 'returns with the first key' do
           expect(default_delivery_system).to eq('delivery_system')
         end
-      end
-    end
-
-    context 'when all delivery_options, client and delivery_settings ' \
-            'are hashes' do
-      let(:delivery_options) do
-        {
-          'delivery_system' => %i[to from subject body],
-          'another_delivery_system' => %i[to from subject body]
-        }
-      end
-      let(:client) { { 'delivery_system' => DummyApi } }
-      let(:delivery_settings) do
-        { 'delivery_system' => { return_response: true } }
-      end
-
-      it 'returns with the first key' do
-        expect(default_delivery_system).to eq('delivery_system')
       end
     end
   end
@@ -654,88 +665,102 @@ RSpec.describe MailPlugger::MailHelper do
   end
 
   describe '#extract_keys' do
-    subject(:extract_keys) do
-      TestClass
-        .new(
-          delivery_options: delivery_options,
-          client: client,
-          delivery_settings: delivery_settings
-        )
-        .extract_keys
-    end
+    context 'when delivery_systems exists' do
+      subject(:extract_keys) do
+        TestClass.new(delivery_systems: delivery_systems).extract_keys
+      end
 
-    context 'when delivery_options is a hash' do
-      let(:delivery_options) { { key1: :value1, key2: :value2 } }
-      let(:client) { nil }
-      let(:delivery_settings) { nil }
+      let(:delivery_systems) { %w[key1 key2] }
 
-      it 'returns with the keys' do
-        expect(extract_keys).to eq(%i[key1 key2])
+      it 'returns with delivery_systems array' do
+        expect(extract_keys).to eq(delivery_systems)
       end
     end
 
-    context 'when client is a hash' do
-      let(:delivery_options) { nil }
-      let(:client) { { 'key1' => 'value1', 'key2' => 'value2' } }
-      let(:delivery_settings) { nil }
-
-      it 'returns with the keys' do
-        expect(extract_keys).to eq(%w[key1 key2])
-      end
-    end
-
-    context 'when both delivery_options and client are hashes' do
-      let(:delivery_options) { { key1: :value1, key2: :value2 } }
-      # both delivery_options and client should have the same keys,
-      # but now we can see that the delivery_options keys will be returned,
-      # which should be ok.
-      let(:client) { { key3: :value3, key4: :value4 } }
-      let(:delivery_settings) { nil }
-
-      it 'returns with the first hash keys' do
-        expect(extract_keys).to eq(%i[key1 key2])
-      end
-    end
-
-    context 'when delivery_settings is a hash' do
-      let(:delivery_options) { nil }
-      let(:client) { nil }
-
-      context 'but it contains only DELIVERY_SETTINGS_KEYS' do
-        let(:delivery_settings) { { return_response: true } }
-
-        it 'returns with nil' do
-          expect(extract_keys).to be nil
-        end
+    context 'when delivery_systems does NOT exist' do
+      subject(:extract_keys) do
+        TestClass
+          .new(
+            delivery_options: delivery_options,
+            client: client,
+            delivery_settings: delivery_settings
+          )
+          .extract_keys
       end
 
-      context 'but it contains one of DELIVERY_SETTINGS_KEYS' do
-        let(:delivery_settings) do
-          { 'key' => 'value', 'return_response' => true }
-        end
-
-        it 'returns with nil' do
-          expect(extract_keys).to be nil
-        end
-      end
-
-      context 'and it does NOT contain DELIVERY_SETTINGS_KEYS ' \
-              '(in the first level)' do
-        let(:delivery_settings) { { 'key' => { return_response: true } } }
+      context 'and delivery_options is a hash' do
+        let(:delivery_options) { { key1: :value1, key2: :value2 } }
+        let(:client) { nil }
+        let(:delivery_settings) { nil }
 
         it 'returns with the keys' do
-          expect(extract_keys).to eq(%w[key])
+          expect(extract_keys).to eq(%i[key1 key2])
         end
       end
-    end
 
-    context 'when none of the options are hashes' do
-      let(:delivery_options) { nil }
-      let(:client) { nil }
-      let(:delivery_settings) { nil }
+      context 'and client is a hash' do
+        let(:delivery_options) { nil }
+        let(:client) { { 'key1' => 'value1', 'key2' => 'value2' } }
+        let(:delivery_settings) { nil }
 
-      it 'returns with nil' do
-        expect(extract_keys).to be nil
+        it 'returns with the keys' do
+          expect(extract_keys).to eq(%w[key1 key2])
+        end
+      end
+
+      context 'and both delivery_options and client are hashes' do
+        let(:delivery_options) { { key1: :value1, key2: :value2 } }
+        # both delivery_options and client should have the same keys,
+        # but now we can see that the delivery_options keys will be returned,
+        # which should be ok.
+        let(:client) { { key3: :value3, key4: :value4 } }
+        let(:delivery_settings) { nil }
+
+        it 'returns with the first hash keys' do
+          expect(extract_keys).to eq(%i[key1 key2])
+        end
+      end
+
+      context 'and delivery_settings is a hash' do
+        let(:delivery_options) { nil }
+        let(:client) { nil }
+
+        context 'but it contains only DELIVERY_SETTINGS_KEYS' do
+          let(:delivery_settings) { { return_response: true } }
+
+          it 'returns with nil' do
+            expect(extract_keys).to be nil
+          end
+        end
+
+        context 'but it contains one of DELIVERY_SETTINGS_KEYS' do
+          let(:delivery_settings) do
+            { 'key' => 'value', 'return_response' => true }
+          end
+
+          it 'returns with nil' do
+            expect(extract_keys).to be nil
+          end
+        end
+
+        context 'and it does NOT contain DELIVERY_SETTINGS_KEYS ' \
+                '(in the first level)' do
+          let(:delivery_settings) { { 'key' => { return_response: true } } }
+
+          it 'returns with the keys' do
+            expect(extract_keys).to eq(%w[key])
+          end
+        end
+      end
+
+      context 'when none of the options are hashes' do
+        let(:delivery_options) { nil }
+        let(:client) { nil }
+        let(:delivery_settings) { nil }
+
+        it 'returns with nil' do
+          expect(extract_keys).to be nil
+        end
       end
     end
   end

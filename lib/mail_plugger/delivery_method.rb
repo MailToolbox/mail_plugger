@@ -30,6 +30,8 @@ module MailPlugger
       @delivery_settings       = options[:delivery_settings] ||
                                  MailPlugger.delivery_settings
 
+      @delivery_systems        = MailPlugger.delivery_systems
+
       @default_delivery_system = options[:default_delivery_system] ||
                                  default_delivery_system_get
 

@@ -13,7 +13,10 @@ require 'fake_plugger/railtie' if defined?(Rails)
 
 module MailPlugger
   class << self
-    attr_reader :client, :delivery_options, :delivery_settings
+    attr_reader :client,
+                :delivery_options,
+                :delivery_settings,
+                :delivery_systems
 
     # Plug in defined API(s) class.
     #
@@ -93,6 +96,7 @@ module MailPlugger
       check_value(delivery_system)
 
       @delivery_system = delivery_system
+      (@delivery_systems ||= []) << delivery_system
 
       yield self
     rescue NoMethodError => e
