@@ -168,6 +168,14 @@ module MailPlugger
     def extract_keys
       return @delivery_systems unless @delivery_systems.nil?
 
+      extract_keys_from_other_variables
+    end
+
+    # Extract keys from 'delivery_options', 'client' or 'delivery_settings',
+    # depends on which is a hash. If none of these are hashes then returns nil.
+    #
+    # @return [Array/NilClass] with the keys from one of the hash
+    def extract_keys_from_other_variables
       if @delivery_options.is_a?(Hash)
         @delivery_options
       elsif @client.is_a?(Hash)
