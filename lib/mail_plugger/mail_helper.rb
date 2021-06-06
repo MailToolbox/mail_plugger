@@ -73,12 +73,15 @@ module MailPlugger
     end
 
     # Tries to set up a default delivery system, if the 'delivery_system'
-    # wasn't defined in the Mail::Message object and 'delivery_options',
+    # wasn't defined in the Mail::Message object and we're using
+    # MailPlugger.plug_in then it returns with first key of the stored
+    # 'delivery_systems'.
+    # When we are't using MailPlugger.plug_in method and 'delivery_options',
     # 'client' and/or 'delivery_settings' is a hash, then it tries to get the
     # 'delivery_system' from the hashes.
-    # Which means the MailPlugger.plugin method was used, probably.
+    # Otherwise it returns with nil.
     #
-    # @return [Stirng] the first key from the extracted keys
+    # @return [Stirng/NilClass] the first key from the extracted keys or nil
     def default_delivery_system_get
       extract_keys&.first
     end
@@ -160,11 +163,11 @@ module MailPlugger
       end
     end
 
-    # Return 'delivery_systems' array if it is exist. If not then extract keys
+    # Return 'delivery_systems' array if it's exist. If not then extract keys
     # from 'delivery_options', 'client' or 'delivery_settings',
     # depends on which is a hash. If none of these are hashes then returns nil.
     #
-    # @return [Array/NilClass] with the keys from one of the hash
+    # @return [Array/NilClass] with the keys or nil
     def extract_keys
       return @delivery_systems unless @delivery_systems.nil?
 
@@ -174,7 +177,7 @@ module MailPlugger
     # Extract keys from 'delivery_options', 'client' or 'delivery_settings',
     # depends on which is a hash. If none of these are hashes then returns nil.
     #
-    # @return [Array/NilClass] with the keys from one of the hash
+    # @return [Array/NilClass] with the keys from one of the hash or nil
     def extract_keys_from_other_variables
       if @delivery_options.is_a?(Hash)
         @delivery_options
@@ -211,8 +214,8 @@ module MailPlugger
     end
 
     # Check if either 'deliviery_options' or 'client' is a hash.
-    # Or delivery_settings is a hash but not contains DELIVERY_SETTINGS_KEYS in
-    # first level.
+    # Or delivery_settings is a hash but not contains 'DELIVERY_SETTINGS_KEYS'
+    # in first level.
     #
     # @return [Boolean] true/false
     def need_delivery_system?

@@ -1,8 +1,8 @@
-# How to use SparkPost with MailPlugger in Ruby on Rails
+# How to use SparkPost API with MailPlugger in Ruby on Rails
 
 **Please note that these examples were not tested, but I believe it should work.**
 
-Let's use mailer method which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
+Let's use mailer method which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#api).
 
 Add `simple_spark` gem to the `Gemfile`.
 

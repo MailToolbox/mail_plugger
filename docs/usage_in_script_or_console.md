@@ -2,6 +2,55 @@
 
 First you should be able to `require 'mail'` and `require 'mail_plugger'` to get started.
 
+## SMTP
+
+*This is just a theoretical example, because here it would be smarter to use the built in SMTP solution of `mail` gem. The advantage of this solution will be much more usable in Ruby on Rails. Especially when we would like to use more then one SMTP servers or we would like to combine SMTP and API connections.*
+
+
+We can use `MailPlugger.plug_in` to add our configurations.
+
+```ruby
+MailPlugger.plug_in('test_smtp_client') do |smtp|
+  smtp.delivery_settings = { smtp_settings: { address: '127.0.0.1', port: 1025 } }
+end
+
+message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
+# => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
+
+MailPlugger::DeliveryMethod.new.deliver!(message)
+# => #<Mail::Message:1880, Multipart: false, Headers: <Date: Tue, 25 May 2021 21:03:50 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60ad4a168fe52_3c74708-472@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: text/plain>, <Content-Transfer-Encoding: 7bit>>
+```
+
+Or we can use the `MailPlugger::DeliveryMethod` directly as well.
+
+```ruby
+message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
+# => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
+
+MailPlugger::DeliveryMethod.new(delivery_settings: { smtp_settings: { address: '127.0.0.1', port: 1025 } }).deliver!(message)
+# => #<Mail::Message:1880, Multipart: false, Headers: <Date: Tue, 25 May 2021 21:09:06 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60ad4b52a2079_3e16708170b1@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: text/plain>, <Content-Transfer-Encoding: 7bit>>
+```
+
+Or add `MailPlugger::DeliveryMethod` to `mail.delivery_method`.
+
+```ruby
+mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
+# => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
+
+mail.delivery_method MailPlugger::DeliveryMethod, { delivery_settings: { smtp_settings: { address: '127.0.0.1', port: 1025 } } }
+# => #<MailPlugger::DeliveryMethod:0x00007fb684044150 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}}, @default_delivery_system=nil, @message=nil>
+
+mail.deliver
+# => #<Mail::Message:1880, Multipart: false, Headers: <Date: Tue, 25 May 2021 21:13:41 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60ad4c657877a_3f587081186e@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: text/plain>, <Content-Transfer-Encoding: 7bit>>
+
+# or
+
+mail.deliver!
+# => #<Mail::Message:1880, Multipart: false, Headers: <Date: Tue, 25 May 2021 21:13:41 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60ad4c657877a_3f587081186e@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: text/plain>, <Content-Transfer-Encoding: 7bit>>
+```
+
+## API
+
 We need a class which will send the message in the right format via API.
 
 ```ruby
@@ -127,7 +176,7 @@ mail.deliver!
 # => {:response=>"OK"}
 ```
 
-Let's use `MailPlugger.plug_in` method.
+Or use `MailPlugger.plug_in` method with delivery settings.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|

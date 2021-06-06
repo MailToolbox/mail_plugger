@@ -1,6 +1,6 @@
 # How to add API specific options to the mailer method in Ruby on Rails
 
-Let's use mailer method which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
+Let's use mailer method which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#api).
 
 Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
 

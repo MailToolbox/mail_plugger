@@ -2,7 +2,23 @@
 
 **This Class was made for development and testing purpose. Please do not use on production environment.**
 
-After to add `mail_plugger`, `mail_grabber` gems and the gem of API of the mail provider, create `config/initializers/mail_plugger.rb` file and add something similar.
+After to add `mail_plugger`, `mail_grabber` gems and if we are using API then the gem of API of the mail provider, create `config/initializers/mail_plugger.rb` file and add something similar.
+
+
+If we are using SMTP
+
+```ruby
+# NOTE: This is just an example for testing...
+MailPlugger.plug_in('test_smtp_client') do |smtp|
+  smtp.delivery_settings = {
+    smtp_settings: { address: '127.0.0.1', port: 1025 },
+    fake_plugger_use_mail_grabber: true
+  }
+end
+```
+
+If we are using API
+
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -149,7 +165,7 @@ TestMailer.send_test.deliver_now
 #</html>
 #
 #----==_mimepart_6075280484140_c43aec1857593--
-
+#
 #=> #<Mail::Message:61220, Multipart: true, Headers: <Date: Tue, 13 Apr 2021 07:11:32 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60752804857d7_c43aec18576b4@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_6075280484140_c43aec1857593"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
 ```
 

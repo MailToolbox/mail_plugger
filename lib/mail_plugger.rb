@@ -18,9 +18,9 @@ module MailPlugger
                 :delivery_settings,
                 :delivery_systems
 
-    # Plug in defined API(s) class.
+    # Plug in SMTP(s) or defined API(s) class.
     #
-    # @param [String/Symbol] delivery_system the name of the API
+    # @param [String/Symbol] delivery_system the name of the SMTP/API
     #
     # @example using Rails `config/initializers/mail_plugger.rb`
     #
@@ -105,7 +105,7 @@ module MailPlugger
 
     # Define 'client', 'delivery_options' and 'delivery_settings' setter
     # methods. These methods are generating a hash where the key is the
-    # 'delivery_system'. This let us to set/use more than one API.
+    # 'delivery_system'. This let us to set/use more than one STMP/API.
     %w[client delivery_options delivery_settings].each do |method|
       define_method "#{method}=" do |value|
         variable = instance_variable_get("@#{method}")
@@ -119,7 +119,7 @@ module MailPlugger
     # Check 'delivery_system' is valid or not. If it's not valid then
     # it will raise an error.
     #
-    # @param [String/Symbol] delivery_system the name of the API
+    # @param [String/Symbol] delivery_system the name of the SMTP/API
     def check_value(delivery_system)
       if delivery_system.nil?
         raise Error::WrongDeliverySystem, '"delivery_system" is nil'

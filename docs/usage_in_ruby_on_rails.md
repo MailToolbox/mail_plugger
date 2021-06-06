@@ -1,5 +1,116 @@
 # How to use MailPlugger in Ruby on Rails
 
+## SMTP
+
+*This is just a theoretical example, because if we would like to use only one SMTP connection to send emails, it would be smarter to use the built in SMTP solution of Ruby on Rails. The advantage of this solution will be much more usable when we would like to use more then one SMTP servers or we would like to combine SMTP and API connections.*
+
+
+After to add `mail_plugger` gem, create `config/initializers/mail_plugger.rb` file and add something similar.
+
+```ruby
+# NOTE: This is just an example for testing...
+MailPlugger.plug_in('test_smtp_client') do |smtp|
+  smtp.delivery_settings = { smtp_settings: { address: '127.0.0.1', port: 1025 } }
+end
+```
+
+Then change `config/application.rb` file.
+
+```ruby
+config.action_mailer.delivery_method = :mail_plugger
+```
+
+So now we should add a mailer method. Let's create `app/mailers/test_mailer.rb` file.
+
+```ruby
+class TestMailer < ApplicationMailer
+  default from: 'from@example.com'
+
+  def send_test
+    mail subject: 'Test email', to: 'to@example.com'
+  end
+end
+```
+
+Then we should add views (the body) of this email, so create `app/views/test_mailer/send_test.html.erb`
+
+```erb
+<p>Test email body</p>
+```
+
+and `app/views/test_mailer/send_test.text.erb`.
+
+```erb
+Test email body
+```
+
+In the `rails console` we can try it out.
+
+```ruby
+TestMailer.send_test.deliver_now
+#  Rendering test_mailer/send_test.html.erb within layouts/mailer
+#  Rendered test_mailer/send_test.html.erb within layouts/mailer (0.8ms)
+#  Rendering test_mailer/send_test.text.erb within layouts/mailer
+#  Rendered test_mailer/send_test.text.erb within layouts/mailer (0.4ms)
+#TestMailer#send_test: processed outbound mail in 36.4ms
+#Sent mail to to@example.com (264.5ms)
+#Date: Mon, 31 May 2021 07:20:48 +0200
+#From: from@example.com
+#To: to@example.com
+#Message-ID: <60b4723022332_a16cec18481b7@server.local.mail>
+#Subject: Test email
+#Mime-Version: 1.0
+#Content-Type: multipart/alternative;
+# boundary="--==_mimepart_60b47230210ad_a16cec1848093";
+# charset=UTF-8
+#Content-Transfer-Encoding: 7bit
+#
+#
+#----==_mimepart_60b47230210ad_a16cec1848093
+#Content-Type: text/plain;
+# charset=UTF-8
+#Content-Transfer-Encoding: 7bit
+#
+#Test email body
+#
+#
+#----==_mimepart_60b47230210ad_a16cec1848093
+#Content-Type: text/html;
+# charset=UTF-8
+#Content-Transfer-Encoding: 7bit
+#
+#<!DOCTYPE html>
+#<html>
+#  <head>
+#    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+#    <style>
+#      /* Email styles need to be inline */
+#    </style>
+#  </head>
+#
+#  <body>
+#    <p>Test email body</p>
+#
+#  </body>
+#</html>
+#
+#----==_mimepart_60b47230210ad_a16cec1848093--
+#
+#=> #<Mail::Message:61220, Multipart: true, Headers: <Date: Mon, 31 May 2021 07:20:48 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60b4723022332_a16cec18481b7@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60b47230210ad_a16cec1848093"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
+
+# or use ! to not render mail
+
+TestMailer.send_test.deliver_now!
+#  Rendering test_mailer/send_test.html.erb within layouts/mailer
+#  Rendered test_mailer/send_test.html.erb within layouts/mailer (0.1ms)
+#  Rendering test_mailer/send_test.text.erb within layouts/mailer
+#  Rendered test_mailer/send_test.text.erb within layouts/mailer (0.1ms)
+#TestMailer#send_test: processed outbound mail in 20.5ms
+#=> #<Mail::Message:61240, Multipart: true, Headers: <Date: Mon, 31 May 2021 07:24:08 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60b472f8e921e_a16cec1848382@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60b472f8e69f6_a16cec1848279"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
+```
+
+## API
+
 After to add `mail_plugger` gem and the gem of API of the mail provider, create `config/initializers/mail_plugger.rb` file and add something similar.
 
 ```ruby

@@ -7,7 +7,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/137881380fc475b4a836/maintainability)](https://codeclimate.com/github/MailToolbox/mail_plugger/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/137881380fc475b4a836/test_coverage)](https://codeclimate.com/github/MailToolbox/mail_plugger/test_coverage)
 
-**MailPlugger** helps you to use different mail providers' **API**. You can use any APIs which one would like to use. It allows you to send different emails with different APIs. Also it can help to move between providers, load balacing or cost management.
+**MailPlugger** helps you to use different mail providers' **SMTP** and **API**. You can use any SMTPs and APIs which one would like to use. It allows you to send different emails with different SMTPs and APIs. Also it can help to move between providers, load balacing or cost management.
 
 ## Installation
 
@@ -31,16 +31,18 @@ Or install it yourself as:
 - [How to use MailPlugger::DeliveryMethod class](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_delivery_method.md)
 - [How to use MailPlugger in a Ruby script or IRB console](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_script_or_console.md)
 - [How to use MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md)
-  - [How to add API specific options to the mailer method in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_special_options_in_ruby_on_rails.md)
-  - [How to add attachments to the mailer method in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_attachments_in_ruby_on_rails.md)
-  - [How to use more delivey systems in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_delivery_system_in_ruby_on_rails.md)
-  - [How to use one delivey system with more send methods in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_one_delivery_system_with_more_send_methods_in_ruby_on_rails.md)
-  - [How to use AWS SES with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_aws_ses_in_ruby_on_rails.md)
-  - [How to use SparkPost with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_sparkpost_in_ruby_on_rails.md)
-  - [How to use SendGrid with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_sendgrid_in_ruby_on_rails.md)
-  - [How to use Mandrill with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_mandrill_in_ruby_on_rails.md)
-  - [How to use Postmark with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_postmark_in_ruby_on_rails.md)
-  - [How to use Mailgun with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_mailgun_in_ruby_on_rails.md)
+  - [How to use more SMTP delivery systems in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_smtp_delivery_systems_in_ruby_on_rails.md)
+  - [How to combine SMTP and API delivery systems in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_smtp_and_api_delivery_systems_in_ruby_on_rails.md)
+  - [How to add API specific options to the mailer method in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_api_specific_options_in_ruby_on_rails.md)
+  - [How to use API delivery system that add attachments to the mailer method in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_api_attachments_in_ruby_on_rails.md)
+  - [How to use more API delivery systems in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_api_delivery_systems_in_ruby_on_rails.md)
+  - [How to use one API delivery system with more send methods in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_one_api_delivery_system_with_more_send_methods_in_ruby_on_rails.md)
+  - [How to use AWS SES API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_aws_ses_api_in_ruby_on_rails.md)
+  - [How to use SparkPost API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_sparkpost_api_in_ruby_on_rails.md)
+  - [How to use SendGrid API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_sendgrid_api_in_ruby_on_rails.md)
+  - [How to use Mandrill API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_mandrill_api_in_ruby_on_rails.md)
+  - [How to use Postmark API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_postmark_api_in_ruby_on_rails.md)
+  - [How to use Mailgun API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_mailgun_api_in_ruby_on_rails.md)
 
 # F<img src="https://raw.githubusercontent.com/MailToolbox/mail_plugger/main/images/fake_plugger800x500.png" height="22" />kePlugger
 
@@ -51,6 +53,7 @@ Or install it yourself as:
 - [How to use FakePlugger::DeliveryMethod class](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_delivery_method.md)
 - [How to use FakePlugger in a Ruby script or IRB console](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_in_script_or_console.md)
 - [How to use FakePlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_in_ruby_on_rails.md)
+  - [How to use FakePlugger with more delivery systems in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_with_more_delivery_systems_in_ruby_on_rails.md)
   - [How to use FakePlugger with MailGrabber in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_with_mail_grabber_in_ruby_on_rails.md)
 
 ## Development

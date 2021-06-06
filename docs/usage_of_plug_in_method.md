@@ -7,9 +7,29 @@ It has a parameter which calls to `delivery_system`. This parameter is a name of
 It can accept 3 configurations:
 - `client` which should be a Class. This Class is a special Class which generates the data and calls the API to send the message. The Class should have an `initialize` and a `deliver` method.
 - `delivery_options` which should be an Array with Symbols or Strings. It will search these options in the `Mail::Message` object like `from`, `to`, `cc`, `bcc`, `subject`, `body`, `text_part`, `html_part`, `attachments` or anything what we will add to this object. Also we can retrieve the `Mail::Message` object with `message_obj`.
-- `delivery_settings` which should be a Hash. The Mail gem can use these settings like `{ return_response: true }` (The keys are should be Symbols).
+- `delivery_settings` which should be a Hash. The Mail gem can use these settings like `{ return_response: true }` or we can add SMTP settings like `{ smtp_sttings: { address: 'smtp.server.com', port: 587, ... } }` (The keys are should be Symbols).
 
 Example:
+
+## SMTP
+
+```ruby
+MailPlugger.plug_in('test_smtp_client') do |smtp|
+  smtp.delivery_settings = {
+    smtp_settings: {
+      address: 'smtp.server.com',
+      port: 587,
+      domain: 'test.domain.com',
+      enable_starttls_auto: true,
+      user_name: 'test_user',
+      password: '1234',
+      authentication: :plain
+    }
+  }
+end
+```
+
+## API
 
 ```ruby
 # NOTE: This is just an example for testing...
