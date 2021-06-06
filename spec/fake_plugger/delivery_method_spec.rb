@@ -82,24 +82,21 @@ RSpec.describe FakePlugger::DeliveryMethod do
           expect(init_method.instance_variable_get('@message')).to be nil
         end
 
-        it 'sets debug with expected value' do
-          expect(init_method.instance_variable_get('@debug'))
-            .to eq(delivery_settings[:fake_plugger_debug])
+        it 'does NOT set debug yet' do
+          expect(init_method.instance_variable_get('@debug')).to be nil
         end
 
-        it 'sets raw_message with expected value' do
-          expect(init_method.instance_variable_get('@raw_message'))
-            .to eq(delivery_settings[:fake_plugger_raw_message])
+        it 'does NOT set raw_message yet' do
+          expect(init_method.instance_variable_get('@raw_message')).to be nil
         end
 
-        it 'sets response with expected value' do
-          expect(init_method.instance_variable_get('@response'))
-            .to eq(delivery_settings[:fake_plugger_response])
+        it 'does NOT set response yet' do
+          expect(init_method.instance_variable_get('@response')).to be nil
         end
 
-        it 'sets use_mail_grabber with expected value' do
+        it 'does NOT set use_mail_grabber yet' do
           expect(init_method.instance_variable_get('@use_mail_grabber'))
-            .to eq(delivery_settings[:fake_plugger_use_mail_grabber])
+            .to be nil
         end
       end
 
@@ -132,36 +129,27 @@ RSpec.describe FakePlugger::DeliveryMethod do
           expect(init_method.instance_variable_get('@message')).to be nil
         end
 
-        it 'sets debug with false' do
-          expect(init_method.instance_variable_get('@debug')).to be false
+        it 'sets debug with nil' do
+          expect(init_method.instance_variable_get('@debug')).to be nil
         end
 
-        it 'sets raw_message with false' do
-          expect(init_method.instance_variable_get('@raw_message')).to be false
+        it 'sets raw_message with nil' do
+          expect(init_method.instance_variable_get('@raw_message')).to be nil
         end
 
         it 'does NOT set response' do
           expect(init_method.instance_variable_get('@response')).to be nil
         end
 
-        it 'sets use_mail_grabber with false' do
+        it 'sets use_mail_grabber with nil' do
           expect(init_method.instance_variable_get('@use_mail_grabber'))
-            .to be false
+            .to be nil
         end
       end
     end
 
     context 'with initialize arguments' do
-      subject(:init_method) do
-        described_class.new(
-          delivery_options: delivery_options,
-          client: client,
-          default_delivery_system: delivery_system,
-          delivery_settings: delivery_settings
-        )
-      end
-
-      shared_examples 'arguments' do
+      shared_examples 'arguments' do |use_settings_or_options|
         it 'sets delivery_options with given value' do
           expect(init_method.instance_variable_get('@delivery_options'))
             .to eq(delivery_options)
@@ -185,47 +173,114 @@ RSpec.describe FakePlugger::DeliveryMethod do
           expect(init_method.instance_variable_get('@message')).to be nil
         end
 
-        it 'sets debug with given value' do
-          expect(init_method.instance_variable_get('@debug'))
-            .to eq(delivery_settings[:fake_plugger_debug])
-        end
+        if use_settings_or_options == 'using settings'
+          it 'does NOT set debug yet' do
+            expect(init_method.instance_variable_get('@debug')).to be nil
+          end
 
-        it 'sets raw_message with given value' do
-          expect(init_method.instance_variable_get('@raw_message'))
-            .to eq(delivery_settings[:fake_plugger_raw_message])
-        end
+          it 'does NOT set raw_message yet' do
+            expect(init_method.instance_variable_get('@raw_message')).to be nil
+          end
 
-        it 'sets response with given value' do
-          expect(init_method.instance_variable_get('@response'))
-            .to eq(delivery_settings[:fake_plugger_response])
-        end
+          it 'does NOT set response yet' do
+            expect(init_method.instance_variable_get('@response')).to be nil
+          end
 
-        it 'sets use_mail_grabber with expected value' do
-          expect(init_method.instance_variable_get('@use_mail_grabber'))
-            .to eq(delivery_settings[:fake_plugger_use_mail_grabber])
+          it 'does NOT set use_mail_grabber yet' do
+            expect(init_method.instance_variable_get('@use_mail_grabber'))
+              .to be nil
+          end
+        else
+          it 'sets debug with given value' do
+            expect(init_method.instance_variable_get('@debug'))
+              .to eq(delivery_settings[:fake_plugger_debug])
+          end
+
+          it 'sets raw_message with given value' do
+            expect(init_method.instance_variable_get('@raw_message'))
+              .to eq(delivery_settings[:fake_plugger_raw_message])
+          end
+
+          it 'sets response with given value' do
+            expect(init_method.instance_variable_get('@response'))
+              .to eq(delivery_settings[:fake_plugger_response])
+          end
+
+          it 'sets use_mail_grabber with expected value' do
+            expect(init_method.instance_variable_get('@use_mail_grabber'))
+              .to eq(delivery_settings[:fake_plugger_use_mail_grabber])
+          end
         end
       end
 
-      context 'when using MailPlugger.plug_in method' do
-        before do
-          MailPlugger.plug_in('different_api') do |api|
-            api.delivery_options = 'different options'
-            api.delivery_settings = 'different settings'
-            api.client = 'different client'
-          end
+      context 'and sets debug value via settings' do
+        subject(:init_method) do
+          described_class.new(
+            delivery_options: delivery_options,
+            client: client,
+            default_delivery_system: delivery_system,
+            delivery_settings: delivery_settings
+          )
         end
 
-        after do
-          MailPlugger.instance_variables.each do |variable|
-            MailPlugger.remove_instance_variable(variable)
+        context 'when using MailPlugger.plug_in method' do
+          before do
+            MailPlugger.plug_in('different_api') do |api|
+              api.delivery_options = 'different options'
+              api.delivery_settings = 'different settings'
+              api.client = 'different client'
+            end
           end
+
+          after do
+            MailPlugger.instance_variables.each do |variable|
+              MailPlugger.remove_instance_variable(variable)
+            end
+          end
+
+          it_behaves_like 'arguments', 'using settings'
         end
 
-        it_behaves_like 'arguments'
+        context 'when NOT using MailPlugger.plug_in method' do
+          it_behaves_like 'arguments', 'using settings'
+        end
       end
 
-      context 'when NOT using MailPlugger.plug_in method' do
-        it_behaves_like 'arguments'
+      context 'and sets debug value via options' do
+        subject(:init_method) do
+          described_class.new(
+            delivery_options: delivery_options,
+            client: client,
+            default_delivery_system: delivery_system,
+            delivery_settings: delivery_settings,
+            debug: delivery_settings[:fake_plugger_debug],
+            raw_message: delivery_settings[:fake_plugger_raw_message],
+            response: delivery_settings[:fake_plugger_response],
+            use_mail_grabber: delivery_settings[:fake_plugger_use_mail_grabber]
+          )
+        end
+
+        context 'when using MailPlugger.plug_in method' do
+          before do
+            MailPlugger.plug_in('different_api') do |api|
+              api.delivery_options = 'different options'
+              api.delivery_settings = 'different settings'
+              api.client = 'different client'
+            end
+          end
+
+          after do
+            MailPlugger.instance_variables.each do |variable|
+              MailPlugger.remove_instance_variable(variable)
+            end
+          end
+
+          it_behaves_like 'arguments', 'using options'
+        end
+
+        context 'when NOT using MailPlugger.plug_in method' do
+          it_behaves_like 'arguments', 'using options'
+        end
       end
     end
   end
@@ -698,6 +753,52 @@ RSpec.describe FakePlugger::DeliveryMethod do
             end
 
             it_behaves_like 'fake response', 'and NOT using settings', 'API'
+          end
+        end
+      end
+
+      context 'when using SMTP and API' do
+        context 'and using MailPlugger.plug_in method' do
+          subject(:deliver) { described_class.new.deliver!(message) }
+
+          before do
+            MailPlugger.plug_in(api_delivery_system) do |api|
+              api.delivery_options = delivery_options
+              api.delivery_settings = delivery_settings
+              api.client = client
+            end
+
+            MailPlugger.plug_in(smtp_delivery_system) do |smtp|
+              smtp.delivery_settings = {
+                smtp_settings: { key: 'value' },
+                fake_plugger_response: 'SMTP OK'
+              }
+            end
+          end
+
+          after do
+            MailPlugger.instance_variables.each do |variable|
+              MailPlugger.remove_instance_variable(variable)
+            end
+          end
+
+          let(:smtp_delivery_system) { 'smtp_delivery_system' }
+          let(:api_delivery_system) { 'api_delivery_system' }
+
+          context 'and testing SMTP response' do
+            before { message[:delivery_system] = smtp_delivery_system }
+
+            it 'response with right value' do
+              expect(deliver).to eq('SMTP OK')
+            end
+          end
+
+          context 'and testing API response' do
+            before { message[:delivery_system] = api_delivery_system }
+
+            it 'response with right value' do
+              expect(deliver).to eq(delivery_settings[:fake_plugger_response])
+            end
           end
         end
       end

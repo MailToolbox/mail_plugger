@@ -38,27 +38,13 @@ module FakePlugger
     def initialize(options = {})
       super
 
-      # Sepcial semaphore for the settings method that
-      # FakePlugger::DeliveryMethod can behaves like MailPlugger::DeliveryMethod
-      @initialize       = true
+      @debug            = options[:debug]
 
-      @debug            = options[:debug] ||
-                          settings[:fake_plugger_debug] || false
+      @raw_message      = options[:raw_message]
 
-      @raw_message      = options[:raw_message] ||
-                          settings[:fake_plugger_raw_message] || false
+      @response         = options[:response]
 
-      @response         = options[:response] || settings[:fake_plugger_response]
-
-      @use_mail_grabber = options[:use_mail_grabber] ||
-                          settings[:fake_plugger_use_mail_grabber] || false
-
-      @initialize       = false
-
-      # Clear memoized values
-      @delivery_system  = nil
-
-      @settings         = nil
+      @use_mail_grabber = options[:use_mail_grabber]
     end
 
     # Using SMTP:
@@ -169,6 +155,8 @@ module FakePlugger
       end
 
       @message = message
+
+      update_settings
 
       call_extra_options
 
@@ -290,6 +278,19 @@ module FakePlugger
         =======================================================================
 
       RAW_MESSAGE
+    end
+
+    # Extract settings values and update attributes.
+    def update_settings
+      # rubocop:disable Naming/MemoizedInstanceVariableName
+      @debug            ||= settings[:fake_plugger_debug] || false
+
+      @raw_message      ||= settings[:fake_plugger_raw_message] || false
+
+      @response         ||= settings[:fake_plugger_response]
+
+      @use_mail_grabber ||= settings[:fake_plugger_use_mail_grabber] || false
+      # rubocop:enable Naming/MemoizedInstanceVariableName
     end
   end
 end

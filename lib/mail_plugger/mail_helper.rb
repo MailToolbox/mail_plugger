@@ -255,23 +255,12 @@ module MailPlugger
 
       return {} if @settings.nil?
 
-      return @delivery_settings if should_return_delivery_settings?
-
       unless @settings.is_a?(Hash)
         raise Error::WrongDeliverySettings,
               '"delivery_settings" does not a Hash'
       end
 
       @settings
-    end
-
-    # For FakePlugger in the initialize method sometimes the extracted
-    # 'settings' value is wrong because we need that hash what we added to the
-    # 'delivery_settings'.
-    #
-    # @return [Boolean] true/false
-    def should_return_delivery_settings?
-      @delivery_settings.is_a?(Hash) && !@settings.is_a?(Hash) && @initialize
     end
   end
 end
