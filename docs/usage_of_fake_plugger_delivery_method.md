@@ -1,3 +1,10 @@
+**Go To:**
+
+- [How to use FakePlugger::DeliveryMethod class](#how-to-use-fakepluggerdeliverymethod-class)
+  - [SMTP](#smtp)
+  - [API](#api)
+
+
 # How to use FakePlugger::DeliveryMethod class
 
 **This Class was made for development and testing purpose. Please do not use on production environment.**

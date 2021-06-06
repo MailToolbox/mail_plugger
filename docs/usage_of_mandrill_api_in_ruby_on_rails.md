@@ -1,3 +1,10 @@
+**Go To:**
+
+- [How to use Mandrill API with MailPlugger in Ruby on Rails](#how-to-use-mandrill-api-with-mailplugger-in-ruby-on-rails)
+  - [Send](#send)
+  - [Send Raw](#send-raw)
+
+
 # How to use Mandrill API with MailPlugger in Ruby on Rails
 
 **Please note that these examples were not tested, but I believe it should work.**

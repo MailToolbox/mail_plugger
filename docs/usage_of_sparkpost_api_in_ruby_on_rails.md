@@ -1,3 +1,10 @@
+**Go To:**
+
+- [How to use SparkPost API with MailPlugger in Ruby on Rails](#how-to-use-sparkpost-with-mailplugger-in-ruby-on-rails)
+  - [Send Inline Content](#send-inline-content)
+  - [Send RFC822 Content](#send-rfc822-content)
+
+
 # How to use SparkPost API with MailPlugger in Ruby on Rails
 
 **Please note that these examples were not tested, but I believe it should work.**

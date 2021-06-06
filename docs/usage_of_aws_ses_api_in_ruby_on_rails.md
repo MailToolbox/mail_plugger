@@ -1,3 +1,10 @@
+**Go To:**
+
+- [How to use AWS SES API with MailPlugger in Ruby on Rails](#how-to-use-aws-ses-api-with-mailplugger-in-ruby-on-rails)
+  - [Send Email](#send-email)
+  - [Send Raw Email](#send-raw-email)
+
+
 # How to use AWS SES API with MailPlugger in Ruby on Rails
 
 **Please note that these examples were not tested, but I believe it should work.**

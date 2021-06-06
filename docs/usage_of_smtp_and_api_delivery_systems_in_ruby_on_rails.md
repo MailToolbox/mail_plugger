@@ -1,3 +1,10 @@
+**Go To:**
+
+- [How to combine SMTP and API delivery systems in Ruby on Rails](#how-to-combine-smtp-and-api-delivery-systems-in-ruby-on-rails)
+  - [When SMTP client defined first](#when-smtp-client-defined-first)
+  - [When API client defined first](#when-api-client-defined-first)
+
+
 # How to combine SMTP and API delivery systems in Ruby on Rails
 
 Let's modify the configuration which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_smtp_delivery_systems_in_ruby_on_rails.md).

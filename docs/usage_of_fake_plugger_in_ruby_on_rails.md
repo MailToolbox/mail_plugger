@@ -1,3 +1,10 @@
+**Go To:**
+
+- [How to use FakePlugger in Ruby on Rails](#how-to-use-fakeplugger-in-ruby-on-rails)
+  - [SMTP](#smtp)
+  - [API](#api)
+
+
 # How to use FakePlugger in Ruby on Rails
 
 **This Class was made for development and testing purpose. Please do not use on production environment.**

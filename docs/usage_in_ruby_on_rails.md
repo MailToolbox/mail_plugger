@@ -1,3 +1,10 @@
+**Go To:**
+
+- [How to use MailPlugger in Ruby on Rails](#how-to-use-mailplugger-in-ruby-on-rails)
+  - [SMTP](#smtp)
+  - [API](#api)
+
+
 # How to use MailPlugger in Ruby on Rails
 
 ## SMTP

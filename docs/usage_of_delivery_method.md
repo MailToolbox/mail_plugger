@@ -1,3 +1,10 @@
+**Go To:**
+
+- [How to use MailPlugger::DeliveryMethod class](#how-to-use-mailpluggerdeliverymethod-class)
+  - [SMTP](#smtp)
+  - [API](#api)
+
+
 # How to use MailPlugger::DeliveryMethod class
 
 With this Class it can extract data from the `Mail::Message` object and send message based on the given configurations. We can add these options directly in the `new` method or we can use `MailPlugger.plug_in` method as well.

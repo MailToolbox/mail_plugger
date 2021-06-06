@@ -1,3 +1,10 @@
+**Go To:**
+
+- [How to use MailPlugger.plug_in method](#how-to-use-mailpluggerplug_in-method)
+  - [SMTP](#smtp)
+  - [API](#api)
+
+
 # How to use MailPlugger.plug_in method
 
 With `plug_in` method we can add configurations for the delivery method.

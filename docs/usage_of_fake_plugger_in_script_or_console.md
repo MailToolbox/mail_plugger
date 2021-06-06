@@ -1,3 +1,10 @@
+**Go To:**
+
+- [How to use FakePlugger in a Ruby script or IRB console](#how-to-use-fakeplugger-in-a-ruby-script-or-irb-console)
+  - [SMTP](#smtp)
+  - [API](#api)
+
+
 # How to use FakePlugger in a Ruby script or IRB console
 
 **This Class was made for development and testing purpose. Please do not use on production environment.**
