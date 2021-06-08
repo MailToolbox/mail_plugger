@@ -1,5 +1,16 @@
 # Change log
 
+## 1.4.0 (2021-06-08)
+
+### New features
+
+* Add SMTP support. With this modifications we can use SMTP and API delivery methods as well.
+
+### Changes
+
+* Update bundler and gems.
+
+
 ## 1.3.0 (2021-04-14)
 
 ### New features
