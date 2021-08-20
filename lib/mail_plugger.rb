@@ -132,7 +132,7 @@ module MailPlugger
       return if delivery_system.is_a?(String) || delivery_system.is_a?(Symbol)
 
       raise Error::WrongDeliverySystem, '"delivery_system" does not a ' \
-        'String or Symbol'
+                                        'String or Symbol'
     end
   end
 end
