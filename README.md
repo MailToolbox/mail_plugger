@@ -7,7 +7,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/137881380fc475b4a836/maintainability)](https://codeclimate.com/github/MailToolbox/mail_plugger/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/137881380fc475b4a836/test_coverage)](https://codeclimate.com/github/MailToolbox/mail_plugger/test_coverage)
 
-**MailPlugger** helps you to use different mail providers' **SMTP** and **API**. You can use any SMTPs and APIs which one would like to use. It allows you to send different emails with different SMTPs and APIs. Also it can help to move between providers, load balacing or cost management.
+**MailPlugger** helps you to use different mail providers' **SMTP** and **API**. You can use any SMTPs and APIs which one would like to use. It allows you to send different emails with different SMTPs and APIs. Also it can help to move between providers, load balancing or cost management.
 
 ## Installation
 
