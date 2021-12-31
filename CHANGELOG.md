@@ -1,5 +1,17 @@
 # Change log
 
+## 1.5.0 (2021-12-31)
+
+### Changes
+
+* Add Ruby 3.1 support.
+* Drop Ruby 2.5 support.
+* Require MFA on RubyGems.
+* Update bundler and gems.
+* Fix typo in the README.md.
+* Replace Travis with GitHub Actions.
+
+
 ## 1.4.0 (2021-06-08)
 
 ### New features
