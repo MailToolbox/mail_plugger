@@ -33,4 +33,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'mail', '~> 2.5'
+  spec.add_dependency 'net-smtp', '~> 0.3'
 end
