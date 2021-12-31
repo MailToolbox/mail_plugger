@@ -54,95 +54,95 @@ RSpec.describe FakePlugger::DeliveryMethod do
         end
 
         it 'sets delivery_options with expected value' do
-          expect(init_method.instance_variable_get('@delivery_options'))
+          expect(init_method.instance_variable_get(:@delivery_options))
             .to eq({ delivery_system => delivery_options })
         end
 
         it 'sets client with expected value' do
-          expect(init_method.instance_variable_get('@client'))
+          expect(init_method.instance_variable_get(:@client))
             .to eq({ delivery_system => DummyApi })
         end
 
         it 'sets default_delivery_system with expected value' do
-          expect(init_method.instance_variable_get('@default_delivery_system'))
+          expect(init_method.instance_variable_get(:@default_delivery_system))
             .to eq(delivery_system)
         end
 
         it 'sets delivery_settings with expected value' do
-          expect(init_method.instance_variable_get('@delivery_settings'))
+          expect(init_method.instance_variable_get(:@delivery_settings))
             .to eq({ delivery_system => delivery_settings })
         end
 
         it 'sets delivery_systems with expected value' do
-          expect(init_method.instance_variable_get('@delivery_systems'))
+          expect(init_method.instance_variable_get(:@delivery_systems))
             .to eq([delivery_system])
         end
 
         it 'sets message with nil' do
-          expect(init_method.instance_variable_get('@message')).to be nil
+          expect(init_method.instance_variable_get(:@message)).to be nil
         end
 
         it 'does NOT set debug yet' do
-          expect(init_method.instance_variable_get('@debug')).to be nil
+          expect(init_method.instance_variable_get(:@debug)).to be nil
         end
 
         it 'does NOT set raw_message yet' do
-          expect(init_method.instance_variable_get('@raw_message')).to be nil
+          expect(init_method.instance_variable_get(:@raw_message)).to be nil
         end
 
         it 'does NOT set response yet' do
-          expect(init_method.instance_variable_get('@response')).to be nil
+          expect(init_method.instance_variable_get(:@response)).to be nil
         end
 
         it 'does NOT set use_mail_grabber yet' do
-          expect(init_method.instance_variable_get('@use_mail_grabber'))
+          expect(init_method.instance_variable_get(:@use_mail_grabber))
             .to be nil
         end
       end
 
       context 'when NOT using MailPlugger.plug_in method' do
         it 'does NOT set delivery_options' do
-          expect(init_method.instance_variable_get('@delivery_options'))
+          expect(init_method.instance_variable_get(:@delivery_options))
             .to be nil
         end
 
         it 'does NOT set client' do
-          expect(init_method.instance_variable_get('@client')).to be nil
+          expect(init_method.instance_variable_get(:@client)).to be nil
         end
 
         it 'does NOT set default_delivery_system' do
-          expect(init_method.instance_variable_get('@default_delivery_system'))
+          expect(init_method.instance_variable_get(:@default_delivery_system))
             .to be nil
         end
 
         it 'does NOT set delivery_settings' do
-          expect(init_method.instance_variable_get('@delivery_settings'))
+          expect(init_method.instance_variable_get(:@delivery_settings))
             .to be nil
         end
 
         it 'does NOT set delivery_systems' do
-          expect(init_method.instance_variable_get('@delivery_systems'))
+          expect(init_method.instance_variable_get(:@delivery_systems))
             .to be nil
         end
 
         it 'sets message with nil' do
-          expect(init_method.instance_variable_get('@message')).to be nil
+          expect(init_method.instance_variable_get(:@message)).to be nil
         end
 
         it 'sets debug with nil' do
-          expect(init_method.instance_variable_get('@debug')).to be nil
+          expect(init_method.instance_variable_get(:@debug)).to be nil
         end
 
         it 'sets raw_message with nil' do
-          expect(init_method.instance_variable_get('@raw_message')).to be nil
+          expect(init_method.instance_variable_get(:@raw_message)).to be nil
         end
 
         it 'does NOT set response' do
-          expect(init_method.instance_variable_get('@response')).to be nil
+          expect(init_method.instance_variable_get(:@response)).to be nil
         end
 
         it 'sets use_mail_grabber with nil' do
-          expect(init_method.instance_variable_get('@use_mail_grabber'))
+          expect(init_method.instance_variable_get(:@use_mail_grabber))
             .to be nil
         end
       end
@@ -151,63 +151,63 @@ RSpec.describe FakePlugger::DeliveryMethod do
     context 'with initialize arguments' do
       shared_examples 'arguments' do |use_settings_or_options|
         it 'sets delivery_options with given value' do
-          expect(init_method.instance_variable_get('@delivery_options'))
+          expect(init_method.instance_variable_get(:@delivery_options))
             .to eq(delivery_options)
         end
 
         it 'sets client with given value' do
-          expect(init_method.instance_variable_get('@client')).to eq(client)
+          expect(init_method.instance_variable_get(:@client)).to eq(client)
         end
 
         it 'sets default_delivery_system with given value' do
-          expect(init_method.instance_variable_get('@default_delivery_system'))
+          expect(init_method.instance_variable_get(:@default_delivery_system))
             .to eq(delivery_system)
         end
 
         it 'sets delivery_settings with given value' do
-          expect(init_method.instance_variable_get('@delivery_settings'))
+          expect(init_method.instance_variable_get(:@delivery_settings))
             .to eq(delivery_settings)
         end
 
         it 'sets message with nil' do
-          expect(init_method.instance_variable_get('@message')).to be nil
+          expect(init_method.instance_variable_get(:@message)).to be nil
         end
 
         if use_settings_or_options == 'using settings'
           it 'does NOT set debug yet' do
-            expect(init_method.instance_variable_get('@debug')).to be nil
+            expect(init_method.instance_variable_get(:@debug)).to be nil
           end
 
           it 'does NOT set raw_message yet' do
-            expect(init_method.instance_variable_get('@raw_message')).to be nil
+            expect(init_method.instance_variable_get(:@raw_message)).to be nil
           end
 
           it 'does NOT set response yet' do
-            expect(init_method.instance_variable_get('@response')).to be nil
+            expect(init_method.instance_variable_get(:@response)).to be nil
           end
 
           it 'does NOT set use_mail_grabber yet' do
-            expect(init_method.instance_variable_get('@use_mail_grabber'))
+            expect(init_method.instance_variable_get(:@use_mail_grabber))
               .to be nil
           end
         else
           it 'sets debug with given value' do
-            expect(init_method.instance_variable_get('@debug'))
+            expect(init_method.instance_variable_get(:@debug))
               .to eq(delivery_settings[:fake_plugger_debug])
           end
 
           it 'sets raw_message with given value' do
-            expect(init_method.instance_variable_get('@raw_message'))
+            expect(init_method.instance_variable_get(:@raw_message))
               .to eq(delivery_settings[:fake_plugger_raw_message])
           end
 
           it 'sets response with given value' do
-            expect(init_method.instance_variable_get('@response'))
+            expect(init_method.instance_variable_get(:@response))
               .to eq(delivery_settings[:fake_plugger_response])
           end
 
           it 'sets use_mail_grabber with expected value' do
-            expect(init_method.instance_variable_get('@use_mail_grabber'))
+            expect(init_method.instance_variable_get(:@use_mail_grabber))
               .to eq(delivery_settings[:fake_plugger_use_mail_grabber])
           end
         end
