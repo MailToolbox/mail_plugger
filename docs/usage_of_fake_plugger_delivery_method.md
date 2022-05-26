@@ -9,19 +9,19 @@
 
 **This Class was made for development and testing purpose. Please do not use on production environment.**
 
-With this Class it can extract data from the `Mail::Message` object and mock send message based on the given configurations. We can add these options directly in the `new` method or we can use `MailPlugger.plug_in` method as well.
+With this Class it can extract data from the `Mail::Message` object and mock send message based on the given configurations. We can add these options directly in the `new` method, or we can use `MailPlugger.plug_in` method as well.
 
 The `new` method parameter is a Hash where the keys are Symbols.
 
 Hash parameters:
-- `client` which should be a Class (It can be a Hash with this Class as well. In this case the key of the Hash is the `delivery_system` from the `Mail::Message` object or the `default_delivery_system`). This Class is a special Class which generates the data and calls the API to send the message. The Class should have an `initialize` and a `deliver` method.
-- `delivery_options` which should be an Array with Symbols or Strings (It can be a Hash with this Array as well. In this case the key of the Hash is the `delivery_system` from the `Mail::Message` object or the `default_delivery_system`). It will search these options in the `Mail::Message` object like `from`, `to`, `cc`, `bcc`, `subject`, `body`, `text_part`, `html_part`, `attachments` or anything what we will add to this object. Also we can retrieve the `Mail::Message` object with `message_obj`.
-- `delivery_settings` which should be a Hash. The Mail gem can use these settings like `{ return_response: true }` or we can add SMTP settings like `{ smtp_sttings: { address: 'smtp.server.com', port: 587, ... } }` (The keys are should be Symbols). Also we can give configurations to the `FakePlugger::DeliveryMethod` like `{ fake_plugger_debug: true }`.
-- `default_delivery_system` which should be a String or Symbol. This option is needed when we are not using `MailPlugger.plug_in` method, and `delivery_options`, `client` and `delivery_settings` are Hashes, and `delivery_system` is the key of the Hash, and `delivery_system` is not defined in the `Mail::Message` object. When `delivery_system` in the `Mail::Message` object is not defined then the `default_delivery_system` value is the key of those Hashes. When `default_delivery_system` is not defined then `default_delivery_system_get` method will return with the first key of `delivery_options`, `client` or `delivery_settings` Hash.
-- `debug` which should be a Boolean. The default value is `false`. If this parameter is `true` then it will prints out debug informations like variable values and output of some methods. If we are using `MailPlugger.plug_in` method then we can set this value to add `fake_plugger_debug: true` into the `delivery_settings` Hash.
-- `raw_message` which should be a Boolean. The default value is `false`. If this parameter is `true` then it will prints out the raw message content. If we are using `MailPlugger.plug_in` method then we can set this value to add `fake_plugger_raw_message: true` into the `delivery_settings` Hash.
-- `response` which returns back with the give value. But if this parameter is `nil` then it will extract those information from the `Mail::Message` object which was provided in the `delivery_options`. After that it generates a hash with these data and returns with the provided `client` Class which has a `deliver` method, but it won't call the `deliver` method. If the `response` parameter is a Hash with `return_delivery_data: true` then it will retrun with the extracted delivery data. If we are using `MailPlugger.plug_in` method then we can set this value to add e.g. `fake_plugger_response: { status: :ok }` into the `delivery_settings` Hash.
-- `use_mail_grabber` which should be a Boolean. The default value is `false`. If this parameter is `true` then it will store the message in a database which **[MailGrabber](https://github.com/MailToolbox/mail_grabber)** can read. If we are using `MailPlugger.plug_in` method then we can set this value to add `fake_plugger_use_mail_grabber: true` into the `delivery_settings` Hash. **This option needs that [MailGrabber](https://github.com/MailToolbox/mail_grabber) gem to be installed.**
+- `client` which should be a Class (It can be a Hash with this Class as well. In this case, the key of the Hash is the `delivery_system` from the `Mail::Message` object or the `default_delivery_system`). This Class is a special Class which generates the data and calls the API to send the message. The Class should have an `initialize` and a `deliver` method.
+- `delivery_options` which should be an Array with Symbols or Strings (It can be a Hash with this Array as well. In this case, the key of the Hash is the `delivery_system` from the `Mail::Message` object or the `default_delivery_system`). It will search these options in the `Mail::Message` object like `from`, `to`, `cc`, `bcc`, `subject`, `body`, `text_part`, `html_part`, `attachments` or anything what we will add to this object. Also, we can retrieve the `Mail::Message` object with `message_obj`.
+- `delivery_settings` which should be a Hash. The Mail gem can use these settings like `{ return_response: true }` or we can add SMTP settings like `{ smtp_sttings: { address: 'smtp.server.com', port: 587, ... } }` (The keys are should be Symbols). Also, we can give configurations to the `FakePlugger::DeliveryMethod` like `{ fake_plugger_debug: true }`.
+- `default_delivery_system` which should be a String or Symbol. This option is needed when we are not using `MailPlugger.plug_in` method, and `delivery_options`, `client` and `delivery_settings` are Hashes, and `delivery_system` is the key of the Hash, and `delivery_system` is not defined in the `Mail::Message` object. When `delivery_system` in the `Mail::Message` object is not defined, then the `default_delivery_system` value is the key of those Hashes. When `default_delivery_system` is not defined, then `default_delivery_system_get` method will return with the first key of `delivery_options`, `client` or `delivery_settings` Hash.
+- `debug` which should be a Boolean. The default value is `false`. If this parameter is `true` then it will print out debug information like variable values and output of some methods. If we are using `MailPlugger.plug_in` method, then we can set this value to add `fake_plugger_debug: true` into the `delivery_settings` Hash.
+- `raw_message` which should be a Boolean. The default value is `false`. If this parameter is `true` then it will print out the raw message content. If we are using `MailPlugger.plug_in` method, then we can set this value to add `fake_plugger_raw_message: true` into the `delivery_settings` Hash.
+- `response` which returns with the give value. But if this parameter is `nil` then it will extract this information from the `Mail::Message` object which was provided in the `delivery_options`. After that it generates a hash with these data and returns with the provided `client` Class which has a `deliver` method, but it won't call the `deliver` method. If the `response` parameter is a Hash with `return_delivery_data: true` then it will return with the extracted delivery data. If we are using `MailPlugger.plug_in` method, then we can set this value to add e.g. `fake_plugger_response: { status: :ok }` into the `delivery_settings` Hash.
+- `use_mail_grabber` which should be a Boolean. The default value is `false`. If this parameter is `true` then it will store the message in a database which **[MailGrabber](https://github.com/MailToolbox/mail_grabber)** can read. If we are using `MailPlugger.plug_in` method, then we can set this value to add `fake_plugger_use_mail_grabber: true` into the `delivery_settings` Hash. **This option needs that [MailGrabber](https://github.com/MailToolbox/mail_grabber) gem to be installed.**
 
 Examples:
 
@@ -186,7 +186,7 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 FakePlugger::DeliveryMethod.new(response: { status: :ok }).deliver!(message)
 ```
 
-It can returns with the extracted delivery data.
+It can return with the extracted delivery data.
 
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -194,7 +194,7 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], response: { return_delivery_data: true }).deliver!(message)
 ```
 
-Without the response parameter it returns back with `client` object then we can force delivery if we would like to.
+Without the response parameter, it returns with `client` object, then we can force delivery if we would like to.
 
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -202,7 +202,7 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], client: TestApiClientClass).deliver!(message).deliver
 ```
 
-If we installed **[MailGrabber](https://github.com/MailToolbox/mail_grabber#usage)** gem then we can store messages, which **[MailGrabber](https://github.com/MailToolbox/mail_grabber#usage)** will show us (please follow the link to check how to do that).
+If we installed **[MailGrabber](https://github.com/MailToolbox/mail_grabber#usage)** gem, then we can store messages, which **[MailGrabber](https://github.com/MailToolbox/mail_grabber#usage)** will show us (please follow the link to check how to do that).
 
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -228,4 +228,4 @@ message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Tes
 FakePlugger::DeliveryMethod.new.deliver!(message)
 ```
 
-If we are using `mail_plugger` gem in Ruby on Rails we don't have to do anything with this class. Rails will load this method automatically if we add this config `config.action_mailer.delivery_method = :fake_plugger` e.g. into the `config/environments/development.rb`. Basically we should use `MailPlugger.plug_in` method to configure this delivery method.
+If we are using `mail_plugger` gem in Ruby on Rails, we don't have to do anything with this class. Rails will load this method automatically if we add this config `config.action_mailer.delivery_method = :fake_plugger` e.g. into the `config/environments/development.rb`. Basically, we should use `MailPlugger.plug_in` method to configure this delivery method.

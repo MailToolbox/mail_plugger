@@ -169,4 +169,4 @@ TestMailer.send_test.deliver_now
 #=> #<Mail::Message:61220, Multipart: true, Headers: <Date: Tue, 13 Apr 2021 07:11:32 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60752804857d7_c43aec18576b4@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_6075280484140_c43aec1857593"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
 ```
 
-Then we can check grabbed emails on the web interface. If the Rails server is running then open a browser and visit on the `http://localhost:3000/mail_grabber` page.
+Then we can check grabbed emails on the web interface. If the Rails server is running, then open a browser and visit on the `http://localhost:3000/mail_grabber` page.

@@ -9,7 +9,7 @@
 
 **This Class was made for development and testing purpose. Please do not use on production environment.**
 
-First you should be able to `require 'mail'` and `require 'mail_plugger'` to get started.
+First, you should be able to `require 'mail'` and `require 'mail_plugger'` to get started.
 
 ## SMTP
 
@@ -183,7 +183,7 @@ mail.deliver
 
 # or
 
-# if you call mail.deliver twice then it will send the email, so set delivery_method again
+# if you call mail.deliver twice, then it will send the email, so set delivery_method again
 
 mail.delivery_method FakePlugger::DeliveryMethod, { delivery_settings: { smtp_settings: { address: '127.0.0.1', port: 1025 } }, debug: true, raw_message: true }
 # => #<FakePlugger::DeliveryMethod:0x00007fde01bcc820 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}}, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @initialize=false, @debug=true, @raw_message=true, @delivery_system=nil, @settings=nil, @response=nil, @use_mail_grabber=false>
@@ -262,7 +262,7 @@ mail.deliver
 
 # or
 
-# if you call mail.deliver twice then it will send the email, so set delivery_method again
+# if you call mail.deliver twice, then it will send the email, so set delivery_method again
 
 mail.delivery_method FakePlugger::DeliveryMethod, { delivery_settings: { smtp_settings: { address: '127.0.0.1', port: 1025 }, return_response: true } }
 # => #<FakePlugger::DeliveryMethod:0x00007ffacf32e818 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true}, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @initialize=false, @delivery_system=nil, @settings=nil, @debug=false, @raw_message=false, @response=nil, @use_mail_grabber=false>
@@ -353,7 +353,7 @@ mail.deliver
 
 # or
 
-# if you call mail.deliver twice then it will send the email, so set delivery_method again
+# if you call mail.deliver twice, then it will send the email, so set delivery_method again
 
 mail.delivery_method FakePlugger::DeliveryMethod
 # => #<FakePlugger::DeliveryMethod:0x00007fefb1c81010 @client=nil, @delivery_options=nil, @delivery_settings={"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}, @delivery_systems=["test_smtp_client"], @default_delivery_system="test_smtp_client", @message=nil, @initialize=false, @delivery_system=nil, @settings=nil, @debug=true, @raw_message=true, @response=nil, @use_mail_grabber=false>
@@ -781,7 +781,7 @@ mail.deliver
 mail.deliver!
 # => #<TestApiClientClass:0x00007fb185b2dfe8 @settings={:api_key=>"12345"}, @options={"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}>
 
-# if it returns with the client class then we can call the client's deliver method
+# if it returns with the client class, then we can call the client's deliver method
 
 mail.deliver!.deliver
 # >>> settings: {:api_key=>"12345"}
@@ -927,7 +927,7 @@ mail.deliver!
 #
 # => #<TestApiClientClass:0x00007f84af91d490 @settings={:api_key=>"12345"}, @options={"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}>
 
-# if it returns with the client class then we can call the client's deliver method
+# if it returns with the client class, then we can call the client's deliver method
 
 mail.deliver!.deliver
 #

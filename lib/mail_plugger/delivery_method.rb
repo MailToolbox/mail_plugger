@@ -44,7 +44,7 @@ module MailPlugger
     #
     # Using API:
     # Send message with the given client if the message parameter is a
-    # Mail::Message object. Before doing that extract those information from the
+    # Mail::Message object. Before doing that, extract this information from the
     # Mail::Message object which was provided in the 'delivery_options'. After
     # that it generates a hash with these data and sends the message with the
     # provided client class which has a 'deliver' method.

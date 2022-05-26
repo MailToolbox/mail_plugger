@@ -3,12 +3,12 @@
 require 'mail_plugger/error'
 require 'mail_plugger/mail_helper'
 require 'mail_plugger/delivery_method'
-# If we are using this gem outside of Rails then do not load this code.
+# If we are using this gem outside of Rails, then do not load this code.
 require 'mail_plugger/railtie' if defined?(Rails)
 require 'mail_plugger/version'
 
 require 'fake_plugger/delivery_method'
-# If we are using this gem outside of Rails then do not load this code.
+# If we are using this gem outside of Rails, then do not load this code.
 require 'fake_plugger/railtie' if defined?(Rails)
 
 module MailPlugger
@@ -104,8 +104,8 @@ module MailPlugger
     end
 
     # Define 'client', 'delivery_options' and 'delivery_settings' setter
-    # methods. These methods are generating a hash where the key is the
-    # 'delivery_system'. This let us to set/use more than one STMP/API.
+    # methods. These methods are generating a hash, where the key is the
+    # 'delivery_system'. This let us set/use more than one STMP/API.
     %w[client delivery_options delivery_settings].each do |method|
       define_method "#{method}=" do |value|
         variable = instance_variable_get("@#{method}")
@@ -116,7 +116,7 @@ module MailPlugger
 
     private
 
-    # Check 'delivery_system' is valid or not. If it's not valid then
+    # Check 'delivery_system' is valid or not. If it's not valid, then
     # it will raise an error.
     #
     # @param [String/Symbol] delivery_system the name of the SMTP/API

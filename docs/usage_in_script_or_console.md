@@ -7,11 +7,11 @@
 
 # How to use MailPlugger in a Ruby script or IRB console
 
-First you should be able to `require 'mail'` and `require 'mail_plugger'` to get started.
+First, you should be able to `require 'mail'` and `require 'mail_plugger'` to get started.
 
 ## SMTP
 
-*This is just a theoretical example, because here it would be smarter to use the built in SMTP solution of `mail` gem. The advantage of this solution will be much more usable in Ruby on Rails. Especially when we would like to use more then one SMTP servers or we would like to combine SMTP and API connections.*
+*This is just a theoretical example, because here it would be smarter to use the built-in SMTP solution of `mail` gem. The advantage of this solution will be much more usable in Ruby on Rails. Especially when we would like to use more than one SMTP servers, or we would like to combine SMTP and API connections.*
 
 
 We can use `MailPlugger.plug_in` to add our configurations.

@@ -9,7 +9,7 @@
 
 Let's modify the configuration which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_smtp_delivery_systems_in_ruby_on_rails.md).
 
-Replace a SMTP client with an API client in `config/initializers/mail_plugger.rb`.
+Replace an SMTP client with an API client in `config/initializers/mail_plugger.rb`.
 
 ## When SMTP client defined first
 
@@ -110,7 +110,7 @@ TestMailer.send_test2.deliver_now!
 #=> {:response=>"Message sent via API"}
 ```
 
-In the `app/mailers/test_mailer.rb` file we can use the Rails default option as well to define `delivery_system`.
+In the `app/mailers/test_mailer.rb` file, we can use the Rails default option as well to define `delivery_system`.
 
 ```ruby
 class TestMailer < ApplicationMailer

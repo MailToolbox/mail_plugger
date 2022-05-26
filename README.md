@@ -7,7 +7,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/137881380fc475b4a836/maintainability)](https://codeclimate.com/github/MailToolbox/mail_plugger/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/137881380fc475b4a836/test_coverage)](https://codeclimate.com/github/MailToolbox/mail_plugger/test_coverage)
 
-**MailPlugger** helps you to use different mail providers' **SMTP** and **API**. You can use any SMTPs and APIs which one would like to use. It allows you to send different emails with different SMTPs and APIs. Also it can help to move between providers, load balancing or cost management.
+**MailPlugger** helps you to use different mail providers' **SMTP** and **API**. You can use any SMTPs and APIs which one would like to use. It allows you to send different emails with different SMTPs and APIs. Also, it can help to move between providers, load balancing or cost management.
 
 ## Installation
 
@@ -46,7 +46,7 @@ Or install it yourself as:
 
 # F<img src="https://raw.githubusercontent.com/MailToolbox/mail_plugger/main/images/fake_plugger800x500.png" height="22" />kePlugger
 
-**FakePlugger** is a delivery method to mock **MailPlugger**. It is working similarly like **MailPlugger**, but it won't send any emails (but if we would like it is possible, just we should do manually). Also it can write out debug informations or we can manipulate the response with it. Another option that we can use **[MailGrabber](https://github.com/MailToolbox/mail_grabber)** web interface if the delivery method is `:fake_plugger`.
+**FakePlugger** is a delivery method to mock **MailPlugger**. It is working similarly like **MailPlugger**, but it won't send any emails (but if we would like it is possible, just we should do manually). Also, it can write out debug information, or we can manipulate the response with it. Another option that we can use **[MailGrabber](https://github.com/MailToolbox/mail_grabber)** web interface if the delivery method is `:fake_plugger`.
 
 ## Usage
 

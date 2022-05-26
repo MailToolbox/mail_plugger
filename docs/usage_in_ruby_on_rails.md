@@ -9,7 +9,7 @@
 
 ## SMTP
 
-*This is just a theoretical example, because if we would like to use only one SMTP connection to send emails, it would be smarter to use the built in SMTP solution of Ruby on Rails. The advantage of this solution will be much more usable when we would like to use more then one SMTP servers or we would like to combine SMTP and API connections.*
+*This is just a theoretical example, because if we would like to use only one SMTP connection to send emails, it would be smarter to use the built-in SMTP solution of Ruby on Rails. The advantage of this solution will be much more usable when we would like to use more than one SMTP servers, or we would like to combine SMTP and API connections.*
 
 
 After to add `mail_plugger` gem, create `config/initializers/mail_plugger.rb` file and add something similar.

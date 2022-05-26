@@ -23,10 +23,10 @@ module FakePlugger
     #   e.g. 'defined_api'
     #
     # @option options [Boolean] debug
-    #   if true it will show debug informations
+    #   if true, it will show debug information
     #
     # @option options [Boolean] raw_message
-    #   if true it will show raw message
+    #   if true, it will show raw message
     #
     # @option options [String/Symbol/Array/Hash] response
     #   the deliver! method will return with this value or if this value is nil
@@ -53,22 +53,22 @@ module FakePlugger
     #
     # Using API:
     # Mock send message with the given client if the message parameter is a
-    # Mail::Message object. If 'response' parameter is nil then it will extract
-    # those information from the Mail::Message object which was provided in the
+    # Mail::Message object. If 'response' parameter is nil, then it will extract
+    # this information from the Mail::Message object which was provided in the
     # 'delivery_options'. After that it generates a hash with these data and
     # returns with the provided client class which has a 'deliver' method, but
     # it won't call the 'deliver' method.
     # If the 'response' parameter is a hash with 'return_delivery_data: true'
-    # then it will retrun with the extracted delivery data.
+    # then it will return with the extracted delivery data.
     #
     #
-    # If the 'response' parameter is not nil then retruns with that given data
+    # If the 'response' parameter is not nil, then returns with that given data
     # without call any other methods.
-    # Except if 'debug' is true. In this case it will call those methods which
-    # is calling in normal operation as well.
-    # If 'debug' is true then it prints out some debug informations.
-    # If 'raw_message' is true then it prints out raw message.
-    # if 'use_mail_grabber' is true then it stores the message in a database.
+    # Except if 'debug' is true. In this case, it will call those methods which
+    # are calling in normal operation as well.
+    # If 'debug' is true, then it prints out some debug information.
+    # If 'raw_message' is true, then it prints out raw message.
+    # If 'use_mail_grabber' is true, then it stores the message in a database.
     #
     # @param [Mail::Message] message what we would like to send
     #
@@ -165,7 +165,7 @@ module FakePlugger
 
     private
 
-    # Call extra options like show debug informations, show raw message,
+    # Call extra options like show debug information, show raw message,
     # use mail grabber.
     def call_extra_options
       show_debug_info if @debug
@@ -176,7 +176,7 @@ module FakePlugger
       MailGrabber::DeliveryMethod.new.deliver!(@message)
     end
 
-    # Debug informations for API
+    # Debug information for API
     def debug_info_for_api
       puts <<~DEBUG_INFO
 
@@ -246,7 +246,7 @@ module FakePlugger
       end
     end
 
-    # Check that it should retrun with the delivery data.
+    # Check that it should return with the delivery data.
     def return_delivery_data?
       !send_via_smtp? &&
         @response.is_a?(Hash) &&
@@ -262,7 +262,7 @@ module FakePlugger
       @response
     end
 
-    # Show debug informations from variables and methods.
+    # Show debug information from variables and methods.
     def show_debug_info
       send_via_smtp? ? debug_info_for_smtp : debug_info_for_api
     end

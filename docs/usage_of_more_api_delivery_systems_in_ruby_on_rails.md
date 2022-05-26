@@ -2,7 +2,7 @@
 
 Let's modify the configuration which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#api).
 
-Add a new API Class in `config/initializers/mail_plugger.rb` (you can define it in another place just now it is esasier to do this).
+Add a new API Class in `config/initializers/mail_plugger.rb` (you can define it in another place, just now it is easier to do this).
 
 ```ruby
 # NOTE: This is just an example for testing...

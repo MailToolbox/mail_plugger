@@ -26,7 +26,7 @@ Then change `config/application.rb` file.
 config.action_mailer.delivery_method = :mail_plugger
 ```
 
-Also change e.g. `config/environments/test.rb` file.
+Also change, e.g. `config/environments/test.rb` file.
 
 ```ruby
 config.action_mailer.delivery_method = :fake_plugger
@@ -326,7 +326,7 @@ TestMailer.send_test.deliver_now!
 #TestMailer#send_test: processed outbound mail in 3.6ms
 # => #<Mail::Message:61260, Multipart: true, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60bc97a55bca4_e570ec04158f"; charset=UTF-8>>
 
-# if it returns with the message object then we can call the deliver method to send the email.
+# if it returns with the message object, then we can call the deliver method to send the email.
 
 TestMailer.send_test.deliver_now!.deliver
 #  Rendering test_mailer/send_test.html.erb within layouts/mailer
@@ -1076,7 +1076,7 @@ TestMailer.send_test.deliver_now!
 #TestMailer#send_test: processed outbound mail in 20.9ms
 # => #<TestApiClientClass:0x00007ff1c88e2c60 @settings={:api_key=>"12345"}, @options={"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "text_part"=>"Test email body\n\n", "html_part"=>"<!DOCTYPE html>\n<html>\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <style>\n      /* Email styles need to be inline */\n    </style>\n  </head>\n\n  <body>\n    <p>Test email body</p>\n\n  </body>\n</html>\n"}>
 
-# if it returns with the client class then we can call the client's deliver method
+# if it returns with the client class, then we can call the client's deliver method
 
 TestMailer.send_test.deliver_now!.deliver
 #  Rendering test_mailer/send_test.html.erb within layouts/mailer

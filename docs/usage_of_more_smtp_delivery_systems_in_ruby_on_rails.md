@@ -63,7 +63,7 @@ TestMailer.send_test2.deliver_now!
 #=> #<Mail::Message:61280, Multipart: true, Headers: <Date: Wed, 02 Jun 2021 07:25:45 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60b71659f1a9c_14341ec18225d@server.local.mail>>, <Subject: Test2 email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60b71659ecb72_14341ec182249a"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>, <delivery-system: test_smtp2_client>>
 ```
 
-In the `app/mailers/test_mailer.rb` file we can use the Rails default option as well to define `delivery_system`.
+In the `app/mailers/test_mailer.rb` file, we can use the Rails default option as well to define `delivery_system`.
 
 ```ruby
 class TestMailer < ApplicationMailer

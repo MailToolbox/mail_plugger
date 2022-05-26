@@ -27,9 +27,9 @@ module MailPlugger
       requirement.satisfied_by?(current_version)
     end
 
-    # Extract 'client'. If it's a hash then it'll return the right
-    # client belongs to the delivery system. If it's not a hash it'll return
-    # the given value. But if the value doesn't a class it'll raise an error.
+    # Extract 'client'. If it's a hash, then it'll return the right
+    # client belongs to the delivery system. If it's not a hash, it'll return
+    # the given value. But if the value doesn't a class, it'll raise an error.
     #
     # @return [Class] the defined API class
     def client
@@ -73,22 +73,22 @@ module MailPlugger
     end
 
     # Tries to set up a default delivery system, if the 'delivery_system'
-    # wasn't defined in the Mail::Message object and we're using
+    # wasn't defined in the Mail::Message object, and we're using
     # MailPlugger.plug_in then it returns with first key of the stored
     # 'delivery_systems'.
-    # When we are't using MailPlugger.plug_in method and 'delivery_options',
+    # When we aren't using MailPlugger.plug_in method and 'delivery_options',
     # 'client' and/or 'delivery_settings' is a hash, then it tries to get the
     # 'delivery_system' from the hashes.
-    # Otherwise it returns with nil.
+    # Otherwise, it returns with nil.
     #
     # @return [Stirng/NilClass] the first key from the extracted keys or nil
     def default_delivery_system_get
       extract_keys&.first
     end
 
-    # Extract 'delivery_options'. If it's a hash then it'll return the right
-    # options belongs to the delivery system. If it's not a hash it'll return
-    # the given value. But if the value doesn't an array it'll raise an error.
+    # Extract 'delivery_options'. If it's a hash, then it'll return the right
+    # options, belongs to the delivery system. If it's not a hash, it'll return
+    # the given value. But if the value doesn't an array, it'll raise an error.
     #
     # @return [Array] the options it'll collect from the Mail::Message object
     def delivery_options
@@ -103,7 +103,7 @@ module MailPlugger
     end
 
     # Extract 'delivery_system' from the Mail::Message object or if it's not
-    # defined then use the default one. If it's still nil and one of the
+    # defined, then use the default one. If it's still nil and one of the
     # 'delivery_options', 'client' and/or 'delivery_settings' is a hash and
     # 'delivery_settings' doesn't contain 'delivery_system' then raise error.
     #
@@ -121,8 +121,8 @@ module MailPlugger
     # Check the given 'delivery_options', 'client' and 'delivery_settings' are
     # hashes and if one of that does then check the 'delivery_system' is valid
     # or not.
-    # If the given 'delivery_system' is nil or doesn't match with extracted keys
-    # then it will raise error.
+    # If the given 'delivery_system' is nil or doesn't match with extracted
+    # keys, then it will raise error.
     def delivery_system_value_check
       return unless need_delivery_system?
 
@@ -138,7 +138,7 @@ module MailPlugger
     end
 
     # Check that 'delivery_settings' has 'delivery_system' key or not.
-    # If 'delivery_settings' contains 'DELIVERY_SETTINGS_KEYS' then it retruns
+    # If 'delivery_settings' contains 'DELIVERY_SETTINGS_KEYS' then it returns
     # false, else true.
     #
     # @return [Boolean] true/false
@@ -163,9 +163,9 @@ module MailPlugger
       end
     end
 
-    # Return 'delivery_systems' array if it's exist. If not then extract keys
+    # Return 'delivery_systems' array if it's exist. If not, then extract keys
     # from 'delivery_options', 'client' or 'delivery_settings',
-    # depends on which is a hash. If none of these are hashes then returns nil.
+    # depends on which is a hash. If none of these are hashes, then returns nil.
     #
     # @return [Array/NilClass] with the keys or nil
     def extract_keys
@@ -175,7 +175,7 @@ module MailPlugger
     end
 
     # Extract keys from 'delivery_options', 'client' or 'delivery_settings',
-    # depends on which is a hash. If none of these are hashes then returns nil.
+    # depends on which is a hash. If none of these are hashes, then returns nil.
     #
     # @return [Array/NilClass] with the keys from one of the hash or nil
     def extract_keys_from_other_variables
@@ -188,7 +188,7 @@ module MailPlugger
       end&.keys
     end
 
-    # How to Extract the (unparsed) value of the mail message fields.
+    # How to extract the (unparsed) value of the mail message fields.
     #
     # @return [String] version dependent method call
     def mail_field_value
@@ -247,9 +247,9 @@ module MailPlugger
       false
     end
 
-    # Extract 'settings'. If it's a hash then it'll return the right
-    # settings belongs to the delivery system. If 'delivery_settings' is nil
-    # it'll return an empty hash. But if the value doesn't a hash it'll raise
+    # Extract 'settings'. If it's a hash, then it'll return the right
+    # settings, belongs to the delivery system. If 'delivery_settings' is nil,
+    # it'll return an empty hash. But if the value doesn't a hash, it'll raise
     # an error.
     #
     # @return [Hash] settings for Mail delivery_method and/or FakePlugger
