@@ -5,6 +5,7 @@ require 'spec_helper'
 RSpec.describe MailPlugger::DeliveryMethod do
   before { stub_const('DummyApi', dummy_api_class) }
 
+  # rubocop:disable Style/RedundantInitialize
   let(:dummy_api_class) do
     Class.new do
       def initialize(options = {}); end
@@ -12,6 +13,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
       def deliver; end
     end
   end
+  # rubocop:enable Style/RedundantInitialize
   let(:delivery_system) { 'delivery_system' }
   let(:delivery_options) { %i[to from subject body] }
   let(:delivery_settings) { { key: :value } }
@@ -57,32 +59,32 @@ RSpec.describe MailPlugger::DeliveryMethod do
         end
 
         it 'sets message with nil' do
-          expect(init_method.instance_variable_get(:@message)).to be nil
+          expect(init_method.instance_variable_get(:@message)).to be_nil
         end
       end
 
       context 'when NOT using MailPlugger.plug_in method' do
         it 'does NOT set delivery_options' do
           expect(init_method.instance_variable_get(:@delivery_options))
-            .to be nil
+            .to be_nil
         end
 
         it 'does NOT set client' do
-          expect(init_method.instance_variable_get(:@client)).to be nil
+          expect(init_method.instance_variable_get(:@client)).to be_nil
         end
 
         it 'does NOT set default_delivery_system' do
           expect(init_method.instance_variable_get(:@default_delivery_system))
-            .to be nil
+            .to be_nil
         end
 
         it 'does NOT set delivery_settings' do
           expect(init_method.instance_variable_get(:@delivery_settings))
-            .to be nil
+            .to be_nil
         end
 
         it 'sets message with nil' do
-          expect(init_method.instance_variable_get(:@message)).to be nil
+          expect(init_method.instance_variable_get(:@message)).to be_nil
         end
       end
     end
@@ -118,7 +120,7 @@ RSpec.describe MailPlugger::DeliveryMethod do
         end
 
         it 'sets message with nil' do
-          expect(init_method.instance_variable_get(:@message)).to be nil
+          expect(init_method.instance_variable_get(:@message)).to be_nil
         end
       end
 

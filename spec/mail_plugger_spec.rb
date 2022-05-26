@@ -79,15 +79,15 @@ RSpec.describe MailPlugger do
       end
 
       it 'does not set client' do
-        expect(described_class.client).to be nil
+        expect(described_class.client).to be_nil
       end
 
       it 'does not set delivery_options' do
-        expect(described_class.delivery_options).to be nil
+        expect(described_class.delivery_options).to be_nil
       end
 
       it 'does not set delivery_settings' do
-        expect(described_class.delivery_settings).to be nil
+        expect(described_class.delivery_settings).to be_nil
       end
 
       it 'sets delivery_systems' do
@@ -114,11 +114,11 @@ RSpec.describe MailPlugger do
       shared_examples 'setting with the right data' do |delivery_method|
         if delivery_method == 'SMTP'
           it 'does NOT set delivery_options' do
-            expect(described_class.delivery_options).to be nil
+            expect(described_class.delivery_options).to be_nil
           end
 
           it 'does NOT set client' do
-            expect(described_class.client).to be nil
+            expect(described_class.client).to be_nil
           end
         else
           it 'sets delivery_options' do
@@ -197,11 +197,11 @@ RSpec.describe MailPlugger do
         case delivery_method
         when 'SMTP'
           it 'does NOT set delivery_options' do
-            expect(described_class.delivery_options).to be nil
+            expect(described_class.delivery_options).to be_nil
           end
 
           it 'does NOT set client' do
-            expect(described_class.client).to be nil
+            expect(described_class.client).to be_nil
           end
 
           it 'sets both delivery_settings' do

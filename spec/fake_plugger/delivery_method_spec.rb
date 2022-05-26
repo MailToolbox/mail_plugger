@@ -8,6 +8,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
     stub_const('MailGrabber::DeliveryMethod', mail_grabber_class)
   end
 
+  # rubocop:disable Style/RedundantInitialize
   let(:dummy_api_class) do
     Class.new do
       def initialize(options = {}); end
@@ -22,6 +23,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
       def deliver!(message); end
     end
   end
+  # rubocop:enable Style/RedundantInitialize
   let(:delivery_system) { 'delivery_system' }
   let(:delivery_options) { %i[to from subject body] }
   let(:delivery_settings) do
@@ -79,71 +81,71 @@ RSpec.describe FakePlugger::DeliveryMethod do
         end
 
         it 'sets message with nil' do
-          expect(init_method.instance_variable_get(:@message)).to be nil
+          expect(init_method.instance_variable_get(:@message)).to be_nil
         end
 
         it 'does NOT set debug yet' do
-          expect(init_method.instance_variable_get(:@debug)).to be nil
+          expect(init_method.instance_variable_get(:@debug)).to be_nil
         end
 
         it 'does NOT set raw_message yet' do
-          expect(init_method.instance_variable_get(:@raw_message)).to be nil
+          expect(init_method.instance_variable_get(:@raw_message)).to be_nil
         end
 
         it 'does NOT set response yet' do
-          expect(init_method.instance_variable_get(:@response)).to be nil
+          expect(init_method.instance_variable_get(:@response)).to be_nil
         end
 
         it 'does NOT set use_mail_grabber yet' do
           expect(init_method.instance_variable_get(:@use_mail_grabber))
-            .to be nil
+            .to be_nil
         end
       end
 
       context 'when NOT using MailPlugger.plug_in method' do
         it 'does NOT set delivery_options' do
           expect(init_method.instance_variable_get(:@delivery_options))
-            .to be nil
+            .to be_nil
         end
 
         it 'does NOT set client' do
-          expect(init_method.instance_variable_get(:@client)).to be nil
+          expect(init_method.instance_variable_get(:@client)).to be_nil
         end
 
         it 'does NOT set default_delivery_system' do
           expect(init_method.instance_variable_get(:@default_delivery_system))
-            .to be nil
+            .to be_nil
         end
 
         it 'does NOT set delivery_settings' do
           expect(init_method.instance_variable_get(:@delivery_settings))
-            .to be nil
+            .to be_nil
         end
 
         it 'does NOT set delivery_systems' do
           expect(init_method.instance_variable_get(:@delivery_systems))
-            .to be nil
+            .to be_nil
         end
 
         it 'sets message with nil' do
-          expect(init_method.instance_variable_get(:@message)).to be nil
+          expect(init_method.instance_variable_get(:@message)).to be_nil
         end
 
         it 'sets debug with nil' do
-          expect(init_method.instance_variable_get(:@debug)).to be nil
+          expect(init_method.instance_variable_get(:@debug)).to be_nil
         end
 
         it 'sets raw_message with nil' do
-          expect(init_method.instance_variable_get(:@raw_message)).to be nil
+          expect(init_method.instance_variable_get(:@raw_message)).to be_nil
         end
 
         it 'does NOT set response' do
-          expect(init_method.instance_variable_get(:@response)).to be nil
+          expect(init_method.instance_variable_get(:@response)).to be_nil
         end
 
         it 'sets use_mail_grabber with nil' do
           expect(init_method.instance_variable_get(:@use_mail_grabber))
-            .to be nil
+            .to be_nil
         end
       end
     end
@@ -170,25 +172,25 @@ RSpec.describe FakePlugger::DeliveryMethod do
         end
 
         it 'sets message with nil' do
-          expect(init_method.instance_variable_get(:@message)).to be nil
+          expect(init_method.instance_variable_get(:@message)).to be_nil
         end
 
         if use_settings_or_options == 'using settings'
           it 'does NOT set debug yet' do
-            expect(init_method.instance_variable_get(:@debug)).to be nil
+            expect(init_method.instance_variable_get(:@debug)).to be_nil
           end
 
           it 'does NOT set raw_message yet' do
-            expect(init_method.instance_variable_get(:@raw_message)).to be nil
+            expect(init_method.instance_variable_get(:@raw_message)).to be_nil
           end
 
           it 'does NOT set response yet' do
-            expect(init_method.instance_variable_get(:@response)).to be nil
+            expect(init_method.instance_variable_get(:@response)).to be_nil
           end
 
           it 'does NOT set use_mail_grabber yet' do
             expect(init_method.instance_variable_get(:@use_mail_grabber))
-              .to be nil
+              .to be_nil
           end
         else
           it 'sets debug with given value' do

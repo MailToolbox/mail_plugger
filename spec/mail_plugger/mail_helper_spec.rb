@@ -386,7 +386,7 @@ RSpec.describe MailPlugger::MailHelper do
         let(:delivery_settings) { nil }
 
         it 'returns with nil' do
-          expect(default_delivery_system).to be nil
+          expect(default_delivery_system).to be_nil
         end
       end
 
@@ -426,7 +426,7 @@ RSpec.describe MailPlugger::MailHelper do
           let(:delivery_settings) { { return_response: true } }
 
           it 'returns with nil' do
-            expect(default_delivery_system).to be nil
+            expect(default_delivery_system).to be_nil
           end
         end
 
@@ -634,7 +634,7 @@ RSpec.describe MailPlugger::MailHelper do
           let(:default_delivery_system) { nil }
 
           it 'returns with nil' do
-            expect(delivery_system).to be nil
+            expect(delivery_system).to be_nil
           end
         end
       end
@@ -729,7 +729,7 @@ RSpec.describe MailPlugger::MailHelper do
           let(:delivery_settings) { { return_response: true } }
 
           it 'returns with nil' do
-            expect(extract_keys).to be nil
+            expect(extract_keys).to be_nil
           end
         end
 
@@ -739,7 +739,7 @@ RSpec.describe MailPlugger::MailHelper do
           end
 
           it 'returns with nil' do
-            expect(extract_keys).to be nil
+            expect(extract_keys).to be_nil
           end
         end
 
@@ -759,7 +759,7 @@ RSpec.describe MailPlugger::MailHelper do
         let(:delivery_settings) { nil }
 
         it 'returns with nil' do
-          expect(extract_keys).to be nil
+          expect(extract_keys).to be_nil
         end
       end
     end
@@ -807,7 +807,7 @@ RSpec.describe MailPlugger::MailHelper do
       let(:message_field) { message['unknown'] }
 
       it 'returns with nil' do
-        expect(value).to be nil
+        expect(value).to be_nil
       end
     end
 
@@ -880,7 +880,7 @@ RSpec.describe MailPlugger::MailHelper do
         let(:option) { nil }
 
         it 'returns with nil' do
-          expect(value).to be nil
+          expect(value).to be_nil
         end
       end
     end
