@@ -1,5 +1,14 @@
 # Change log
 
+## 1.6.0 (2022-05-26)
+
+### Changes
+
+* Drop Ruby 2.6 support.
+* Fix some grammar issues and typos.
+* Update bundler and gems.
+
+
 ## 1.5.0 (2021-12-31)
 
 ### Changes
