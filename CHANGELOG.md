@@ -1,5 +1,12 @@
 # Change log
 
+## 1.6.1 (2022-05-27)
+
+### Changes
+
+* Update MailGrabber to version 1.2.1 because of security issues in the rack gem.
+
+
 ## 1.6.0 (2022-05-26)
 
 ### Changes
