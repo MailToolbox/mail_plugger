@@ -13,12 +13,40 @@ require 'fake_plugger/railtie' if defined?(Rails)
 
 module MailPlugger
   class << self
+    attr_accessor :default_delivery_system,
+                  :sending_method,
+                  :sending_options
+
     attr_reader :client,
                 :delivery_options,
                 :delivery_settings,
-                :delivery_systems
+                :delivery_systems,
+                :rotatable_delivery_systems
 
-    # Plug in SMTP(s) or defined API(s) class.
+    # Configure MailPlugger.
+    #
+    # @example using Rails `config/initializers/mail_plugger.rb`
+    #
+    #   MailPlugger.configure do |config|
+    #     # It should be defined with the plug_in method.
+    #     config.default_delivery_system = 'api_client'
+    #     # It can be:
+    #     #  - default_delivery_system
+    #     #  - plugged_in_first
+    #     #  - random
+    #     #  - round_robin
+    #     config.sending_method = 'default_delivery_system'
+    #     # Default sending options for a plugged in client.
+    #     config.sending_options = { 'api_client' => { tag: 'test_message' } }
+    #   end
+    #
+    def configure
+      yield self
+    rescue NoMethodError => e
+      raise Error::WrongConfigureOption, e.message
+    end
+
+    # Plug in SMTP(s) or defined API(s) class(es).
     #
     # @param [String/Symbol] delivery_system the name of the SMTP/API
     #
@@ -85,8 +113,8 @@ module MailPlugger
     #     end
     #   end
     #
-    #   MailPlugger.plug_in('defined_api') do |api|
-    #     # It will search these options in the Mail::Message object
+    #   MailPlugger.plug_in('api_client') do |api|
+    #     # It will search these options in the Mail::Message object.
     #     api.delivery_options = [:to, :from, :subject, :text_part, :html_part]
     #     api.delivery_settings = { return_response: true }
     #     api.client = DefinedApiClientClass
@@ -97,6 +125,7 @@ module MailPlugger
 
       @delivery_system = delivery_system
       (@delivery_systems ||= []) << delivery_system
+      @rotatable_delivery_systems = @delivery_systems.cycle
 
       yield self
     rescue NoMethodError => e

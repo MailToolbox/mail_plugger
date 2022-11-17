@@ -20,7 +20,7 @@ module FakePlugger
     #   e.g. { return_response: true }
     #
     # @option options [String/Symbol] default_delivery_system
-    #   e.g. 'defined_api'
+    #   e.g. 'api_client'
     #
     # @option options [Boolean] debug
     #   if true, it will show debug information

@@ -15,6 +15,8 @@ require 'shared_examples/mail_plugger/delivery_method/deliver/' \
         'with_initialize_arguments/when_using_smtp'
 require 'shared_examples/mail_plugger/delivery_method/deliver/' \
         'with_initialize_arguments/when_using_api'
+require 'shared_examples/mail_plugger/delivery_method/deliver/' \
+        'without_initialize_arguments/when_using_configure_method'
 
 RSpec.describe MailPlugger::DeliveryMethod do
   before { stub_const('DummyApi', dummy_api_class) }
@@ -28,10 +30,13 @@ RSpec.describe MailPlugger::DeliveryMethod do
     end
   end
   # rubocop:enable Style/RedundantInitialize
-  let(:delivery_system) { 'delivery_system' }
+  let(:client) { DummyApi }
   let(:delivery_options) { %i[to from subject body] }
   let(:delivery_settings) { { key: :value } }
-  let(:client) { DummyApi }
+  let(:delivery_system) { 'delivery_system' }
+  let(:default_delivery_system) { nil }
+  let(:sending_method) { nil }
+  let(:sending_options) { nil }
 
   describe '#initialize' do
     include_examples 'mail_plugger/delivery_method/initialize/' \
@@ -57,6 +62,10 @@ RSpec.describe MailPlugger::DeliveryMethod do
 
         include_examples 'mail_plugger/delivery_method/deliver/' \
                          'without_initialize_arguments/when_using_smtp_and_api'
+
+        include_examples 'mail_plugger/delivery_method/deliver/' \
+                         'without_initialize_arguments/' \
+                         'when_using_configure_method'
       end
 
       context 'when NOT using MailPlugger.plug_in method' do

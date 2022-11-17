@@ -3,6 +3,68 @@
 require 'spec_helper'
 
 RSpec.describe MailPlugger do
+  describe '.configure' do
+    # rubocop:disable Lint/EmptyBlock
+    context 'when options are missing' do
+      before do
+        described_class.configure {}
+      end
+
+      it 'does not set default_delivery_system' do
+        expect(described_class.default_delivery_system).to be_nil
+      end
+
+      it 'does not set sending_options' do
+        expect(described_class.sending_options).to be_nil
+      end
+
+      it 'does not set sending_method' do
+        expect(described_class.sending_method).to be_nil
+      end
+    end
+    # rubocop:enable Lint/EmptyBlock
+
+    context 'when use unexisting options' do
+      let(:configure) do
+        described_class.configure do |config|
+          config.unexisting = 'something'
+        end
+      end
+
+      it 'raises error' do
+        expect { configure }
+          .to raise_error(described_class::Error::WrongConfigureOption)
+      end
+    end
+
+    context 'when options are given' do
+      let(:default_delivery_system) { 'default_delivery_system' }
+      let(:sending_options) { { delivery_system: { key: :value } } }
+      let(:sending_method) { 'default_delivery_system' }
+
+      before do
+        described_class.configure do |config|
+          config.default_delivery_system = default_delivery_system
+          config.sending_options = sending_options
+          config.sending_method = sending_method
+        end
+      end
+
+      it 'sets default_delivery_system' do
+        expect(described_class.default_delivery_system)
+          .to eq(default_delivery_system)
+      end
+
+      it 'sets sending_options' do
+        expect(described_class.sending_options).to eq(sending_options)
+      end
+
+      it 'sets sending_method' do
+        expect(described_class.sending_method).to eq(sending_method)
+      end
+    end
+  end
+
   describe '.plug_in' do
     before do
       stub_const('DummyApi', Class.new)

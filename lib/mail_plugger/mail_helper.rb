@@ -13,6 +13,12 @@ module MailPlugger
       return_response
       smtp_settings
     ].freeze
+    DELIVERY_SENDING_METHODS = %i[
+      default_delivery_system
+      plugged_in_first
+      random
+      round_robin
+    ].freeze
 
     # Check the version of a gem.
     #
@@ -69,7 +75,31 @@ module MailPlugger
           end
       end
 
-      Mail::IndifferentHash.new(data)
+      Mail::IndifferentHash.new(default_data.merge(data))
+    end
+
+    # Extract 'sending_options'. If it's a hash, then it'll return the right
+    # sending options belongs to the delivery system. If 'sending_options' is
+    # nil, it'll return an empty hash. But if the value doesn't a hash, it'll
+    # raise an error.
+    #
+    # @return [Hash] the data which was defined in 'sending_options'
+    def default_data
+      options = option_value_from(@sending_options)
+
+      return {} if options.nil?
+
+      unless options.is_a?(Hash)
+        raise Error::WrongSendingOptions,
+              '"sending_options" does not a Hash'
+      end
+      if options == @sending_options
+        raise Error::WrongSendingOptions,
+              '"sending_options" does not contain the ' \
+              "'#{delivery_system}' \"delivery_system\""
+      end
+
+      options
     end
 
     # Tries to set up a default delivery system, if the 'delivery_system'
@@ -83,7 +113,16 @@ module MailPlugger
     #
     # @return [Stirng/NilClass] the first key from the extracted keys or nil
     def default_delivery_system_get
-      extract_keys&.first
+      case sending_method_get
+      when :default_delivery_system
+        @passed_delivery_system
+      when :plugged_in_first
+        extract_keys&.first
+      when :random
+        extract_keys&.sample
+      when :round_robin
+        @rotatable_delivery_systems&.next
+      end
     end
 
     # Extract 'delivery_options'. If it's a hash, then it'll return the right
@@ -169,9 +208,7 @@ module MailPlugger
     #
     # @return [Array/NilClass] with the keys or nil
     def extract_keys
-      return @delivery_systems unless @delivery_systems.nil?
-
-      extract_keys_from_other_variables
+      @delivery_systems || extract_keys_from_other_variables
     end
 
     # Extract keys from 'delivery_options', 'client' or 'delivery_settings',
@@ -245,6 +282,22 @@ module MailPlugger
                      settings[:smtp_settings].any?
 
       false
+    end
+
+    # Choose a 'sending_method' for the given conditions.
+    #
+    # @return [Symbol] the appropriate sending method
+    def sending_method_get
+      if @sending_method.nil? && !@passed_delivery_system.nil?
+        :default_delivery_system
+      elsif @sending_method.nil? ||
+            !DELIVERY_SENDING_METHODS.include?(@sending_method.to_sym) ||
+            (@sending_method.to_sym == :default_delivery_system &&
+              @passed_delivery_system.nil?)
+        :plugged_in_first
+      else
+        @sending_method.to_sym
+      end
     end
 
     # Extract 'settings'. If it's a hash, then it'll return the right

@@ -12,7 +12,11 @@ RSpec.describe MailPlugger::MailHelper do
           @client = options[:client]
           @delivery_options = options[:delivery_options]
           @delivery_settings = options[:delivery_settings]
+          @passed_delivery_system = options[:passed_delivery_system]
           @delivery_systems = options[:delivery_systems]
+          @rotatable_delivery_systems = options[:rotatable_delivery_systems]
+          @sending_method = options[:sending_method]
+          @sending_options = options[:sending_options]
           @default_delivery_system = options[:default_delivery_system]
           @message = options[:message]
         end
@@ -147,12 +151,21 @@ RSpec.describe MailPlugger::MailHelper do
   describe '#delivery_data' do
     subject(:delivery_data) do
       TestClass
-        .new(delivery_options: delivery_options, message: message)
+        .new(
+          delivery_options: delivery_options,
+          sending_options: sending_options,
+          default_delivery_system: default_delivery_system,
+          message: message
+        )
         .delivery_data
     end
 
+    let(:sending_options) { nil }
+    let(:default_delivery_system) { nil }
+
     # rubocop:disable RSpec/VariableDefinition, RSpec/VariableName
     context 'when mail does NOT multipart' do
+      let(:delivery_options) { %i[from to subject body] }
       let(:message) do
         Mail.new do
           from    'from@example.com'
@@ -161,7 +174,6 @@ RSpec.describe MailPlugger::MailHelper do
           body    'This is the message body'
         end
       end
-      let(:delivery_options) { %i[from to subject body] }
       let(:expected_hash) do
         {
           'from' => ['from@example.com'],
@@ -178,6 +190,7 @@ RSpec.describe MailPlugger::MailHelper do
 
     context 'when mail is multipart' do
       context 'and does NOT has attachments' do
+        let(:delivery_options) { %i[from to subject text_part html_part] }
         let(:message) do
           Mail.new do
             from    'from@example.com'
@@ -194,7 +207,6 @@ RSpec.describe MailPlugger::MailHelper do
             end
           end
         end
-        let(:delivery_options) { %i[from to subject text_part html_part] }
         let(:expected_hash) do
           {
             'from' => ['from@example.com'],
@@ -216,6 +228,9 @@ RSpec.describe MailPlugger::MailHelper do
       end
 
       context 'and has attachments' do
+        let(:delivery_options) do
+          %i[from to subject text_part html_part attachments]
+        end
         let(:message) do
           message = Mail.new do
             from    'from@example.com'
@@ -237,9 +252,6 @@ RSpec.describe MailPlugger::MailHelper do
             File.read(File.expand_path('../README.md', File.dirname(__dir__)))
 
           message
-        end
-        let(:delivery_options) do
-          %i[from to subject text_part html_part attachments]
         end
         let(:expected_hash) do
           {
@@ -286,6 +298,9 @@ RSpec.describe MailPlugger::MailHelper do
     end
 
     context 'when mail has extra options' do
+      let(:delivery_options) do
+        %i[from to subject body string boolean array hash message_obj]
+      end
       let(:message) do
         message = Mail.new do
           from    'from@example.com'
@@ -299,9 +314,6 @@ RSpec.describe MailPlugger::MailHelper do
         message[:hash] = { this: 'is the hash' }
 
         message
-      end
-      let(:delivery_options) do
-        %i[from to subject body string boolean array hash message_obj]
       end
       let(:expected_hash) do
         {
@@ -328,6 +340,7 @@ RSpec.describe MailPlugger::MailHelper do
     end
 
     context 'when delivery_options is an array of string' do
+      let(:delivery_options) { %w[from to subject body] }
       let(:message) do
         Mail.new do
           from    'from@example.com'
@@ -336,7 +349,6 @@ RSpec.describe MailPlugger::MailHelper do
           body    'This is the message body'
         end
       end
-      let(:delivery_options) { %w[from to subject body] }
       let(:expected_hash) do
         {
           'from' => ['from@example.com'],
@@ -350,112 +362,415 @@ RSpec.describe MailPlugger::MailHelper do
         expect(delivery_data).to eq(expected_hash)
       end
     end
+
+    context 'when default_data exists' do
+      let(:sending_options) { { 'delivery_system' => { key: :value } } }
+      let(:default_delivery_system) { 'delivery_system' }
+
+      context 'and option does NOT defined in the mail' do
+        let(:delivery_options) { %i[from to subject body] }
+        let(:message) do
+          Mail.new do
+            from    'from@example.com'
+            to      'to@example.com'
+            subject 'This is the message subject'
+            body    'This is the message body'
+          end
+        end
+        let(:expected_hash) do
+          {
+            'from' => ['from@example.com'],
+            'to' => ['to@example.com'],
+            'key' => :value,
+            'subject' => 'This is the message subject',
+            'body' => 'This is the message body'
+          }
+        end
+
+        it 'returns back with the right data' do
+          expect(delivery_data).to eq(expected_hash)
+        end
+      end
+
+      context 'and option is defined in the mail as well' do
+        context 'but delivery_options does NOT contain this option' do
+          let(:delivery_options) { %i[from to subject body] }
+          let(:message) do
+            message = Mail.new do
+              from    'from@example.com'
+              to      'to@example.com'
+              subject 'This is the message subject'
+              body    'This is the message body'
+            end
+            message[:key] = 'defined in mail'
+
+            message
+          end
+          let(:expected_hash) do
+            {
+              'from' => ['from@example.com'],
+              'to' => ['to@example.com'],
+              'key' => :value,
+              'subject' => 'This is the message subject',
+              'body' => 'This is the message body'
+            }
+          end
+
+          it 'returns back with the right data (it adds the default_data)' do
+            expect(delivery_data).to eq(expected_hash)
+          end
+        end
+
+        context 'and delivery_options contains this option' do
+          let(:delivery_options) { %i[from to subject body key] }
+          let(:message) do
+            message = Mail.new do
+              from    'from@example.com'
+              to      'to@example.com'
+              subject 'This is the message subject'
+              body    'This is the message body'
+            end
+            message[:key] = 'defined in mail'
+
+            message
+          end
+          let(:expected_hash) do
+            {
+              'from' => ['from@example.com'],
+              'to' => ['to@example.com'],
+              'key' => 'defined in mail',
+              'subject' => 'This is the message subject',
+              'body' => 'This is the message body'
+            }
+          end
+
+          it 'returns back with the right data (it does not override the ' \
+             'data in mail)' do
+            expect(delivery_data).to eq(expected_hash)
+          end
+        end
+      end
+    end
     # rubocop:enable RSpec/VariableDefinition, RSpec/VariableName
   end
 
-  describe '#default_delivery_system_get' do
-    subject(:default_delivery_system) do
+  describe '#default_data' do
+    subject(:default_data) do
       TestClass
         .new(
-          delivery_options: delivery_options,
+          sending_options: sending_options,
+          default_delivery_system: default_delivery_system
+        )
+        .default_data
+    end
+
+    let(:default_delivery_system) { nil }
+
+    context 'when sending_options does NOT a hash' do
+      context 'but it is nil' do
+        let(:sending_options) { nil }
+
+        it 'returns with empty hash' do
+          expect(default_data).to eq({})
+        end
+      end
+
+      context 'but it is string' do
+        let(:sending_options) { 'default_data' }
+
+        it 'raises error' do
+          expect { default_data }
+            .to raise_error(MailPlugger::Error::WrongSendingOptions)
+        end
+      end
+    end
+
+    context 'when sending_options is a hash' do
+      let(:sending_options) { { 'delivery_system' => { key: :value } } }
+
+      context 'and delivery_system does NOT exist' do
+        it 'raises error' do
+          expect { default_data }
+            .to raise_error(MailPlugger::Error::WrongSendingOptions)
+        end
+      end
+
+      context 'and delivery_system exists' do
+        context 'but delivery_system does NOT exist in the sending_options' do
+          let(:default_delivery_system) { 'not_exist' }
+
+          it 'raises error' do
+            expect { default_data }
+              .to raise_error(MailPlugger::Error::WrongSendingOptions)
+          end
+        end
+
+        context 'and delivery_system exists in the sending_options' do
+          let(:default_delivery_system) { 'delivery_system' }
+
+          it 'returns with the given hash of the delivery_system' do
+            expect(default_data).to eq(sending_options[default_delivery_system])
+          end
+        end
+      end
+    end
+  end
+
+  describe '#default_delivery_system_get' do
+    subject(:default_delivery_system_get) do
+      TestClass
+        .new(
           client: client,
+          delivery_options: delivery_options,
           delivery_settings: delivery_settings,
-          delivery_systems: delivery_systems
+          passed_delivery_system: passed_delivery_system,
+          delivery_systems: delivery_systems,
+          rotatable_delivery_systems: rotatable_delivery_systems,
+          sending_method: sending_method
         )
         .default_delivery_system_get
     end
 
-    context 'when delivery_systems exists' do
-      let(:delivery_systems) { %w[delivery_system another_delivery_system] }
-      let(:delivery_options) { nil }
-      let(:client) { nil }
-      let(:delivery_settings) { nil }
+    let(:client) { nil }
+    let(:delivery_options) { nil }
+    let(:delivery_settings) { nil }
+    let(:passed_delivery_system) { nil }
+    let(:delivery_systems) { nil }
+    let(:rotatable_delivery_systems) { nil }
+    let(:sending_method) { nil }
 
-      it 'returns with the first key' do
-        expect(default_delivery_system).to eq('delivery_system')
+    shared_examples 'returning with the delivery system key' \
+                    do |delivery_system_key|
+      context 'and delivery_systems exists' do
+        let(:delivery_systems) { %w[delivery_system another_delivery_system] }
+
+        if delivery_system_key == 'first'
+          it 'returns with the first key' do
+            expect(default_delivery_system_get).to eq('delivery_system')
+          end
+        else
+          it 'returns with one of the keys' do
+            expect(default_delivery_system_get)
+              .to eq('delivery_system').or eq('another_delivery_system')
+          end
+        end
+      end
+
+      context 'and delivery_systems does NOT exist' do
+        let(:delivery_systems) { nil }
+
+        context 'and neither delivery_options, client or delivery_settings ' \
+                'is a hash' do
+          let(:client) { DummyApi }
+          let(:delivery_options) { %i[to from subject body] }
+          let(:delivery_settings) { nil }
+
+          it 'returns with nil' do
+            expect(default_delivery_system_get).to be_nil
+          end
+        end
+
+        context 'and delivery_options is hash but client and ' \
+                'delivery_settings does NOT' do
+          let(:client) { DummyApi }
+          let(:delivery_options) do
+            {
+              'delivery_system' => %i[to from subject body],
+              'another_delivery_system' => %i[to from subject body]
+            }
+          end
+          let(:delivery_settings) { nil }
+
+          if delivery_system_key == 'first'
+            it 'returns with the first key' do
+              expect(default_delivery_system_get).to eq('delivery_system')
+            end
+          else
+            it 'returns with one of the keys' do
+              expect(default_delivery_system_get)
+                .to eq('delivery_system').or eq('another_delivery_system')
+            end
+          end
+        end
+
+        context 'and client is hash but delivery_options and ' \
+                'delivery_settings does NOT' do
+          let(:client) do
+            {
+              'delivery_system' => DummyApi,
+              'another_delivery_system' => AnotherDummyApi
+            }
+          end
+          let(:delivery_options) { %i[to from subject body] }
+          let(:delivery_settings) { nil }
+
+          if delivery_system_key == 'first'
+            it 'returns with the first key' do
+              expect(default_delivery_system_get).to eq('delivery_system')
+            end
+          else
+            it 'returns with one of the keys' do
+              expect(default_delivery_system_get)
+                .to eq('delivery_system').or eq('another_delivery_system')
+            end
+          end
+        end
+
+        context 'and delivery_settings is hash but delivery_options and ' \
+                'client does NOT' do
+          let(:client) { DummyApi }
+          let(:delivery_options) { %i[to from subject body] }
+
+          context 'and it contains DELIVERY_SETTINGS_KEYS' do
+            let(:delivery_settings) { { return_response: true } }
+
+            it 'returns with nil' do
+              expect(default_delivery_system_get).to be_nil
+            end
+          end
+
+          context 'and it does NOT contain DELIVERY_SETTINGS_KEYS' do
+            let(:delivery_settings) do
+              {
+                'delivery_system' => { return_response: true },
+                'another_delivery_system' => { return_response: true }
+              }
+            end
+
+            if delivery_system_key == 'first'
+              it 'returns with the first key' do
+                expect(default_delivery_system_get).to eq('delivery_system')
+              end
+            else
+              it 'returns with one of the keys' do
+                expect(default_delivery_system_get)
+                  .to eq('delivery_system').or eq('another_delivery_system')
+              end
+            end
+          end
+        end
+
+        context 'and all delivery_options, client and delivery_settings ' \
+                'are hashes' do
+          let(:client) do
+            {
+              'delivery_system' => DummyApi,
+              'another_delivery_system' => AnotherDummyApi
+            }
+          end
+          let(:delivery_options) do
+            {
+              'delivery_system' => %i[to from subject body],
+              'another_delivery_system' => %i[to from subject body]
+            }
+          end
+          let(:delivery_settings) do
+            {
+              'delivery_system' => { return_response: true },
+              'another_delivery_system' => { return_response: true }
+            }
+          end
+
+          if delivery_system_key == 'first'
+            it 'returns with the first key' do
+              expect(default_delivery_system_get).to eq('delivery_system')
+            end
+          else
+            it 'returns with one of the keys' do
+              expect(default_delivery_system_get)
+                .to eq('delivery_system').or eq('another_delivery_system')
+            end
+          end
+        end
       end
     end
 
-    context 'when delivery_systems does NOT exist' do
-      let(:delivery_systems) { nil }
+    context 'when sending_method is default_delivery_system' do
+      let(:sending_method) { :default_delivery_system }
 
-      context 'and neither delivery_options, client or delivery_settings ' \
-              'is a hash' do
-        let(:delivery_options) { %i[to from subject body] }
-        let(:client) { DummyApi }
-        let(:delivery_settings) { nil }
+      context 'and passed_delivery_system does NOT exist' do
+        let(:passed_delivery_system) { nil }
+
+        it_behaves_like 'returning with the delivery system key', 'first'
+      end
+
+      context 'and passed_delivery_system exists' do
+        let(:passed_delivery_system) { 'delivery_system' }
+
+        it 'returns with the passed_delivery_system' do
+          expect(default_delivery_system_get).to eq('delivery_system')
+        end
+      end
+    end
+
+    context 'when sending_method is plugged_in_first' do
+      let(:sending_method) { :plugged_in_first }
+
+      it_behaves_like 'returning with the delivery system key', 'first'
+    end
+
+    context 'when sending_method is random' do
+      let(:sending_method) { :random }
+
+      it_behaves_like 'returning with the delivery system key', 'random'
+    end
+
+    context 'when sending_method is round_robin' do
+      let(:sending_method) { :round_robin }
+
+      context 'and rotatable_delivery_systems does NOT exist' do
+        let(:rotatable_delivery_systems) { nil }
 
         it 'returns with nil' do
-          expect(default_delivery_system).to be_nil
+          expect(default_delivery_system_get).to be_nil
         end
       end
 
-      context 'and delivery_options is hash but client and delivery_settings ' \
-              'does NOT' do
-        let(:delivery_options) do
-          {
-            'delivery_system' => %i[to from subject body],
-            'another_delivery_system' => %i[to from subject body]
-          }
-        end
-        let(:client) { DummyApi }
-        let(:delivery_settings) { nil }
-
-        it 'returns with the first key' do
-          expect(default_delivery_system).to eq('delivery_system')
-        end
-      end
-
-      context 'and client is hash but delivery_options and delivery_settings ' \
-              'does NOT' do
-        let(:delivery_options) { %i[to from subject body] }
-        let(:client) { { 'delivery_system' => DummyApi } }
-        let(:delivery_settings) { nil }
-
-        it 'returns with the first key' do
-          expect(default_delivery_system).to eq('delivery_system')
-        end
-      end
-
-      context 'and delivery_settings is hash but delivery_options and client ' \
-              'does NOT' do
-        let(:delivery_options) { %i[to from subject body] }
-        let(:client) { DummyApi }
-
-        context 'and it contains DELIVERY_SETTINGS_KEYS' do
-          let(:delivery_settings) { { return_response: true } }
-
-          it 'returns with nil' do
-            expect(default_delivery_system).to be_nil
+      context 'and rotatable_delivery_systems exists' do
+        subject(:default_delivery_system_get) do
+          proc do
+            TestClass
+              .new(
+                rotatable_delivery_systems: rotatable_delivery_systems,
+                sending_method: sending_method
+              )
+              .default_delivery_system_get
           end
         end
 
-        context 'and it does NOT contain DELIVERY_SETTINGS_KEYS' do
-          let(:delivery_settings) do
-            { 'delivery_system' => { return_response: true } }
-          end
-
-          it 'returns with the first key' do
-            expect(default_delivery_system).to eq('delivery_system')
-          end
+        let(:rotatable_delivery_systems) do
+          %w[delivery_system another_delivery_system].cycle
         end
+
+        # rubocop:disable RSpec/ExampleLength
+        it 'returns with the cycle of the delivery system keys' do
+          expect(default_delivery_system_get.call)
+            .to eq('delivery_system')
+          expect(default_delivery_system_get.call)
+            .to eq('another_delivery_system')
+          expect(default_delivery_system_get.call)
+            .to eq('delivery_system')
+          expect(default_delivery_system_get.call)
+            .to eq('another_delivery_system')
+        end
+        # rubocop:enable RSpec/ExampleLength
+      end
+    end
+
+    context 'when sending_method is nil' do
+      let(:sending_method) { nil }
+
+      context 'and passed_delivery_system does NOT exist' do
+        let(:passed_delivery_system) { nil }
+
+        it_behaves_like 'returning with the delivery system key', 'first'
       end
 
-      context 'and all delivery_options, client and delivery_settings ' \
-              'are hashes' do
-        let(:delivery_options) do
-          {
-            'delivery_system' => %i[to from subject body],
-            'another_delivery_system' => %i[to from subject body]
-          }
-        end
-        let(:client) { { 'delivery_system' => DummyApi } }
-        let(:delivery_settings) do
-          { 'delivery_system' => { return_response: true } }
-        end
+      context 'and passed_delivery_system exists' do
+        let(:passed_delivery_system) { 'delivery_system' }
 
-        it 'returns with the first key' do
-          expect(default_delivery_system).to eq('delivery_system')
+        it 'returns with the passed_delivery_system' do
+          expect(default_delivery_system_get).to eq('delivery_system')
         end
       end
     end
@@ -505,20 +820,20 @@ RSpec.describe MailPlugger::MailHelper do
     subject(:delivery_system) do
       TestClass
         .new(
-          delivery_options: delivery_options,
           client: client,
-          default_delivery_system: default_delivery_system,
+          delivery_options: delivery_options,
           delivery_settings: delivery_settings,
+          default_delivery_system: default_delivery_system,
           message: message
         )
         .delivery_system
     end
 
     context 'when message does NOT exist' do
-      let(:delivery_options) { nil }
       let(:client) { nil }
-      let(:default_delivery_system) { nil }
+      let(:delivery_options) { nil }
       let(:delivery_settings) { nil }
+      let(:default_delivery_system) { nil }
       let(:message) { nil }
 
       it 'does NOT raise error' do
@@ -531,17 +846,17 @@ RSpec.describe MailPlugger::MailHelper do
 
       context 'and all delivery_options, client and delivery_settings ' \
               'are hashes' do
+        let(:client) { { 'delivery_system' => DummyApi } }
         let(:delivery_options) do
           { 'delivery_system' => %i[to from subject body] }
         end
-        let(:client) { { 'delivery_system' => DummyApi } }
         let(:delivery_settings) do
           { 'delivery_system' => { return_response: true } }
         end
 
         context 'and default_delivery_system is defined' do
-          let(:mail_options) { {} }
           let(:default_delivery_system) { 'delivery_system' }
+          let(:mail_options) { {} }
 
           it 'returns with the default_delivery_system' do
             expect(delivery_system).to eq('delivery_system')
@@ -549,8 +864,8 @@ RSpec.describe MailPlugger::MailHelper do
         end
 
         context 'and delivery_system is defined in Mail::Message object' do
-          let(:mail_options) { { delivery_system: 'delivery_system' } }
           let(:default_delivery_system) { nil }
+          let(:mail_options) { { delivery_system: 'delivery_system' } }
 
           it 'returns with the delivery_system from Mail::Message' do
             expect(delivery_system).to eq('delivery_system')
@@ -558,8 +873,8 @@ RSpec.describe MailPlugger::MailHelper do
         end
 
         context 'and delivery_system does NOT defined' do
-          let(:mail_options) { {} }
           let(:default_delivery_system) { nil }
+          let(:mail_options) { {} }
 
           it 'raises error' do
             expect { delivery_system }
@@ -570,15 +885,15 @@ RSpec.describe MailPlugger::MailHelper do
 
       context 'and one of the delivery_options, client or delivery_settings ' \
               'is a hash' do
+        let(:client) { DummyApi }
         let(:delivery_options) do
           { 'delivery_system' => %i[to from subject body] }
         end
-        let(:client) { DummyApi }
         let(:delivery_settings) { nil }
 
         context 'and default_delivery_system is defined' do
-          let(:mail_options) { {} }
           let(:default_delivery_system) { 'delivery_system' }
+          let(:mail_options) { {} }
 
           it 'returns with the default_delivery_system' do
             expect(delivery_system).to eq('delivery_system')
@@ -586,8 +901,8 @@ RSpec.describe MailPlugger::MailHelper do
         end
 
         context 'and delivery_system is defined in Mail::Message object' do
-          let(:mail_options) { { delivery_system: 'delivery_system' } }
           let(:default_delivery_system) { nil }
+          let(:mail_options) { { delivery_system: 'delivery_system' } }
 
           it 'returns with the delivery_system from Mail::Message' do
             expect(delivery_system).to eq('delivery_system')
@@ -595,8 +910,8 @@ RSpec.describe MailPlugger::MailHelper do
         end
 
         context 'and delivery_system does NOT defined' do
-          let(:mail_options) { {} }
           let(:default_delivery_system) { nil }
+          let(:mail_options) { {} }
 
           it 'raises error' do
             expect { delivery_system }
@@ -607,13 +922,13 @@ RSpec.describe MailPlugger::MailHelper do
 
       context 'and none of the delivery_options, client and ' \
               'delivery_settings are hashes' do
-        let(:delivery_options) { %i[to from subject body] }
         let(:client) { DummyApi }
+        let(:delivery_options) { %i[to from subject body] }
         let(:delivery_settings) { nil }
 
         context 'and default_delivery_system is defined' do
-          let(:mail_options) { {} }
           let(:default_delivery_system) { 'delivery_system' }
+          let(:mail_options) { {} }
 
           it 'returns with the default_delivery_system' do
             expect(delivery_system).to eq('delivery_system')
@@ -621,8 +936,8 @@ RSpec.describe MailPlugger::MailHelper do
         end
 
         context 'and delivery_system is defined in Mail::Message object' do
-          let(:mail_options) { { delivery_system: 'delivery_system' } }
           let(:default_delivery_system) { nil }
+          let(:mail_options) { { delivery_system: 'delivery_system' } }
 
           it 'returns with the delivery_system from Mail::Message' do
             expect(delivery_system).to eq('delivery_system')
@@ -630,8 +945,8 @@ RSpec.describe MailPlugger::MailHelper do
         end
 
         context 'and delivery_system does NOT defined' do
-          let(:mail_options) { {} }
           let(:default_delivery_system) { nil }
+          let(:mail_options) { {} }
 
           it 'returns with nil' do
             expect(delivery_system).to be_nil
@@ -641,11 +956,11 @@ RSpec.describe MailPlugger::MailHelper do
 
       # rubocop:disable RSpec/AnyInstance
       context 'and calls delivery_system more time' do
-        let(:delivery_options) { nil }
         let(:client) { nil }
+        let(:delivery_options) { nil }
         let(:delivery_settings) { nil }
-        let(:mail_options) { {} }
         let(:default_delivery_system) { nil }
+        let(:mail_options) { {} }
 
         before do
           allow_any_instance_of(described_class)
@@ -681,16 +996,16 @@ RSpec.describe MailPlugger::MailHelper do
       subject(:extract_keys) do
         TestClass
           .new(
-            delivery_options: delivery_options,
             client: client,
+            delivery_options: delivery_options,
             delivery_settings: delivery_settings
           )
           .extract_keys
       end
 
       context 'and delivery_options is a hash' do
-        let(:delivery_options) { { key1: :value1, key2: :value2 } }
         let(:client) { nil }
+        let(:delivery_options) { { key1: :value1, key2: :value2 } }
         let(:delivery_settings) { nil }
 
         it 'returns with the keys' do
@@ -699,8 +1014,8 @@ RSpec.describe MailPlugger::MailHelper do
       end
 
       context 'and client is a hash' do
-        let(:delivery_options) { nil }
         let(:client) { { 'key1' => 'value1', 'key2' => 'value2' } }
+        let(:delivery_options) { nil }
         let(:delivery_settings) { nil }
 
         it 'returns with the keys' do
@@ -709,11 +1024,11 @@ RSpec.describe MailPlugger::MailHelper do
       end
 
       context 'and both delivery_options and client are hashes' do
-        let(:delivery_options) { { key1: :value1, key2: :value2 } }
         # both delivery_options and client should have the same keys,
         # but now we can see that the delivery_options keys will be returned,
         # which should be ok.
         let(:client) { { key3: :value3, key4: :value4 } }
+        let(:delivery_options) { { key1: :value1, key2: :value2 } }
         let(:delivery_settings) { nil }
 
         it 'returns with the first hash keys' do
@@ -722,8 +1037,8 @@ RSpec.describe MailPlugger::MailHelper do
       end
 
       context 'and delivery_settings is a hash' do
-        let(:delivery_options) { nil }
         let(:client) { nil }
+        let(:delivery_options) { nil }
 
         context 'but it contains only DELIVERY_SETTINGS_KEYS' do
           let(:delivery_settings) { { return_response: true } }
@@ -754,8 +1069,8 @@ RSpec.describe MailPlugger::MailHelper do
       end
 
       context 'when none of the options are hashes' do
-        let(:delivery_options) { nil }
         let(:client) { nil }
+        let(:delivery_options) { nil }
         let(:delivery_settings) { nil }
 
         it 'returns with nil' do
@@ -942,6 +1257,100 @@ RSpec.describe MailPlugger::MailHelper do
             expect(send_via_smtp).to be true
           end
         end
+      end
+    end
+  end
+
+  describe '#sending_method_get' do
+    subject(:sending_method_get) do
+      TestClass
+        .new(
+          passed_delivery_system: passed_delivery_system,
+          sending_method: sending_method
+        )
+        .sending_method_get
+    end
+
+    context 'when sending_method does NOT exist' do
+      let(:sending_method) { nil }
+
+      context 'and passed_delivery_system does NOT exist' do
+        let(:passed_delivery_system) { nil }
+
+        it 'returns with plugged_in_first' do
+          expect(sending_method_get).to eq(:plugged_in_first)
+        end
+      end
+
+      context 'and passed_delivery_system exists' do
+        let(:passed_delivery_system) { 'delivery_system' }
+
+        it 'returns with default_delivery_system' do
+          expect(sending_method_get).to eq(:default_delivery_system)
+        end
+      end
+    end
+
+    context 'when sending_method exists' do
+      context 'and sending_method does NOT include in ' \
+              'DELIVERY_SENDING_METHODS' do
+        let(:passed_delivery_system) { nil }
+        let(:sending_method) { :not_exist }
+
+        it 'returns with plugged_in_first' do
+          expect(sending_method_get).to eq(:plugged_in_first)
+        end
+      end
+
+      context 'and sending_method includes in DELIVERY_SENDING_METHODS' do
+        shared_examples 'returning with the right sending_method' do |method|
+          context "and sending_method is equal to #{method}" do
+            let(:sending_method) { method }
+
+            context 'and passed_delivery_system does NOT exist' do
+              let(:passed_delivery_system) { nil }
+
+              it "returns with #{method}" do
+                expect(sending_method_get).to eq(sending_method)
+              end
+            end
+
+            context 'and passed_delivery_system exists' do
+              let(:passed_delivery_system) { 'delivery_system' }
+
+              it "returns with #{method}" do
+                expect(sending_method_get).to eq(sending_method)
+              end
+            end
+          end
+        end
+
+        context 'and sending_method is equal to default_delivery_system' do
+          let(:sending_method) { :default_delivery_system }
+
+          context 'and passed_delivery_system does NOT exist' do
+            let(:passed_delivery_system) { nil }
+
+            it 'returns with plugged_in_first' do
+              expect(sending_method_get).to eq(:plugged_in_first)
+            end
+          end
+
+          context 'and passed_delivery_system exists' do
+            let(:passed_delivery_system) { 'delivery_system' }
+
+            it 'returns with default_delivery_system' do
+              expect(sending_method_get).to eq(:default_delivery_system)
+            end
+          end
+        end
+
+        it_behaves_like 'returning with the right sending_method',
+                        :plugged_in_first
+
+        it_behaves_like 'returning with the right sending_method', :random
+
+        it_behaves_like 'returning with the right sending_method', :round_robin
       end
     end
   end

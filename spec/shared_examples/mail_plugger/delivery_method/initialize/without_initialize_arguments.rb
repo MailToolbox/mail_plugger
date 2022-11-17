@@ -5,6 +5,42 @@ RSpec.shared_examples 'mail_plugger/delivery_method/initialize/' \
   context 'without initialize arguments' do
     subject(:init_method) { described_class.new }
 
+    context 'when using MailPlugger.configure method' do
+      before do
+        MailPlugger.configure do |config|
+          config.default_delivery_system = default_delivery_system
+          config.sending_method = sending_method
+          config.sending_options = sending_options
+        end
+      end
+
+      after do
+        MailPlugger.instance_variables.each do |variable|
+          MailPlugger.remove_instance_variable(variable)
+        end
+      end
+
+      it 'sets passed_delivery_system with expected value' do
+        expect(init_method.instance_variable_get(:@passed_delivery_system))
+          .to eq(default_delivery_system)
+      end
+
+      it 'sets sending_method with expected value' do
+        expect(init_method.instance_variable_get(:@sending_method))
+          .to eq(sending_method)
+      end
+
+      it 'sets sending_options with expected value' do
+        expect(init_method.instance_variable_get(:@sending_options))
+          .to eq(sending_options)
+      end
+
+      it 'sets default_delivery_system with expected value' do
+        expect(init_method.instance_variable_get(:@default_delivery_system))
+          .to eq(default_delivery_system)
+      end
+    end
+
     context 'when using MailPlugger.plug_in method' do
       before do
         MailPlugger.plug_in(delivery_system) do |api|
