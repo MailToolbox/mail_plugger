@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.email         = ['sysqa@yahoo.com']
 
   spec.summary       = 'Plug in required mailer(s) with MailPlugger.'
-  spec.description   = 'Delivery Method to send emails via SMTP(s) and ' \
-                       'API(s). We can use this Delivery Method with ' \
-                       'the Ruby on Rails ActionMailer or other solutions.'
+  spec.description   = 'MailPlugger helps you to use one or more mail ' \
+                       'providers. You can send emails via SMTP and API ' \
+                       'as well.'
   spec.homepage      = 'https://github.com/MailToolbox/mail_plugger'
   spec.license       = 'MIT'
 
