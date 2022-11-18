@@ -24,8 +24,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
         let(:message) { nil }
 
         it 'raises error' do
-          expect { deliver }
-            .to raise_error(MailPlugger::Error::WrongParameter)
+          expect { deliver }.to raise_error(MailPlugger::Error::WrongParameter)
         end
       end
 

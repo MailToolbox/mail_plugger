@@ -12,11 +12,11 @@ require 'shared_examples/mail_plugger/delivery_method/deliver/' \
 require 'shared_examples/mail_plugger/delivery_method/deliver/' \
         'without_initialize_arguments/when_using_smtp_and_api'
 require 'shared_examples/mail_plugger/delivery_method/deliver/' \
+        'without_initialize_arguments/when_using_configure_method'
+require 'shared_examples/mail_plugger/delivery_method/deliver/' \
         'with_initialize_arguments/when_using_smtp'
 require 'shared_examples/mail_plugger/delivery_method/deliver/' \
         'with_initialize_arguments/when_using_api'
-require 'shared_examples/mail_plugger/delivery_method/deliver/' \
-        'without_initialize_arguments/when_using_configure_method'
 
 RSpec.describe MailPlugger::DeliveryMethod do
   before { stub_const('DummyApi', dummy_api_class) }

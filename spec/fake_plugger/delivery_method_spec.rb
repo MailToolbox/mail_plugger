@@ -20,6 +20,8 @@ require 'shared_examples/fake_plugger/delivery_method/deliver/' \
 require 'shared_examples/fake_plugger/delivery_method/deliver/' \
         'without_initialize_arguments/when_using_smtp_and_api'
 require 'shared_examples/fake_plugger/delivery_method/deliver/' \
+        'without_initialize_arguments/when_using_configure_method'
+require 'shared_examples/fake_plugger/delivery_method/deliver/' \
         'with_initialize_arguments/when_using_smtp'
 require 'shared_examples/fake_plugger/delivery_method/deliver/' \
         'with_initialize_arguments/when_using_api'
@@ -46,7 +48,7 @@ RSpec.describe FakePlugger::DeliveryMethod do
     end
   end
   # rubocop:enable Style/RedundantInitialize
-  let(:delivery_system) { 'delivery_system' }
+  let(:client) { DummyApi }
   let(:delivery_options) { %i[to from subject body] }
   let(:delivery_settings) do
     {
@@ -56,7 +58,10 @@ RSpec.describe FakePlugger::DeliveryMethod do
       fake_plugger_response: { response: 'OK' }
     }
   end
-  let(:client) { DummyApi }
+  let(:delivery_system) { 'delivery_system' }
+  let(:default_delivery_system) { nil }
+  let(:sending_method) { nil }
+  let(:sending_options) { nil }
 
   describe '#initialize' do
     include_examples 'fake_plugger/delivery_method/initialize/' \
@@ -97,6 +102,10 @@ RSpec.describe FakePlugger::DeliveryMethod do
           include_examples 'fake_plugger/delivery_method/deliver/' \
                            'without_initialize_arguments/' \
                            'when_using_smtp_and_api'
+
+          include_examples 'fake_plugger/delivery_method/deliver/' \
+                           'without_initialize_arguments/' \
+                           'when_using_configure_method'
         end
 
         context 'when NOT using MailPlugger.plug_in method' do
