@@ -14,10 +14,6 @@ RSpec.describe MailPlugger do
         expect(described_class.default_delivery_system).to be_nil
       end
 
-      it 'does not set sending_options' do
-        expect(described_class.sending_options).to be_nil
-      end
-
       it 'does not set sending_method' do
         expect(described_class.sending_method).to be_nil
       end
@@ -39,13 +35,11 @@ RSpec.describe MailPlugger do
 
     context 'when options are given' do
       let(:default_delivery_system) { 'default_delivery_system' }
-      let(:sending_options) { { delivery_system: { key: :value } } }
       let(:sending_method) { 'default_delivery_system' }
 
       before do
         described_class.configure do |config|
           config.default_delivery_system = default_delivery_system
-          config.sending_options = sending_options
           config.sending_method = sending_method
         end
       end
@@ -53,10 +47,6 @@ RSpec.describe MailPlugger do
       it 'sets default_delivery_system' do
         expect(described_class.default_delivery_system)
           .to eq(default_delivery_system)
-      end
-
-      it 'sets sending_options' do
-        expect(described_class.sending_options).to eq(sending_options)
       end
 
       it 'sets sending_method' do
@@ -144,6 +134,10 @@ RSpec.describe MailPlugger do
         expect(described_class.client).to be_nil
       end
 
+      it 'does not set default_delivery_options' do
+        expect(described_class.default_delivery_options).to be_nil
+      end
+
       it 'does not set delivery_options' do
         expect(described_class.delivery_options).to be_nil
       end
@@ -175,6 +169,10 @@ RSpec.describe MailPlugger do
     context 'when plug in a delivery system' do
       shared_examples 'setting with the right data' do |delivery_method|
         if delivery_method == 'SMTP'
+          it 'does NOT set default_delivery_options' do
+            expect(described_class.default_delivery_options).to be_nil
+          end
+
           it 'does NOT set delivery_options' do
             expect(described_class.delivery_options).to be_nil
           end
@@ -183,6 +181,11 @@ RSpec.describe MailPlugger do
             expect(described_class.client).to be_nil
           end
         else
+          it 'sets default_delivery_options' do
+            expect(described_class.default_delivery_options)
+              .to eq({ delivery_system => default_delivery_options })
+          end
+
           it 'sets delivery_options' do
             expect(described_class.delivery_options)
               .to eq({ delivery_system => delivery_options })
@@ -204,6 +207,7 @@ RSpec.describe MailPlugger do
       end
 
       context 'and using SMTP' do
+        let(:default_delivery_options) { nil }
         let(:delivery_options) { nil }
         let(:delivery_settings) { { smtp_settings: { key: :value } } }
         let(:client) { nil }
@@ -228,12 +232,14 @@ RSpec.describe MailPlugger do
       end
 
       context 'and using API' do
+        let(:default_delivery_options) { { tag: 'test_tag' } }
         let(:delivery_options) { %i[to from subject body] }
         let(:delivery_settings) { { key: :value } }
         let(:client) { DummyApi }
 
         before do
           described_class.plug_in(delivery_system) do |api|
+            api.default_delivery_options = default_delivery_options
             api.delivery_options = delivery_options
             api.delivery_settings = delivery_settings
             api.client = client
@@ -258,6 +264,10 @@ RSpec.describe MailPlugger do
       shared_examples 'setting with the right data' do |delivery_method|
         case delivery_method
         when 'SMTP'
+          it 'does NOT set default_delivery_options' do
+            expect(described_class.default_delivery_options).to be_nil
+          end
+
           it 'does NOT set delivery_options' do
             expect(described_class.delivery_options).to be_nil
           end
@@ -274,6 +284,18 @@ RSpec.describe MailPlugger do
                      })
           end
         when 'API'
+          # rubocop:disable RSpec/ExampleLength
+          it 'sets both default_delivery_options' do
+            expect(described_class.default_delivery_options)
+              .to eq(
+                {
+                  delivery_system => default_delivery_options,
+                  another_delivery_system => another_default_delivery_options
+                }
+              )
+          end
+          # rubocop:enable RSpec/ExampleLength
+
           it 'sets both delivery_options' do
             expect(described_class.delivery_options)
               .to eq({
@@ -320,9 +342,11 @@ RSpec.describe MailPlugger do
       end
 
       context 'and using more SMTPs' do
+        let(:default_delivery_options) { nil }
         let(:delivery_options) { nil }
         let(:delivery_settings) { { smtp_settings: { key: :value } } }
         let(:client) { nil }
+        let(:another_default_delivery_options) { nil }
         let(:another_delivery_options) { nil }
         let(:another_delivery_settings) { { smtp_settings: { key2: :value2 } } }
         let(:another_client) { nil }
@@ -353,9 +377,11 @@ RSpec.describe MailPlugger do
       end
 
       context 'and using more APIs' do
+        let(:default_delivery_options) { { tag: 'test_tag' } }
         let(:delivery_options) { %i[to from subject body] }
         let(:delivery_settings) { { key: :value } }
         let(:client) { DummyApi }
+        let(:another_default_delivery_options) { { tag: 'another_test_tag' } }
         let(:another_delivery_options) do
           %i[to from subject text_part html_part]
         end
@@ -364,12 +390,14 @@ RSpec.describe MailPlugger do
 
         before do
           described_class.plug_in(delivery_system) do |api|
+            api.default_delivery_options = default_delivery_options
             api.delivery_options = delivery_options
             api.delivery_settings = delivery_settings
             api.client = client
           end
 
           described_class.plug_in(another_delivery_system) do |api|
+            api.default_delivery_options = another_default_delivery_options
             api.delivery_options = another_delivery_options
             api.client = another_client
           end
@@ -391,15 +419,18 @@ RSpec.describe MailPlugger do
       end
 
       context 'and using SMTP and API' do
+        let(:default_delivery_options) { { tag: 'test_tag' } }
         let(:delivery_options) { %i[to from subject body] }
         let(:delivery_settings) { { key: :value } }
         let(:client) { DummyApi }
+        let(:another_default_delivery_options) { nil }
         let(:another_delivery_options) { nil }
         let(:another_delivery_settings) { { smtp_settings: { key2: :value2 } } }
         let(:another_client) { nil }
 
         before do
           described_class.plug_in(delivery_system) do |api|
+            api.default_delivery_options = default_delivery_options
             api.delivery_options = delivery_options
             api.delivery_settings = delivery_settings
             api.client = client

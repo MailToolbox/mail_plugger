@@ -13,7 +13,7 @@ module MailPlugger
       return_response
       smtp_settings
     ].freeze
-    DELIVERY_SENDING_METHODS = %i[
+    SENDING_METHODS = %i[
       default_delivery_system
       plugged_in_first
       random
@@ -78,25 +78,20 @@ module MailPlugger
       Mail::IndifferentHash.new(default_data.merge(data))
     end
 
-    # Extract 'sending_options'. If it's a hash, then it'll return the right
-    # sending options belongs to the delivery system. If 'sending_options' is
-    # nil, it'll return an empty hash. But if the value doesn't a hash, it'll
-    # raise an error.
+    # Extract 'default_delivery_options'. If it's a hash, then it'll return the
+    # right sending options belongs to the delivery system.
+    # If 'default_delivery_options' is nil, it'll return an empty hash. But if
+    # the value doesn't a hash, it'll raise an error.
     #
-    # @return [Hash] the data which was defined in 'sending_options'
+    # @return [Hash] the data which was defined in 'default_delivery_options'
     def default_data
-      options = option_value_from(@sending_options)
+      options = option_value_from(@default_delivery_options)
 
       return {} if options.nil?
 
       unless options.is_a?(Hash)
-        raise Error::WrongSendingOptions,
-              '"sending_options" does not a Hash'
-      end
-      if options == @sending_options
-        raise Error::WrongSendingOptions,
-              '"sending_options" does not contain the ' \
-              "'#{delivery_system}' \"delivery_system\""
+        raise Error::WrongDefaultDeliveryOptions,
+              '"default_delivery_options" does not a Hash'
       end
 
       options
@@ -291,7 +286,7 @@ module MailPlugger
       if @sending_method.nil? && !@passed_delivery_system.nil?
         :default_delivery_system
       elsif @sending_method.nil? ||
-            !DELIVERY_SENDING_METHODS.include?(@sending_method.to_sym) ||
+            !SENDING_METHODS.include?(@sending_method.to_sym) ||
             (@sending_method.to_sym == :default_delivery_system &&
               @passed_delivery_system.nil?)
         :plugged_in_first

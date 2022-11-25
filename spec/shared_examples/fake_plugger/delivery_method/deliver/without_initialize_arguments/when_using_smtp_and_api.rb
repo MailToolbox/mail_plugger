@@ -14,8 +14,8 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
         end
 
         MailPlugger.plug_in(api_delivery_system) do |api|
-          api.delivery_options = delivery_options
           api.client = client
+          api.delivery_options = delivery_options
         end
       end
 
@@ -103,8 +103,8 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
     context 'and API client plugged first' do
       before do
         MailPlugger.plug_in(api_delivery_system) do |api|
-          api.delivery_options = delivery_options
           api.client = client
+          api.delivery_options = delivery_options
         end
 
         MailPlugger.plug_in(smtp_delivery_system) do |smtp|

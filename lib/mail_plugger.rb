@@ -14,10 +14,10 @@ require 'fake_plugger/railtie' if defined?(Rails)
 module MailPlugger
   class << self
     attr_accessor :default_delivery_system,
-                  :sending_method,
-                  :sending_options
+                  :sending_method
 
     attr_reader :client,
+                :default_delivery_options,
                 :delivery_options,
                 :delivery_settings,
                 :delivery_systems,
@@ -36,8 +36,6 @@ module MailPlugger
     #     #  - random
     #     #  - round_robin
     #     config.sending_method = 'default_delivery_system'
-    #     # Default sending options for a plugged in client.
-    #     config.sending_options = { 'api_client' => { tag: 'test_message' } }
     #   end
     #
     def configure
@@ -100,7 +98,10 @@ module MailPlugger
     #             type: 'text/html; charset=UTF-8',
     #             value: @options[:html_part]
     #           }
-    #         ]
+    #         ],
+    #         tags: [
+    #           @options[:tag]
+    #         ],
     #       }
     #     end
     #
@@ -114,10 +115,12 @@ module MailPlugger
     #   end
     #
     #   MailPlugger.plug_in('api_client') do |api|
+    #     api.client = DefinedApiClientClass
+    #     # Default delivery options for the plugged in client.
+    #     api.default_delivery_options = { tag: 'test_tag' }
     #     # It will search these options in the Mail::Message object.
     #     api.delivery_options = [:to, :from, :subject, :text_part, :html_part]
     #     api.delivery_settings = { return_response: true }
-    #     api.client = DefinedApiClientClass
     #   end
     #
     def plug_in(delivery_system)
@@ -132,10 +135,16 @@ module MailPlugger
       raise Error::WrongPlugInOption, e.message
     end
 
-    # Define 'client', 'delivery_options' and 'delivery_settings' setter
-    # methods. These methods are generating a hash, where the key is the
-    # 'delivery_system'. This let us set/use more than one STMP/API.
-    %w[client delivery_options delivery_settings].each do |method|
+    # Define 'client', 'default_delivery_options', 'delivery_options' and
+    # 'delivery_settings' setter methods. These methods are generating a hash,
+    # where the key is the 'delivery_system'. This let us set/use more than one
+    # STMP/API.
+    %w[
+      client
+      default_delivery_options
+      delivery_options
+      delivery_settings
+    ].each do |method|
       define_method "#{method}=" do |value|
         variable = instance_variable_get("@#{method}")
         variable = instance_variable_set("@#{method}", {}) if variable.nil?

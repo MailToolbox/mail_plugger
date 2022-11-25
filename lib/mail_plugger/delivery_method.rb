@@ -36,13 +36,13 @@ module MailPlugger
 
       # -----------------------------------------------------------------------
 
+      @default_delivery_options   = MailPlugger.default_delivery_options
+
       @delivery_systems           = MailPlugger.delivery_systems
 
       @rotatable_delivery_systems = MailPlugger.rotatable_delivery_systems
 
       @sending_method             = MailPlugger.sending_method
-
-      @sending_options            = MailPlugger.sending_options
 
       # -----------------------------------------------------------------------
 

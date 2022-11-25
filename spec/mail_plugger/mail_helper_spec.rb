@@ -13,10 +13,10 @@ RSpec.describe MailPlugger::MailHelper do
           @delivery_options = options[:delivery_options]
           @delivery_settings = options[:delivery_settings]
           @passed_delivery_system = options[:passed_delivery_system]
+          @default_delivery_options = options[:default_delivery_options]
           @delivery_systems = options[:delivery_systems]
           @rotatable_delivery_systems = options[:rotatable_delivery_systems]
           @sending_method = options[:sending_method]
-          @sending_options = options[:sending_options]
           @default_delivery_system = options[:default_delivery_system]
           @message = options[:message]
         end
@@ -153,15 +153,13 @@ RSpec.describe MailPlugger::MailHelper do
       TestClass
         .new(
           delivery_options: delivery_options,
-          sending_options: sending_options,
-          default_delivery_system: default_delivery_system,
+          default_delivery_options: default_delivery_options,
           message: message
         )
         .delivery_data
     end
 
-    let(:sending_options) { nil }
-    let(:default_delivery_system) { nil }
+    let(:default_delivery_options) { nil }
 
     # rubocop:disable RSpec/VariableDefinition, RSpec/VariableName
     context 'when mail does NOT multipart' do
@@ -364,8 +362,7 @@ RSpec.describe MailPlugger::MailHelper do
     end
 
     context 'when default_data exists' do
-      let(:sending_options) { { 'delivery_system' => { key: :value } } }
-      let(:default_delivery_system) { 'delivery_system' }
+      let(:default_delivery_options) { { tag: 'test_tag' } }
 
       context 'and option does NOT defined in the mail' do
         let(:delivery_options) { %i[from to subject body] }
@@ -381,9 +378,9 @@ RSpec.describe MailPlugger::MailHelper do
           {
             'from' => ['from@example.com'],
             'to' => ['to@example.com'],
-            'key' => :value,
             'subject' => 'This is the message subject',
-            'body' => 'This is the message body'
+            'body' => 'This is the message body',
+            'tag' => 'test_tag'
           }
         end
 
@@ -402,7 +399,7 @@ RSpec.describe MailPlugger::MailHelper do
               subject 'This is the message subject'
               body    'This is the message body'
             end
-            message[:key] = 'defined in mail'
+            message[:tag] = 'defined_in_mail'
 
             message
           end
@@ -410,9 +407,9 @@ RSpec.describe MailPlugger::MailHelper do
             {
               'from' => ['from@example.com'],
               'to' => ['to@example.com'],
-              'key' => :value,
               'subject' => 'This is the message subject',
-              'body' => 'This is the message body'
+              'body' => 'This is the message body',
+              'tag' => 'test_tag'
             }
           end
 
@@ -422,7 +419,7 @@ RSpec.describe MailPlugger::MailHelper do
         end
 
         context 'and delivery_options contains this option' do
-          let(:delivery_options) { %i[from to subject body key] }
+          let(:delivery_options) { %i[from to subject body tag] }
           let(:message) do
             message = Mail.new do
               from    'from@example.com'
@@ -430,7 +427,7 @@ RSpec.describe MailPlugger::MailHelper do
               subject 'This is the message subject'
               body    'This is the message body'
             end
-            message[:key] = 'defined in mail'
+            message[:tag] = 'defined_in_mail'
 
             message
           end
@@ -438,9 +435,9 @@ RSpec.describe MailPlugger::MailHelper do
             {
               'from' => ['from@example.com'],
               'to' => ['to@example.com'],
-              'key' => 'defined in mail',
               'subject' => 'This is the message subject',
-              'body' => 'This is the message body'
+              'body' => 'This is the message body',
+              'tag' => 'defined_in_mail'
             }
           end
 
@@ -458,60 +455,44 @@ RSpec.describe MailPlugger::MailHelper do
     subject(:default_data) do
       TestClass
         .new(
-          sending_options: sending_options,
-          default_delivery_system: default_delivery_system
+          default_delivery_options: default_delivery_options
         )
         .default_data
     end
 
-    let(:default_delivery_system) { nil }
-
-    context 'when sending_options does NOT a hash' do
+    context 'when default_delivery_options does NOT a hash' do
       context 'but it is nil' do
-        let(:sending_options) { nil }
+        let(:default_delivery_options) { nil }
 
         it 'returns with empty hash' do
           expect(default_data).to eq({})
         end
       end
 
-      context 'but it is string' do
-        let(:sending_options) { 'default_data' }
+      context 'but it is a string' do
+        let(:default_delivery_options) { 'default_data' }
 
         it 'raises error' do
           expect { default_data }
-            .to raise_error(MailPlugger::Error::WrongSendingOptions)
+            .to raise_error(MailPlugger::Error::WrongDefaultDeliveryOptions)
+        end
+      end
+
+      context 'but it is an array' do
+        let(:default_delivery_options) { [] }
+
+        it 'raises error' do
+          expect { default_data }
+            .to raise_error(MailPlugger::Error::WrongDefaultDeliveryOptions)
         end
       end
     end
 
-    context 'when sending_options is a hash' do
-      let(:sending_options) { { 'delivery_system' => { key: :value } } }
+    context 'when default_delivery_options is a hash' do
+      let(:default_delivery_options) { { tag: 'test_tag' } }
 
-      context 'and delivery_system does NOT exist' do
-        it 'raises error' do
-          expect { default_data }
-            .to raise_error(MailPlugger::Error::WrongSendingOptions)
-        end
-      end
-
-      context 'and delivery_system exists' do
-        context 'but delivery_system does NOT exist in the sending_options' do
-          let(:default_delivery_system) { 'not_exist' }
-
-          it 'raises error' do
-            expect { default_data }
-              .to raise_error(MailPlugger::Error::WrongSendingOptions)
-          end
-        end
-
-        context 'and delivery_system exists in the sending_options' do
-          let(:default_delivery_system) { 'delivery_system' }
-
-          it 'returns with the given hash of the delivery_system' do
-            expect(default_data).to eq(sending_options[default_delivery_system])
-          end
-        end
+      it 'returns with the given hash of the delivery_system' do
+        expect(default_data).to eq(default_delivery_options)
       end
     end
   end

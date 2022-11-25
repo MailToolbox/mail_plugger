@@ -82,9 +82,9 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
         before do
           MailPlugger.plug_in(delivery_system) do |api|
+            api.client = client
             api.delivery_options = delivery_options
             api.delivery_settings = delivery_settings
-            api.client = client
           end
         end
 
@@ -101,8 +101,8 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
         context 'and sets debug value via settings' do
           subject(:deliver) do
             described_class.new(
-              delivery_options: delivery_options,
               client: client,
+              delivery_options: delivery_options,
               delivery_settings: delivery_settings
             ).deliver!(message)
           end
@@ -113,8 +113,8 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
         context 'and sets debug value via options' do
           subject(:deliver) do
             described_class.new(
-              delivery_options: delivery_options,
               client: client,
+              delivery_options: delivery_options,
               debug: delivery_settings[:fake_plugger_debug]
             ).deliver!(message)
           end

@@ -10,6 +10,10 @@ module MailPlugger
     # in cofigure block.
     class WrongConfigureOption < Error; end
 
+    # Specific error class for errors if default delivery opitons has a wrong
+    # type.
+    class WrongDefaultDeliveryOptions < Error; end
+
     # Specific error class for errors if delivery options are not given or
     # has a wrong type.
     class WrongDeliveryOptions < Error; end
@@ -26,8 +30,5 @@ module MailPlugger
     # Specific error class for errors if tries to add undeclared option
     # in plug_in block.
     class WrongPlugInOption < Error; end
-
-    # Specific error class for errors if sending opitons has a wrong type.
-    class WrongSendingOptions < Error; end
   end
 end

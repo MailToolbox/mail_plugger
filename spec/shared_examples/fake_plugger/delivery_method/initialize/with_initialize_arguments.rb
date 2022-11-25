@@ -4,23 +4,23 @@ RSpec.shared_examples 'fake_plugger/delivery_method/initialize/' \
                       'with_initialize_arguments' do
   context 'with initialize arguments' do
     shared_examples 'arguments' do |use_settings_or_options|
+      it 'sets client with given value' do
+        expect(init_method.instance_variable_get(:@client)).to eq(client)
+      end
+
       it 'sets delivery_options with given value' do
         expect(init_method.instance_variable_get(:@delivery_options))
           .to eq(delivery_options)
       end
 
-      it 'sets client with given value' do
-        expect(init_method.instance_variable_get(:@client)).to eq(client)
+      it 'sets delivery_settings with given value' do
+        expect(init_method.instance_variable_get(:@delivery_settings))
+          .to eq(delivery_settings)
       end
 
       it 'sets default_delivery_system with given value' do
         expect(init_method.instance_variable_get(:@default_delivery_system))
           .to eq(delivery_system)
-      end
-
-      it 'sets delivery_settings with given value' do
-        expect(init_method.instance_variable_get(:@delivery_settings))
-          .to eq(delivery_settings)
       end
 
       it 'sets message with nil' do
@@ -70,8 +70,8 @@ RSpec.shared_examples 'fake_plugger/delivery_method/initialize/' \
     context 'and sets debug value via settings' do
       subject(:init_method) do
         described_class.new(
-          delivery_options: delivery_options,
           client: client,
+          delivery_options: delivery_options,
           default_delivery_system: delivery_system,
           delivery_settings: delivery_settings
         )
@@ -80,9 +80,9 @@ RSpec.shared_examples 'fake_plugger/delivery_method/initialize/' \
       context 'when using MailPlugger.plug_in method' do
         before do
           MailPlugger.plug_in('different_api') do |api|
+            api.client = 'different client'
             api.delivery_options = 'different options'
             api.delivery_settings = 'different settings'
-            api.client = 'different client'
           end
         end
 
@@ -103,10 +103,10 @@ RSpec.shared_examples 'fake_plugger/delivery_method/initialize/' \
     context 'and sets debug value via options' do
       subject(:init_method) do
         described_class.new(
-          delivery_options: delivery_options,
           client: client,
-          default_delivery_system: delivery_system,
+          delivery_options: delivery_options,
           delivery_settings: delivery_settings,
+          default_delivery_system: delivery_system,
           debug: delivery_settings[:fake_plugger_debug],
           raw_message: delivery_settings[:fake_plugger_raw_message],
           response: delivery_settings[:fake_plugger_response],
@@ -117,9 +117,9 @@ RSpec.shared_examples 'fake_plugger/delivery_method/initialize/' \
       context 'when using MailPlugger.plug_in method' do
         before do
           MailPlugger.plug_in('different_api') do |api|
+            api.client = 'different client'
             api.delivery_options = 'different options'
             api.delivery_settings = 'different settings'
-            api.client = 'different client'
           end
         end
 

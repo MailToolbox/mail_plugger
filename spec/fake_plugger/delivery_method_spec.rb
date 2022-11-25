@@ -58,10 +58,10 @@ RSpec.describe FakePlugger::DeliveryMethod do
       fake_plugger_response: { response: 'OK' }
     }
   end
+  let(:default_delivery_options) { { tag: 'test_tag' } }
   let(:delivery_system) { 'delivery_system' }
-  let(:default_delivery_system) { nil }
-  let(:sending_method) { nil }
-  let(:sending_options) { nil }
+  let(:default_delivery_system) { 'delivery_system' }
+  let(:sending_method) { :default_delivery_system }
 
   describe '#initialize' do
     include_examples 'fake_plugger/delivery_method/initialize/' \

@@ -33,10 +33,10 @@ RSpec.describe MailPlugger::DeliveryMethod do
   let(:client) { DummyApi }
   let(:delivery_options) { %i[to from subject body] }
   let(:delivery_settings) { { key: :value } }
+  let(:default_delivery_options) { { tag: 'test_tag' } }
   let(:delivery_system) { 'delivery_system' }
-  let(:default_delivery_system) { nil }
-  let(:sending_method) { nil }
-  let(:sending_options) { nil }
+  let(:default_delivery_system) { 'delivery_system' }
+  let(:sending_method) { :default_delivery_system }
 
   describe '#initialize' do
     include_examples 'mail_plugger/delivery_method/initialize/' \

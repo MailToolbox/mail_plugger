@@ -16,14 +16,13 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
       end
 
       MailPlugger.plug_in(api_delivery_system) do |api|
-        api.delivery_options = delivery_options
         api.client = client
+        api.delivery_options = delivery_options
       end
 
       MailPlugger.configure do |config|
         config.default_delivery_system = default_delivery_system
         config.sending_method = sending_method
-        config.sending_options = sending_options
       end
 
       allow(message).to receive(:deliver!)
@@ -118,6 +117,8 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
         let(:sending_method) { :default_delivery_system }
 
         context 'but default_delivery_system is NOT configred' do
+          let(:default_delivery_system) { nil }
+
           it_behaves_like 'the message does NOT contain delivery_system',
                           'and using SMTP'
 
@@ -185,49 +186,6 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
         end
 
         it_behaves_like 'the message contains delivery_system'
-      end
-    end
-
-    context 'when sending_options is configured' do
-      let(:default_delivery_system) { api_delivery_system }
-      let(:sending_options) { { api_delivery_system => { key: :value } } }
-
-      context 'and message does NOT contain extra option' do
-        let(:message) { Mail.new }
-
-        it 'calls deliver method of the client with the option, ' \
-           'defined in the sending_options' do
-          expect(client).to receive(:new)
-            .with(hash_including(sending_options[api_delivery_system]))
-            .and_call_original
-          deliver
-        end
-      end
-
-      context 'and message contains extra option' do
-        let(:message) { Mail.new(key: 'defined in mail') }
-
-        context 'and delivery_options does NOT contain this option' do
-          it 'calls deliver method of the client with the option, ' \
-             'defined in the sending_options' do
-            expect(client).to receive(:new)
-              .with(hash_including(sending_options[api_delivery_system]))
-              .and_call_original
-            deliver
-          end
-        end
-
-        context 'and delivery_options contains this option' do
-          let(:delivery_options) { %i[to from subject body key] }
-
-          it 'calls deliver method of the client with the option, ' \
-             'defined in the message' do
-            expect(client).to receive(:new)
-              .with(hash_including(key: 'defined in mail'))
-              .and_call_original
-            deliver
-          end
-        end
       end
     end
   end

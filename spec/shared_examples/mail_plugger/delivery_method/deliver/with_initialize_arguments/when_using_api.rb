@@ -6,8 +6,8 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
     context 'and without deliver! method paramemter' do
       subject(:deliver) do
         described_class.new(
-          delivery_options: delivery_options,
           client: client,
+          delivery_options: delivery_options,
           default_delivery_system: delivery_system
         ).deliver!
       end
@@ -20,8 +20,8 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
     context 'and the deliver! method has paramemter' do
       subject(:deliver) do
         described_class.new(
-          delivery_options: delivery_options,
           client: client,
+          delivery_options: delivery_options,
           default_delivery_system: default_delivery_system
         ).deliver!(message)
       end

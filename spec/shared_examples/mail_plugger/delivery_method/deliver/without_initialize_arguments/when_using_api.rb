@@ -5,8 +5,9 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
   context 'when using API' do
     before do
       MailPlugger.plug_in(delivery_system) do |api|
-        api.delivery_options = delivery_options
         api.client = client
+        api.default_delivery_options = default_delivery_options
+        api.delivery_options = delivery_options
       end
     end
 
@@ -78,6 +79,137 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
 
               it 'calls deliver method of the client' do
                 expect(client).to receive_message_chain(:new, :deliver)
+                deliver
+              end
+            end
+          end
+        end
+
+        context 'when plug_in method has client' do
+          let(:message) { Mail.new }
+
+          context 'but client does NOT a class' do
+            let(:client) { 'not_class' }
+
+            it 'raises error' do
+              expect { deliver }
+                .to raise_error(MailPlugger::Error::WrongApiClient)
+            end
+          end
+
+          context 'but client does NOT have a deliver method' do
+            let(:client) { Class.new }
+
+            it 'raises error' do
+              expect { deliver }
+                .to raise_error(MailPlugger::Error::WrongApiClient)
+            end
+          end
+
+          context 'and client is a class with deliver method' do
+            let(:client) { DummyApi }
+
+            it 'does NOT raise error' do
+              expect { deliver }.not_to raise_error
+            end
+
+            it 'calls deliver method of the client' do
+              expect(client).to receive_message_chain(:new, :deliver)
+              deliver
+            end
+          end
+        end
+
+        context 'when plug_in method has default_delivery_options' do
+          context 'but default_delivery_options does NOT a hash' do
+            let(:default_delivery_options) { 'not_hash' }
+            let(:message) { Mail.new }
+
+            it 'raises error' do
+              expect { deliver }
+                .to raise_error(MailPlugger::Error::WrongDefaultDeliveryOptions)
+            end
+          end
+
+          context 'and default_delivery_options is a hash' do
+            let(:default_delivery_options) { { tag: 'test_tag' } }
+
+            context 'and message does NOT contain extra delivery options' do
+              let(:message) { Mail.new }
+
+              it 'calls deliver method of the client with the option, ' \
+                 'defined in the default_delivery_options' do
+                expect(client).to receive(:new)
+                  .with(hash_including(default_delivery_options))
+                  .and_call_original
+                deliver
+              end
+            end
+
+            context 'and message contains extra delivery options' do
+              let(:message) { Mail.new(tag: 'defined_in_mail') }
+
+              context 'and delivery_options does NOT contain this option' do
+                it 'calls deliver method of the client with the option, ' \
+                   'defined in the default_delivery_options' do
+                  expect(client).to receive(:new)
+                    .with(hash_including(default_delivery_options))
+                    .and_call_original
+                  deliver
+                end
+              end
+
+              context 'and delivery_options contains this option' do
+                let(:delivery_options) { %i[to from subject body tag] }
+
+                it 'calls deliver method of the client with the option, ' \
+                   'defined in the message' do
+                  expect(client).to receive(:new)
+                    .with(hash_including(tag: 'defined_in_mail'))
+                    .and_call_original
+                  deliver
+                end
+              end
+            end
+          end
+        end
+
+        context 'when plug_in method has delivery_options' do
+          let(:default_delivery_options) { nil }
+
+          context 'but delivery_options does NOT an array' do
+            let(:delivery_options) { 'not_array' }
+            let(:message) { Mail.new }
+
+            it 'raises error' do
+              expect { deliver }
+                .to raise_error(MailPlugger::Error::WrongDeliveryOptions)
+            end
+          end
+
+          context 'and delivery_options is a array' do
+            let(:delivery_options) { %i[to] }
+
+            context 'and message does NOT contain extra delivery options' do
+              let(:message) { Mail.new }
+
+              it 'calls deliver method of the client with the option, ' \
+                 'defined in the delivery_options with nil value' do
+                expect(client).to receive(:new)
+                  .with(hash_including(to: nil))
+                  .and_call_original
+                deliver
+              end
+            end
+
+            context 'and message contains extra delivery options' do
+              let(:message) { Mail.new(to: 'test@example.com') }
+
+              it 'calls deliver method of the client with the option, ' \
+                 'defined in the message' do
+                expect(client).to receive(:new)
+                  .with(hash_including(to: ['test@example.com']))
+                  .and_call_original
                 deliver
               end
             end
