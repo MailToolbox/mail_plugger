@@ -119,6 +119,7 @@ module FakePlugger
     #   # Using API:
     #
     #   MailPlugger.plug_in('test_api_client') do |api|
+    #     api.client = DefinedApiClientClass
     #     api.delivery_options = %i[from to subject body]
     #     api.delivery_settings = {
     #       fake_plugger_debug: true,
@@ -126,7 +127,6 @@ module FakePlugger
     #       fake_plugger_use_mail_grabber: true,
     #       fake_plugger_response: { response: 'OK' }
     #     }
-    #     api.client = DefinedApiClientClass
     #   end
     #
     #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
@@ -140,8 +140,8 @@ module FakePlugger
     #                      subject: 'Test email', body: 'Test email body')
     #
     #   FakePlugger::DeliveryMethod.new(
-    #     delivery_options: %i[from to subject body],
     #     client: DefinedApiClientClass,
+    #     delivery_options: %i[from to subject body],
     #     debug: true,
     #     raw_message: true,
     #     use_mail_grabber: true,
@@ -177,7 +177,7 @@ module FakePlugger
     end
 
     # Debug information for API
-    def debug_info_for_api
+    def debug_info_for_api # rubocop:disable Metrics/AbcSize
       puts <<~DEBUG_INFO
 
         ===================== FakePlugger::DeliveryMethod =====================
@@ -189,6 +189,12 @@ module FakePlugger
         ==> @delivery_options: #{@delivery_options.inspect}
 
         ==> @delivery_settings: #{@delivery_settings.inspect}
+
+        ==> @passed_delivery_system: #{@passed_delivery_system.inspect}
+
+        ==> @default_delivery_options: #{@default_delivery_options.inspect}
+
+        ==> @sending_method: #{@sending_method.inspect}
 
         ==> @default_delivery_system: #{@default_delivery_system.inspect}
 
@@ -220,6 +226,10 @@ module FakePlugger
         ------------------------------ Variables ------------------------------
 
         ==> @delivery_settings: #{@delivery_settings.inspect}
+
+        ==> @passed_delivery_system: #{@passed_delivery_system.inspect}
+
+        ==> @sending_method: #{@sending_method.inspect}
 
         ==> @default_delivery_system: #{@default_delivery_system.inspect}
 
