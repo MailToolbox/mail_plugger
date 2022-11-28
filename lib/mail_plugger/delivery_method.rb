@@ -111,8 +111,8 @@ module MailPlugger
     #   # Using API:
     #
     #   MailPlugger.plug_in('test_api_client') do |api|
-    #     api.delivery_options = %i[from to subject body]
     #     api.client = DefinedApiClientClass
+    #     api.delivery_options = %i[from to subject body]
     #   end
     #
     #   message = Mail.new(from: 'from@example.com', to: 'to@example.com',
@@ -126,8 +126,8 @@ module MailPlugger
     #                      subject: 'Test email', body: 'Test email body')
     #
     #   MailPlugger::DeliveryMethod.new(
-    #     delivery_options: %i[from to subject body],
-    #     client: DefinedApiClientClass
+    #     client: DefinedApiClientClass,
+    #     delivery_options: %i[from to subject body]
     #   ).deliver!(message)
     #
     def deliver!(message)
