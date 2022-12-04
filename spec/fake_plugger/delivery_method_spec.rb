@@ -32,22 +32,24 @@ RSpec.describe FakePlugger::DeliveryMethod do
     stub_const('MailGrabber::DeliveryMethod', mail_grabber_class)
   end
 
-  # rubocop:disable Style/RedundantInitialize
   let(:dummy_api_class) do
     Class.new do
-      def initialize(options = {}); end
+      def initialize(options = {})
+        # Dummy class for testing.
+      end
 
       def deliver; end
     end
   end
   let(:mail_grabber_class) do
     Class.new do
-      def initialize(options = {}); end
+      def initialize(options = {})
+        # Dummy class for testing.
+      end
 
       def deliver!(message); end
     end
   end
-  # rubocop:enable Style/RedundantInitialize
   let(:client) { DummyApi }
   let(:delivery_options) { %i[to from subject body] }
   let(:delivery_settings) do

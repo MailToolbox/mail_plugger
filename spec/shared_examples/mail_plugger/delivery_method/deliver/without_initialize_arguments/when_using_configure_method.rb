@@ -9,6 +9,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
     let(:smtp_delivery_system) { 'smtp_delivery_system' }
     let(:api_delivery_system) { 'api_delivery_system' }
     let(:delivery_settings) { { smtp_settings: { key: 'value' } } }
+    let(:client_object) { instance_double(client, deliver: true) }
 
     before do
       MailPlugger.plug_in(smtp_delivery_system) do |smtp|
@@ -26,6 +27,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
       end
 
       allow(message).to receive(:deliver!)
+      allow(client).to receive(:new).and_return(client_object)
     end
 
     shared_examples 'the message does NOT contain ' \
@@ -38,13 +40,13 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
 
       if using_protocol.match?('SMTP')
         it 'calls deliver! method of the message' do
-          expect(message).to receive(:deliver!)
           deliver
+          expect(message).to have_received(:deliver!)
         end
       else
         it 'calls deliver method of the client' do
-          expect(client).to receive_message_chain(:new, :deliver)
           deliver
+          expect(client_object).to have_received(:deliver)
         end
       end
     end
@@ -70,8 +72,8 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
           end
 
           it 'calls deliver! method of the message' do
-            expect(message).to receive(:deliver!)
             deliver
+            expect(message).to have_received(:deliver!)
           end
         end
 
@@ -85,8 +87,8 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
           end
 
           it 'calls deliver method of the client' do
-            expect(client).to receive_message_chain(:new, :deliver)
             deliver
+            expect(client_object).to have_received(:deliver)
           end
         end
       end
@@ -178,10 +180,10 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
           let(:message) { Mail.new }
 
           it 'calls deliver method of the message/client' do
-            expect(message).to receive(:deliver!)
             deliver.call
-            expect(client).to receive_message_chain(:new, :deliver)
+            expect(message).to have_received(:deliver!)
             deliver.call
+            expect(client_object).to have_received(:deliver)
           end
         end
 

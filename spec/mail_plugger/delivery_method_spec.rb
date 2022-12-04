@@ -21,15 +21,15 @@ require 'shared_examples/mail_plugger/delivery_method/deliver/' \
 RSpec.describe MailPlugger::DeliveryMethod do
   before { stub_const('DummyApi', dummy_api_class) }
 
-  # rubocop:disable Style/RedundantInitialize
   let(:dummy_api_class) do
     Class.new do
-      def initialize(options = {}); end
+      def initialize(options = {})
+        # Dummy class for testing.
+      end
 
       def deliver; end
     end
   end
-  # rubocop:enable Style/RedundantInitialize
   let(:client) { DummyApi }
   let(:delivery_options) { %i[to from subject body] }
   let(:delivery_settings) { { key: :value } }

@@ -36,6 +36,22 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
       end
 
       context 'and message paramemter is a Mail::Message object' do
+        shared_examples 'fake delivery of the message' do
+          let(:client_object) { instance_double(DummyApi, deliver: true) }
+
+          before { allow(DummyApi).to receive(:new).and_return(client_object) }
+
+          it 'does NOT raise error' do
+            expect { deliver }.not_to raise_error
+          end
+
+          it 'calls only the new method of the client' do
+            deliver
+            expect(DummyApi).to have_received(:new)
+            expect(client_object).not_to have_received(:deliver)
+          end
+        end
+
         context 'and default_delivery_system does NOT defined' do
           let(:default_delivery_system) { nil }
 
@@ -50,14 +66,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
               # It won't raise error because it gets delivery_system from
               # the hash key
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls only the new method of the client' do
-                expect(DummyApi).to receive(:new)
-                deliver
-              end
+              it_behaves_like 'fake delivery of the message'
             end
 
             context 'and message contains delivery_system' do
@@ -76,14 +85,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(DummyApi).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
             end
           end
@@ -96,14 +98,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
             context 'but message does NOT contain delivery_system' do
               let(:message) { Mail.new }
 
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls only the new method of the client' do
-                expect(client).to receive(:new)
-                deliver
-              end
+              it_behaves_like 'fake delivery of the message'
             end
 
             context 'and message contains delivery_system' do
@@ -122,14 +117,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(client).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
             end
           end
@@ -140,28 +128,14 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
             context 'but message does NOT contain delivery_system' do
               let(:message) { Mail.new }
 
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls only the new method of the client' do
-                expect(client).to receive(:new)
-                deliver
-              end
+              it_behaves_like 'fake delivery of the message'
             end
 
             context 'and message contains delivery_system' do
               context 'but the given delivery_system does NOT exist' do
                 let(:message) { Mail.new(delivery_system: 'key') }
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(client).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
 
               context 'and the given delivery_system exists' do
@@ -169,14 +143,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(client).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
             end
           end
@@ -196,14 +163,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
               # It won't raise error because the default_delivery_system
               # is defined
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls only the new method of the client' do
-                expect(DummyApi).to receive(:new)
-                deliver
-              end
+              it_behaves_like 'fake delivery of the message'
             end
 
             context 'and message contains delivery_system' do
@@ -227,27 +187,13 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
                 context 'and delivery_system value is string' do
                   let(:delivery_system) { 'delivery_system' }
 
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
-                  end
-
-                  it 'calls only the new method of the client' do
-                    expect(DummyApi).to receive(:new)
-                    deliver
-                  end
+                  it_behaves_like 'fake delivery of the message'
                 end
 
                 context 'and delivery_system value is symbol' do
                   let(:delivery_system) { :delivery_system }
 
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
-                  end
-
-                  it 'calls only the new method of the client' do
-                    expect(DummyApi).to receive(:new)
-                    deliver
-                  end
+                  it_behaves_like 'fake delivery of the message'
                 end
               end
             end
@@ -263,14 +209,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
               # It won't raise error because the default_delivery_system
               # is defined
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls only the new method of the client' do
-                expect(client).to receive(:new)
-                deliver
-              end
+              it_behaves_like 'fake delivery of the message'
             end
 
             context 'and message contains delivery_system' do
@@ -289,14 +228,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(client).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
             end
           end
@@ -307,28 +239,14 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
             context 'but message does NOT contain delivery_system' do
               let(:message) { Mail.new }
 
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls only the new method of the client' do
-                expect(client).to receive(:new)
-                deliver
-              end
+              it_behaves_like 'fake delivery of the message'
             end
 
             context 'and message contains delivery_system' do
               context 'but the given delivery_system does NOT exist' do
                 let(:message) { Mail.new(delivery_system: 'key') }
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(client).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
 
               context 'and the given delivery_system exists' do
@@ -336,14 +254,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(client).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
             end
           end
@@ -389,14 +300,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(DummyApi).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
             end
           end
@@ -436,14 +340,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(client).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
             end
           end
@@ -454,28 +351,14 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
             context 'but message does NOT contain delivery_system' do
               let(:message) { Mail.new }
 
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls only the new method of the client' do
-                expect(client).to receive(:new)
-                deliver
-              end
+              it_behaves_like 'fake delivery of the message'
             end
 
             context 'and message contains delivery_system' do
               context 'but the given delivery_system does NOT exist' do
                 let(:message) { Mail.new(delivery_system: 'key') }
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(client).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
 
               context 'and the given delivery_system exists' do
@@ -483,14 +366,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls only the new method of the client' do
-                  expect(client).to receive(:new)
-                  deliver
-                end
+                it_behaves_like 'fake delivery of the message'
               end
             end
           end

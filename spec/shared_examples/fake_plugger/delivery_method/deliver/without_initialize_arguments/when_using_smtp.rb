@@ -31,10 +31,8 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
       end
 
       context 'and message paramemter is a Mail::Message object' do
-        before { allow(message).to receive(:deliver!) }
-
-        context 'but message does NOT contain delivery_system' do
-          let(:message) { Mail.new }
+        shared_examples 'fake delivery of the message' do
+          before { allow(message).to receive(:deliver!) }
 
           it 'does NOT raise error' do
             expect { deliver }.not_to raise_error
@@ -42,7 +40,14 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
           it 'returns with the message' do
             expect(deliver).to eq(message)
+            expect(message).not_to have_received(:deliver!)
           end
+        end
+
+        context 'but message does NOT contain delivery_system' do
+          let(:message) { Mail.new }
+
+          it_behaves_like 'fake delivery of the message'
         end
 
         context 'and message contains delivery_system' do
@@ -61,25 +66,13 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
             context 'and delivery_system value is string' do
               let(:delivery_system) { 'delivery_system' }
 
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'returns with the message' do
-                expect(deliver).to eq(message)
-              end
+              it_behaves_like 'fake delivery of the message'
             end
 
             context 'and delivery_system value is symbol' do
               let(:delivery_system) { :delivery_system }
 
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'returns with the message' do
-                expect(deliver).to eq(message)
-              end
+              it_behaves_like 'fake delivery of the message'
             end
           end
         end

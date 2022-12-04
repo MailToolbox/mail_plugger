@@ -94,19 +94,12 @@ module MailPlugger
               '"default_delivery_options" does not a Hash'
       end
 
-      options
+      options.transform_keys(&:to_sym)
     end
 
-    # Tries to set up a default delivery system, if the 'delivery_system'
-    # wasn't defined in the Mail::Message object, and we're using
-    # MailPlugger.plug_in then it returns with first key of the stored
-    # 'delivery_systems'.
-    # When we aren't using MailPlugger.plug_in method and 'delivery_options',
-    # 'client' and/or 'delivery_settings' is a hash, then it tries to get the
-    # 'delivery_system' from the hashes.
-    # Otherwise, it returns with nil.
+    # Tries to set up the 'default_delivery_system'.
     #
-    # @return [Stirng/NilClass] the first key from the extracted keys or nil
+    # @return [Stirng/NilClass] the name of a delivery system or nil
     def default_delivery_system_get
       case sending_method_get
       when :default_delivery_system
@@ -143,7 +136,9 @@ module MailPlugger
     #
     # @return [String] with the name of the delivery system
     def delivery_system
-      @delivery_system ||=
+      return @delivery_system unless @delivery_system.nil?
+
+      @delivery_system =
         (@message && message_field_value_from(@message[:delivery_system])) ||
         @default_delivery_system
 
@@ -153,7 +148,7 @@ module MailPlugger
     end
 
     # Check the given 'delivery_options', 'client' and 'delivery_settings' are
-    # hashes and if one of that does then check the 'delivery_system' is valid
+    # hashes and if one of that does, then check the 'delivery_system' is valid
     # or not.
     # If the given 'delivery_system' is nil or doesn't match with extracted
     # keys, then it will raise error.
@@ -245,8 +240,8 @@ module MailPlugger
       message_field.public_send(*mail_field_value)
     end
 
-    # Check if either 'deliviery_options' or 'client' is a hash.
-    # Or delivery_settings is a hash but not contains 'DELIVERY_SETTINGS_KEYS'
+    # Check if either 'deliviery_options' or 'client' is a hash, or
+    # 'delivery_settings' is a hash but not contains 'DELIVERY_SETTINGS_KEYS'
     # in first level.
     #
     # @return [Boolean] true/false
@@ -295,23 +290,23 @@ module MailPlugger
       end
     end
 
-    # Extract 'settings'. If it's a hash, then it'll return the right
-    # settings, belongs to the delivery system. If 'delivery_settings' is nil,
-    # it'll return an empty hash. But if the value doesn't a hash, it'll raise
-    # an error.
+    # Extract 'settings'. If 'delivery_settings' is a hash, then it'll return
+    # the right settings, belongs to the delivery system. If 'delivery_settings'
+    # is nil, it'll return an empty hash. But if the value doesn't a hash, it'll
+    # raise an error.
     #
     # @return [Hash] settings for Mail delivery_method and/or FakePlugger
     def settings
-      @settings ||= option_value_from(@delivery_settings)
+      return @settings unless @settings.nil?
 
-      return {} if @settings.nil?
+      extracted_settings = option_value_from(@delivery_settings) || {}
 
-      unless @settings.is_a?(Hash)
+      unless extracted_settings.is_a?(Hash)
         raise Error::WrongDeliverySettings,
               '"delivery_settings" does not a Hash'
       end
 
-      @settings
+      @settings = extracted_settings.transform_keys(&:to_sym)
     end
   end
 end

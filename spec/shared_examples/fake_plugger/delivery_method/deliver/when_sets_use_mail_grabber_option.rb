@@ -11,6 +11,15 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
     let(:message) { Mail.new }
 
     shared_examples 'use_mail_grabber mode' do
+      let(:delivery_method) do
+        instance_double(MailGrabber::DeliveryMethod, deliver!: true)
+      end
+
+      before do
+        allow(MailGrabber::DeliveryMethod).to receive(:new)
+          .and_return(delivery_method)
+      end
+
       context 'and mail_grabber gem installed' do
         before { allow(Gem.loaded_specs).to receive(:key?).and_return(true) }
 
@@ -18,16 +27,16 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
           before { delivery_settings[:fake_plugger_use_mail_grabber] = false }
 
           it 'does NOT call deliver! method of MailGrabber::DeliveryMethod' do
-            expect(MailGrabber::DeliveryMethod).not_to receive(:new)
             deliver
+            expect(MailGrabber::DeliveryMethod).not_to have_received(:new)
+            expect(delivery_method).not_to have_received(:deliver!)
           end
         end
 
         context 'and use_mail_grabber mode is swiched on' do
           it 'calls deliver! method of MailGrabber::DeliveryMethod' do
-            expect(MailGrabber::DeliveryMethod)
-              .to receive_message_chain(:new, :deliver!)
             deliver
+            expect(delivery_method).to have_received(:deliver!)
           end
         end
       end
@@ -39,15 +48,17 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
           before { delivery_settings[:fake_plugger_use_mail_grabber] = false }
 
           it 'does NOT call deliver! method of MailGrabber::DeliveryMethod' do
-            expect(MailGrabber::DeliveryMethod).not_to receive(:new)
             deliver
+            expect(MailGrabber::DeliveryMethod).not_to have_received(:new)
+            expect(delivery_method).not_to have_received(:deliver!)
           end
         end
 
         context 'and use_mail_grabber mode is swiched on' do
           it 'does NOT call deliver! method of MailGrabber::DeliveryMethod' do
-            expect(MailGrabber::DeliveryMethod).not_to receive(:new)
             deliver
+            expect(MailGrabber::DeliveryMethod).not_to have_received(:new)
+            expect(delivery_method).not_to have_received(:deliver!)
           end
         end
       end

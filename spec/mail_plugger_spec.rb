@@ -4,10 +4,11 @@ require 'spec_helper'
 
 RSpec.describe MailPlugger do
   describe '.configure' do
-    # rubocop:disable Lint/EmptyBlock
     context 'when options are missing' do
       before do
-        described_class.configure {}
+        described_class.configure do
+          # Test empty block.
+        end
       end
 
       it 'does not set default_delivery_system' do
@@ -18,7 +19,6 @@ RSpec.describe MailPlugger do
         expect(described_class.sending_method).to be_nil
       end
     end
-    # rubocop:enable Lint/EmptyBlock
 
     context 'when use unexisting options' do
       let(:configure) do
@@ -56,9 +56,15 @@ RSpec.describe MailPlugger do
   end
 
   describe '.plug_in' do
+    subject(:plug_in) do
+      described_class.plug_in(delivery_system) do
+        # Test empty block.
+      end
+    end
+
     before do
       stub_const('DummyApi', Class.new)
-      stub_const('AnotherDummyApi', Class.new)
+      stub_const('OtherDummyApi', Class.new)
     end
 
     after do
@@ -73,52 +79,65 @@ RSpec.describe MailPlugger do
       end
     end
 
-    # rubocop:disable Lint/EmptyBlock
     context 'when delivery system is empty string' do
+      let(:delivery_system) { '' }
+
       it 'raises error' do
-        expect { described_class.plug_in('') {} }
+        expect { plug_in }
           .to raise_error(described_class::Error::WrongDeliverySystem)
       end
     end
 
     context 'when delivery system is a string and only has space' do
+      let(:delivery_system) { ' ' }
+
       it 'raises error' do
-        expect { described_class.plug_in(' ') {} }
+        expect { plug_in }
           .to raise_error(described_class::Error::WrongDeliverySystem)
       end
     end
 
     context 'when delivery system is nil' do
+      let(:delivery_system) { nil }
+
       it 'raises error' do
-        expect { described_class.plug_in(nil) {} }
+        expect { plug_in }
           .to raise_error(described_class::Error::WrongDeliverySystem)
       end
     end
 
     context 'when delivery system is an empty array' do
+      let(:delivery_system) { [] }
+
       it 'raises error' do
-        expect { described_class.plug_in([]) {} }
+        expect { plug_in }
           .to raise_error(described_class::Error::WrongDeliverySystem)
       end
     end
 
     context 'when delivery system is an array' do
+      let(:delivery_system) { [:delivery_system] }
+
       it 'raises error' do
-        expect { described_class.plug_in([:delivery_system]) {} }
+        expect { plug_in }
           .to raise_error(described_class::Error::WrongDeliverySystem)
       end
     end
 
     context 'when delivery system is an empty hash' do
+      let(:delivery_system) { {} }
+
       it 'raises error' do
-        expect { described_class.plug_in({}) {} }
+        expect { plug_in }
           .to raise_error(described_class::Error::WrongDeliverySystem)
       end
     end
 
     context 'when delivery system is a hash' do
+      let(:delivery_system) { { key: :value } }
+
       it 'raises error' do
-        expect { described_class.plug_in({ key: :value }) {} }
+        expect { plug_in }
           .to raise_error(described_class::Error::WrongDeliverySystem)
       end
     end
@@ -126,9 +145,7 @@ RSpec.describe MailPlugger do
     context 'when options are missing' do
       let(:delivery_system) { 'delivery_system' }
 
-      before do
-        described_class.plug_in(delivery_system) {}
-      end
+      before { plug_in }
 
       it 'does not set client' do
         expect(described_class.client).to be_nil
@@ -150,15 +167,15 @@ RSpec.describe MailPlugger do
         expect(described_class.delivery_systems).to eq([delivery_system])
       end
     end
-    # rubocop:enable Lint/EmptyBlock
 
     context 'when use unexisting options' do
-      let(:delivery_system) { 'delivery_system' }
-      let(:plug_in) do
+      subject(:plug_in) do
         described_class.plug_in(delivery_system) do |api|
           api.unexisting = 'something'
         end
       end
+
+      let(:delivery_system) { 'delivery_system' }
 
       it 'raises error' do
         expect { plug_in }
@@ -280,27 +297,23 @@ RSpec.describe MailPlugger do
             expect(described_class.delivery_settings)
               .to eq({
                        delivery_system => delivery_settings,
-                       another_delivery_system => another_delivery_settings
+                       other_delivery_system => other_delivery_settings
                      })
           end
         when 'API'
-          # rubocop:disable RSpec/ExampleLength
           it 'sets both default_delivery_options' do
             expect(described_class.default_delivery_options)
-              .to eq(
-                {
-                  delivery_system => default_delivery_options,
-                  another_delivery_system => another_default_delivery_options
-                }
-              )
+              .to eq({
+                       delivery_system => default_delivery_options,
+                       other_delivery_system => other_default_delivery_options
+                     })
           end
-          # rubocop:enable RSpec/ExampleLength
 
           it 'sets both delivery_options' do
             expect(described_class.delivery_options)
               .to eq({
                        delivery_system => delivery_options,
-                       another_delivery_system => another_delivery_options
+                       other_delivery_system => other_delivery_options
                      })
           end
 
@@ -308,7 +321,7 @@ RSpec.describe MailPlugger do
             expect(described_class.client)
               .to eq({
                        delivery_system => client,
-                       another_delivery_system => another_client
+                       other_delivery_system => other_client
                      })
           end
 
@@ -330,14 +343,14 @@ RSpec.describe MailPlugger do
             expect(described_class.delivery_settings)
               .to eq({
                        delivery_system => delivery_settings,
-                       another_delivery_system => another_delivery_settings
+                       other_delivery_system => other_delivery_settings
                      })
           end
         end
 
         it 'sets delivery_systems' do
           expect(described_class.delivery_systems)
-            .to eq([delivery_system, another_delivery_system])
+            .to eq([delivery_system, other_delivery_system])
         end
       end
 
@@ -346,31 +359,31 @@ RSpec.describe MailPlugger do
         let(:delivery_options) { nil }
         let(:delivery_settings) { { smtp_settings: { key: :value } } }
         let(:client) { nil }
-        let(:another_default_delivery_options) { nil }
-        let(:another_delivery_options) { nil }
-        let(:another_delivery_settings) { { smtp_settings: { key2: :value2 } } }
-        let(:another_client) { nil }
+        let(:other_default_delivery_options) { nil }
+        let(:other_delivery_options) { nil }
+        let(:other_delivery_settings) { { smtp_settings: { key2: :value2 } } }
+        let(:other_client) { nil }
 
         before do
           described_class.plug_in(delivery_system) do |smtp|
             smtp.delivery_settings = delivery_settings
           end
 
-          described_class.plug_in(another_delivery_system) do |smtp|
-            smtp.delivery_settings = another_delivery_settings
+          described_class.plug_in(other_delivery_system) do |smtp|
+            smtp.delivery_settings = other_delivery_settings
           end
         end
 
         context 'and delivery_systems values are string' do
           let(:delivery_system) { 'delivery_system' }
-          let(:another_delivery_system) { 'another_delivery_system' }
+          let(:other_delivery_system) { 'other_delivery_system' }
 
           it_behaves_like 'setting with the right data', 'SMTP'
         end
 
         context 'and delivery_systems values are symbol' do
           let(:delivery_system) { :delivery_system }
-          let(:another_delivery_system) { :another_delivery_system }
+          let(:other_delivery_system) { :other_delivery_system }
 
           it_behaves_like 'setting with the right data', 'SMTP'
         end
@@ -381,12 +394,12 @@ RSpec.describe MailPlugger do
         let(:delivery_options) { %i[to from subject body] }
         let(:delivery_settings) { { key: :value } }
         let(:client) { DummyApi }
-        let(:another_default_delivery_options) { { tag: 'another_test_tag' } }
-        let(:another_delivery_options) do
+        let(:other_default_delivery_options) { { tag: 'other_test_tag' } }
+        let(:other_delivery_options) do
           %i[to from subject text_part html_part]
         end
-        let(:another_delivery_settings) { { key2: :value2 } }
-        let(:another_client) { AnotherDummyApi }
+        let(:other_delivery_settings) { { key2: :value2 } }
+        let(:other_client) { OtherDummyApi }
 
         before do
           described_class.plug_in(delivery_system) do |api|
@@ -396,23 +409,23 @@ RSpec.describe MailPlugger do
             api.client = client
           end
 
-          described_class.plug_in(another_delivery_system) do |api|
-            api.default_delivery_options = another_default_delivery_options
-            api.delivery_options = another_delivery_options
-            api.client = another_client
+          described_class.plug_in(other_delivery_system) do |api|
+            api.default_delivery_options = other_default_delivery_options
+            api.delivery_options = other_delivery_options
+            api.client = other_client
           end
         end
 
         context 'and delivery_systems values are string' do
           let(:delivery_system) { 'delivery_system' }
-          let(:another_delivery_system) { 'another_delivery_system' }
+          let(:other_delivery_system) { 'other_delivery_system' }
 
           it_behaves_like 'setting with the right data', 'API'
         end
 
         context 'and delivery_systems values are symbol' do
           let(:delivery_system) { :delivery_system }
-          let(:another_delivery_system) { :another_delivery_system }
+          let(:other_delivery_system) { :other_delivery_system }
 
           it_behaves_like 'setting with the right data', 'API'
         end
@@ -423,10 +436,10 @@ RSpec.describe MailPlugger do
         let(:delivery_options) { %i[to from subject body] }
         let(:delivery_settings) { { key: :value } }
         let(:client) { DummyApi }
-        let(:another_default_delivery_options) { nil }
-        let(:another_delivery_options) { nil }
-        let(:another_delivery_settings) { { smtp_settings: { key2: :value2 } } }
-        let(:another_client) { nil }
+        let(:other_default_delivery_options) { nil }
+        let(:other_delivery_options) { nil }
+        let(:other_delivery_settings) { { smtp_settings: { key2: :value2 } } }
+        let(:other_client) { nil }
 
         before do
           described_class.plug_in(delivery_system) do |api|
@@ -436,21 +449,21 @@ RSpec.describe MailPlugger do
             api.client = client
           end
 
-          described_class.plug_in(another_delivery_system) do |smtp|
-            smtp.delivery_settings = another_delivery_settings
+          described_class.plug_in(other_delivery_system) do |smtp|
+            smtp.delivery_settings = other_delivery_settings
           end
         end
 
         context 'and delivery_systems values are string' do
           let(:delivery_system) { 'delivery_system' }
-          let(:another_delivery_system) { 'another_delivery_system' }
+          let(:other_delivery_system) { 'other_delivery_system' }
 
           it_behaves_like 'setting with the right data', 'SMTP and API'
         end
 
         context 'and delivery_systems values are symbol' do
           let(:delivery_system) { :delivery_system }
-          let(:another_delivery_system) { :another_delivery_system }
+          let(:other_delivery_system) { :other_delivery_system }
 
           it_behaves_like 'setting with the right data', 'SMTP and API'
         end

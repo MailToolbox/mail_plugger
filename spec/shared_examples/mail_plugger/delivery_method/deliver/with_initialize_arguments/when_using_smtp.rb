@@ -35,7 +35,18 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
       end
 
       context 'and message paramemter is a Mail::Message object' do
-        before { allow(message).to receive(:deliver!) }
+        shared_examples 'delivers the message' do
+          before { allow(message).to receive(:deliver!) }
+
+          it 'does NOT raise error' do
+            expect { deliver }.not_to raise_error
+          end
+
+          it 'calls deliver! method of the message' do
+            deliver
+            expect(message).to have_received(:deliver!)
+          end
+        end
 
         context 'and default_delivery_system does NOT defined' do
           let(:default_delivery_system) { nil }
@@ -129,14 +140,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                 context 'but message does NOT contain delivery_system' do
                   let(:message) { Mail.new }
 
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
-                  end
-
-                  it 'calls deliver! method of the message' do
-                    expect(message).to receive(:deliver!)
-                    deliver
-                  end
+                  it_behaves_like 'delivers the message'
                 end
 
                 context 'and message contains delivery_system' do
@@ -145,14 +149,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                   context 'but the given delivery_system does NOT exist' do
                     let(:message) { Mail.new(delivery_system: 'key') }
 
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls deliver! method of the message' do
-                      expect(message).to receive(:deliver!)
-                      deliver
-                    end
+                    it_behaves_like 'delivers the message'
                   end
 
                   context 'and the given delivery_system exists' do
@@ -160,14 +157,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                       Mail.new(delivery_system: delivery_system)
                     end
 
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls deliver! method of the message' do
-                      expect(message).to receive(:deliver!)
-                      deliver
-                    end
+                    it_behaves_like 'delivers the message'
                   end
                 end
               end
@@ -270,14 +260,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                 context 'but message does NOT contain delivery_system' do
                   let(:message) { Mail.new }
 
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
-                  end
-
-                  it 'calls deliver! method of the message' do
-                    expect(message).to receive(:deliver!)
-                    deliver
-                  end
+                  it_behaves_like 'delivers the message'
                 end
 
                 context 'and message contains delivery_system' do
@@ -296,14 +279,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                       Mail.new(delivery_system: delivery_system)
                     end
 
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls deliver! method of the message' do
-                      expect(message).to receive(:deliver!)
-                      deliver
-                    end
+                    it_behaves_like 'delivers the message'
                   end
                 end
               end
@@ -481,14 +457,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                 context 'but message does NOT contain delivery_system' do
                   let(:message) { Mail.new }
 
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
-                  end
-
-                  it 'calls deliver! method of the message' do
-                    expect(message).to receive(:deliver!)
-                    deliver
-                  end
+                  it_behaves_like 'delivers the message'
                 end
 
                 context 'and message contains delivery_system' do
@@ -497,14 +466,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                   context 'but the given delivery_system does NOT exist' do
                     let(:message) { Mail.new(delivery_system: 'key') }
 
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls deliver! method of the message' do
-                      expect(message).to receive(:deliver!)
-                      deliver
-                    end
+                    it_behaves_like 'delivers the message'
                   end
 
                   context 'and the given delivery_system exists' do
@@ -512,14 +474,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                       Mail.new(delivery_system: delivery_system)
                     end
 
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls deliver! method of the message' do
-                      expect(message).to receive(:deliver!)
-                      deliver
-                    end
+                    it_behaves_like 'delivers the message'
                   end
                 end
               end
@@ -622,14 +577,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                 context 'but message does NOT contain delivery_system' do
                   let(:message) { Mail.new }
 
-                  it 'does NOT raise error' do
-                    expect { deliver }.not_to raise_error
-                  end
-
-                  it 'calls deliver! method of the message' do
-                    expect(message).to receive(:deliver!)
-                    deliver
-                  end
+                  it_behaves_like 'delivers the message'
                 end
 
                 context 'and message contains delivery_system' do
@@ -648,14 +596,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                       Mail.new(delivery_system: delivery_system)
                     end
 
-                    it 'does NOT raise error' do
-                      expect { deliver }.not_to raise_error
-                    end
-
-                    it 'calls deliver! method of the message' do
-                      expect(message).to receive(:deliver!)
-                      deliver
-                    end
+                    it_behaves_like 'delivers the message'
                   end
                 end
               end

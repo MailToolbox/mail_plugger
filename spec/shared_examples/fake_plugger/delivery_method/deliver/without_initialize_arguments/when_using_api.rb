@@ -22,6 +22,22 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
     context 'and the deliver! method has paramemter' do
       subject(:deliver) { described_class.new.deliver!(message) }
 
+      shared_examples 'fake delivery of the message' do
+        let(:client_object) { instance_double(client, deliver: true) }
+
+        before { allow(client).to receive(:new).and_return(client_object) }
+
+        it 'does NOT raise error' do
+          expect { deliver }.not_to raise_error
+        end
+
+        it 'calls only the new method of the client' do
+          deliver
+          expect(client).to have_received(:new)
+          expect(client_object).not_to have_received(:deliver)
+        end
+      end
+
       context 'and message paramemter does NOT a Mail::Message object' do
         let(:message) { nil }
 
@@ -34,14 +50,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
         context 'but message does NOT contain delivery_system' do
           let(:message) { Mail.new }
 
-          it 'does NOT raise error' do
-            expect { deliver }.not_to raise_error
-          end
-
-          it 'calls only the new method of the client' do
-            expect(client).to receive(:new)
-            deliver
-          end
+          it_behaves_like 'fake delivery of the message'
         end
 
         context 'and message contains delivery_system' do
@@ -60,27 +69,13 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
             context 'and delivery_system value is string' do
               let(:delivery_system) { 'delivery_system' }
 
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls only the new method of the client' do
-                expect(client).to receive(:new)
-                deliver
-              end
+              it_behaves_like 'fake delivery of the message'
             end
 
             context 'and delivery_system value is symbol' do
               let(:delivery_system) { :delivery_system }
 
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls only the new method of the client' do
-                expect(client).to receive(:new)
-                deliver
-              end
+              it_behaves_like 'fake delivery of the message'
             end
           end
         end
@@ -109,14 +104,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
           context 'and client is a class with deliver method' do
             let(:client) { DummyApi }
 
-            it 'does NOT raise error' do
-              expect { deliver }.not_to raise_error
-            end
-
-            it 'calls only the new method of the client' do
-              expect(client).to receive(:new)
-              deliver
-            end
+            it_behaves_like 'fake delivery of the message'
           end
         end
 
@@ -134,15 +122,18 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
           context 'and default_delivery_options is a hash' do
             let(:default_delivery_options) { { tag: 'test_tag' } }
 
+            before do
+              allow(client).to receive(:new).and_call_original
+              deliver
+            end
+
             context 'and message does NOT contain extra delivery options' do
               let(:message) { Mail.new }
 
               it 'calls deliver method of the client with the option, ' \
                  'defined in the default_delivery_options' do
-                expect(client).to receive(:new)
+                expect(client).to have_received(:new)
                   .with(hash_including(default_delivery_options))
-                  .and_call_original
-                deliver
               end
             end
 
@@ -152,10 +143,8 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
               context 'and delivery_options does NOT contain this option' do
                 it 'calls deliver method of the client with the option, ' \
                    'defined in the default_delivery_options' do
-                  expect(client).to receive(:new)
+                  expect(client).to have_received(:new)
                     .with(hash_including(default_delivery_options))
-                    .and_call_original
-                  deliver
                 end
               end
 
@@ -164,10 +153,8 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
                 it 'calls deliver method of the client with the option, ' \
                    'defined in the message' do
-                  expect(client).to receive(:new)
+                  expect(client).to have_received(:new)
                     .with(hash_including(tag: 'defined_in_mail'))
-                    .and_call_original
-                  deliver
                 end
               end
             end
@@ -190,15 +177,18 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
           context 'and delivery_options is a array' do
             let(:delivery_options) { %i[to] }
 
+            before do
+              allow(client).to receive(:new).and_call_original
+              deliver
+            end
+
             context 'and message does NOT contain extra delivery options' do
               let(:message) { Mail.new }
 
               it 'calls deliver method of the client with the option, ' \
                  'defined in the delivery_options with nil value' do
-                expect(client).to receive(:new)
+                expect(client).to have_received(:new)
                   .with(hash_including(to: nil))
-                  .and_call_original
-                deliver
               end
             end
 
@@ -207,10 +197,8 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
               it 'calls deliver method of the client with the option, ' \
                  'defined in the message' do
-                expect(client).to receive(:new)
+                expect(client).to have_received(:new)
                   .with(hash_including(to: ['test@example.com']))
-                  .and_call_original
-                deliver
               end
             end
           end

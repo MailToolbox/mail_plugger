@@ -292,15 +292,16 @@ module FakePlugger
 
     # Extract settings values and update attributes.
     def update_settings
-      # rubocop:disable Naming/MemoizedInstanceVariableName
-      @debug            ||= settings[:fake_plugger_debug] || false
+      @response = settings[:fake_plugger_response] if @response.nil?
 
-      @raw_message      ||= settings[:fake_plugger_raw_message] || false
+      %w[debug raw_message use_mail_grabber].each do |variable_name|
+        next unless instance_variable_get("@#{variable_name}").nil?
 
-      @response         ||= settings[:fake_plugger_response]
-
-      @use_mail_grabber ||= settings[:fake_plugger_use_mail_grabber] || false
-      # rubocop:enable Naming/MemoizedInstanceVariableName
+        instance_variable_set(
+          "@#{variable_name}",
+          settings[:"fake_plugger_#{variable_name}"] || false
+        )
+      end
     end
   end
 end

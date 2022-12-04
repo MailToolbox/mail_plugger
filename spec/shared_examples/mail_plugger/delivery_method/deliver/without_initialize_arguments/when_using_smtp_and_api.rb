@@ -7,6 +7,30 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
     let(:api_delivery_system) { 'api_delivery_system' }
     let(:delivery_settings) { { smtp_settings: { key: 'value' } } }
 
+    shared_examples 'delivers the message' do |smtp_or_api|
+      it 'does NOT raise error' do
+        expect { deliver }.not_to raise_error
+      end
+
+      if smtp_or_api == 'via SMTP'
+        before { allow(message).to receive(:deliver!) }
+
+        it 'calls deliver! method of the message' do
+          deliver
+          expect(message).to have_received(:deliver!)
+        end
+      else
+        before { allow(client).to receive(:new).and_return(client_object) }
+
+        let(:client_object) { instance_double(client, deliver: true) }
+
+        it 'calls deliver method of the client' do
+          deliver
+          expect(client_object).to have_received(:deliver)
+        end
+      end
+    end
+
     context 'and SMTP client plugged first' do
       before do
         MailPlugger.plug_in(smtp_delivery_system) do |smtp|
@@ -40,19 +64,10 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
         end
 
         context 'and message paramemter is a Mail::Message object' do
-          before { allow(message).to receive(:deliver!) }
-
           context 'but message does NOT contain delivery_system' do
             let(:message) { Mail.new }
 
-            it 'does NOT raise error' do
-              expect { deliver }.not_to raise_error
-            end
-
-            it 'calls deliver! method of the message' do
-              expect(message).to receive(:deliver!)
-              deliver
-            end
+            it_behaves_like 'delivers the message', 'via SMTP'
           end
 
           context 'and message contains delivery_system' do
@@ -71,14 +86,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: smtp_delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls deliver! method of the message' do
-                  expect(message).to receive(:deliver!)
-                  deliver
-                end
+                it_behaves_like 'delivers the message', 'via SMTP'
               end
 
               context 'and delivery_system value is the API client' do
@@ -86,14 +94,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: api_delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls deliver method of the client' do
-                  expect(client).to receive_message_chain(:new, :deliver)
-                  deliver
-                end
+                it_behaves_like 'delivers the message', 'via API'
               end
             end
           end
@@ -134,19 +135,10 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
         end
 
         context 'and message paramemter is a Mail::Message object' do
-          before { allow(message).to receive(:deliver!) }
-
           context 'but message does NOT contain delivery_system' do
             let(:message) { Mail.new }
 
-            it 'does NOT raise error' do
-              expect { deliver }.not_to raise_error
-            end
-
-            it 'calls deliver method of the client' do
-              expect(client).to receive_message_chain(:new, :deliver)
-              deliver
-            end
+            it_behaves_like 'delivers the message', 'via API'
           end
 
           context 'and message contains delivery_system' do
@@ -165,14 +157,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: smtp_delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls deliver! method of the message' do
-                  expect(message).to receive(:deliver!)
-                  deliver
-                end
+                it_behaves_like 'delivers the message', 'via SMTP'
               end
 
               context 'and delivery_system value is the API client' do
@@ -180,14 +165,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
                   Mail.new(delivery_system: api_delivery_system)
                 end
 
-                it 'does NOT raise error' do
-                  expect { deliver }.not_to raise_error
-                end
-
-                it 'calls deliver method of the client' do
-                  expect(client).to receive_message_chain(:new, :deliver)
-                  deliver
-                end
+                it_behaves_like 'delivers the message', 'via API'
               end
             end
           end

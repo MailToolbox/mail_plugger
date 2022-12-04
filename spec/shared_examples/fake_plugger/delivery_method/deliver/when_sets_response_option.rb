@@ -26,6 +26,13 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
     end
 
     shared_examples 'fake response' do |use_settings_method, delivery_method|
+      let(:client_object) { instance_double(client, deliver: true) }
+
+      before do
+        allow(client).to receive(:new).and_return(client_object)
+        allow(message).to receive(:delivery_method)
+      end
+
       shared_examples 'expected method calls' do |use_delivery_data|
         # rubocop:disable RSpec/AnyInstance
         it 'does NOT call client method' do
@@ -82,8 +89,8 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
         # rubocop:enable RSpec/AnyInstance
 
         it 'does NOT call the new method of the client' do
-          expect(client).not_to receive(:new)
           deliver
+          expect(client).not_to have_received(:new)
         end
       end
 
@@ -92,13 +99,14 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
         if delivery_method == 'SMTP'
           it 'calls the delivery_method method of the message' do
-            expect(message).to receive(:delivery_method)
             deliver
+            expect(message).to have_received(:delivery_method)
           end
         else
-          it 'calls the new method of the client' do
-            expect(client).to receive(:new)
+          it 'calls only the new method of the client' do
             deliver
+            expect(client).to have_received(:new)
+            expect(client_object).not_to have_received(:deliver)
           end
         end
       end

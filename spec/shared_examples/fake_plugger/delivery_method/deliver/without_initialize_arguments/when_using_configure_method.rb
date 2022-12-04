@@ -9,6 +9,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
     let(:smtp_delivery_system) { 'smtp_delivery_system' }
     let(:api_delivery_system) { 'api_delivery_system' }
     let(:delivery_settings) { { smtp_settings: { key: 'value' } } }
+    let(:client_object) { instance_double(client, deliver: true) }
 
     before do
       MailPlugger.plug_in(smtp_delivery_system) do |smtp|
@@ -26,6 +27,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
       end
 
       allow(message).to receive(:deliver!)
+      allow(client).to receive(:new).and_return(client_object)
     end
 
     shared_examples 'the message does NOT contain ' \
@@ -42,8 +44,9 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
         end
       else
         it 'calls only the new method of the client' do
-          expect(client).to receive(:new)
           deliver
+          expect(client).to have_received(:new)
+          expect(client_object).not_to have_received(:deliver)
         end
       end
     end
@@ -70,6 +73,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
           it 'returns with the message' do
             expect(deliver).to eq(message)
+            expect(message).not_to have_received(:deliver!)
           end
         end
 
@@ -83,8 +87,9 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
           end
 
           it 'calls only the new method of the client' do
-            expect(client).to receive(:new)
             deliver
+            expect(client).to have_received(:new)
+            expect(client_object).not_to have_received(:deliver)
           end
         end
       end
@@ -178,8 +183,10 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
           it 'returns with the message or calls only the new method of the ' \
              'client' do
             expect(deliver.call).to eq(message)
-            expect(client).to receive(:new)
+            expect(message).not_to have_received(:deliver!)
             deliver.call
+            expect(client).to have_received(:new)
+            expect(client_object).not_to have_received(:deliver)
           end
         end
 

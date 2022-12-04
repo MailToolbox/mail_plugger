@@ -29,19 +29,23 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
       end
 
       context 'and message paramemter is a Mail::Message object' do
-        before { allow(message).to receive(:deliver!) }
-
-        context 'but message does NOT contain delivery_system' do
-          let(:message) { Mail.new }
+        shared_examples 'delivers the message' do
+          before { allow(message).to receive(:deliver!) }
 
           it 'does NOT raise error' do
             expect { deliver }.not_to raise_error
           end
 
           it 'calls deliver! method of the message' do
-            expect(message).to receive(:deliver!)
             deliver
+            expect(message).to have_received(:deliver!)
           end
+        end
+
+        context 'but message does NOT contain delivery_system' do
+          let(:message) { Mail.new }
+
+          it_behaves_like 'delivers the message'
         end
 
         context 'and message contains delivery_system' do
@@ -60,27 +64,13 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
             context 'and delivery_system value is string' do
               let(:delivery_system) { 'delivery_system' }
 
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls deliver! method of the message' do
-                expect(message).to receive(:deliver!)
-                deliver
-              end
+              it_behaves_like 'delivers the message'
             end
 
             context 'and delivery_system value is symbol' do
               let(:delivery_system) { :delivery_system }
 
-              it 'does NOT raise error' do
-                expect { deliver }.not_to raise_error
-              end
-
-              it 'calls deliver! method of the message' do
-                expect(message).to receive(:deliver!)
-                deliver
-              end
+              it_behaves_like 'delivers the message'
             end
           end
         end
