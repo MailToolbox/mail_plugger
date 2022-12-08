@@ -68,9 +68,9 @@ class SparkPostApiClient
 end
 
 MailPlugger.plug_in('sparkpost') do |api|
+  api.client = SparkPostApiClient
   api.delivery_options = %i[from to subject text_part html_part options tag metadata]
   api.delivery_settings = { return_response: true }
-  api.client = SparkPostApiClient
 end
 ```
 
@@ -130,9 +130,9 @@ class SparkPostApiClient
 end
 
 MailPlugger.plug_in('sparkpost') do |api|
+  api.client = SparkPostApiClient
   api.delivery_options = %i[to options message_obj tag metadata]
   api.delivery_settings = { return_response: true }
-  api.client = SparkPostApiClient
 end
 ```
 

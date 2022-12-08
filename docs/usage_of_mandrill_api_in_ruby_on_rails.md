@@ -57,9 +57,9 @@ class MandrillApiClient
 end
 
 MailPlugger.plug_in('mandrill') do |api|
+  api.client = MandrillApiClient
   api.delivery_options = %i[from to subject text_part html_part tag]
   api.delivery_settings = { return_response: true }
-  api.client = MandrillApiClient
 end
 ```
 
@@ -92,9 +92,9 @@ class MandrillApiClient
 end
 
 MailPlugger.plug_in('mandrill') do |api|
+  api.client = MandrillApiClient
   api.delivery_options = %i[message_obj]
   api.delivery_settings = { return_response: true }
-  api.client = MandrillApiClient
 end
 ```
 

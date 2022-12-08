@@ -63,9 +63,9 @@ class SendGridApiClient
 end
 
 MailPlugger.plug_in('sendgrid') do |api|
+  api.client = SendGridApiClient
   api.delivery_options = %i[from to subject text_part html_part]
   api.delivery_settings = { return_response: true }
-  api.client = SendGridApiClient
 end
 ```
 

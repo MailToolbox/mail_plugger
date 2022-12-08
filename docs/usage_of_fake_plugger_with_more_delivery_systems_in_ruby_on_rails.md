@@ -60,12 +60,12 @@ class TestApiClientClass
 end
 
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject text_part html_part]
   api.delivery_settings = {
     return_response: true,
     fake_plugger_response: 'using API: OK'
   }
-  api.client = TestApiClientClass
 end
 ```
 

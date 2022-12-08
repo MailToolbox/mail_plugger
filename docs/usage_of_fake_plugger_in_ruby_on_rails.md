@@ -473,6 +473,10 @@ TestMailer.send_test.deliver_now
 #
 #==> @delivery_settings: {"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_debug=>true}}
 #
+#==> @passed_default_delivery_system: nil
+#
+#==> @sending_method: nil
+#
 #==> @default_delivery_system: "test_smtp_client"
 #
 #==> @message: #<Mail::Message:61240, Multipart: true, Headers: <Date: Sun, 06 Jun 2021 11:50:34 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60bc9a6ac0c6a_e993ec04919df@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60bc9a6abe156_e993ec049187c"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
@@ -544,6 +548,10 @@ TestMailer.send_test.deliver_now!
 #------------------------------ Variables ------------------------------
 #
 #==> @delivery_settings: {"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_debug=>true}}
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: "test_smtp_client"
 #
@@ -754,8 +762,8 @@ class TestApiClientClass
 end
 
 MailPlugger.plug_in('test_api_client') do |api|
-  api.delivery_options = %i[from to subject text_part html_part]
   api.client = TestApiClientClass
+  api.delivery_options = %i[from to subject text_part html_part]
 end
 ```
 
@@ -935,9 +943,9 @@ Let's add delivery settings as well in `config/initializers/mail_plugger.rb`.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject text_part html_part]
   api.delivery_settings = { return_response: true }
-  api.client = TestApiClientClass
 end
 ```
 
@@ -1094,9 +1102,9 @@ Let's add debug option as well in `config/initializers/mail_plugger.rb`.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject text_part html_part]
   api.delivery_settings = { return_response: true, fake_plugger_debug: true }
-  api.client = TestApiClientClass
 end
 ```
 
@@ -1191,6 +1199,12 @@ TestMailer.send_test.deliver_now
 #
 #==> @delivery_settings: {"test_api_client"=>{:return_response=>true, :fake_plugger_debug=>true}}
 #
+#==> @passed_default_delivery_system: nil
+#
+#==> @default_delivery_options: nil
+#
+#==> @sending_method: nil
+#
 #==> @default_delivery_system: "test_api_client"
 #
 #==> @message: #<Mail::Message:61100, Multipart: true, Headers: <Date: Sat, 02 Jan 2021 15:08:53 +0100>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <5ff07e7597b40_104cfebb4988d3@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_5ff07e75956a7_104cfebb498739"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
@@ -1273,6 +1287,12 @@ TestMailer.send_test.deliver_now!
 #
 #==> @delivery_settings: {"test_api_client"=>{:return_response=>true, :fake_plugger_debug=>true}}
 #
+#==> @passed_default_delivery_system: nil
+#
+#==> @default_delivery_options: nil
+#
+#==> @sending_method: nil
+#
 #==> @default_delivery_system: "test_api_client"
 #
 #==> @message: #<Mail::Message:61160, Multipart: true, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60052c37c7a8c_165c5ebb41651a"; charset=UTF-8>>
@@ -1298,9 +1318,9 @@ Let's add fake response in `config/initializers/mail_plugger.rb`.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject text_part html_part]
   api.delivery_settings = { return_response: true, fake_plugger_response: { status: :ok } }
-  api.client = TestApiClientClass
 end
 ```
 

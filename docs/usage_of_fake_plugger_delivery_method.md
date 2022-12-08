@@ -151,7 +151,7 @@ We can add simple options to `FakePlugger::DeliveryMethod`.
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 
-FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], client: TestApiClientClass, debug: true, raw_message: true).deliver!(message)
+FakePlugger::DeliveryMethod.new(client: TestApiClientClass, delivery_options: %i[from to subject body], debug: true, raw_message: true).deliver!(message)
 ```
 
 Or we can add these options in Hash and set `default_delivery_system`.
@@ -159,7 +159,7 @@ Or we can add these options in Hash and set `default_delivery_system`.
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 
-FakePlugger::DeliveryMethod.new(delivery_options: { 'test_api_client' => %i[from to subject body] }, client: { 'test_api_client' => TestApiClientClass }, default_delivery_system: 'test_api_client', debug: true, raw_message: true).deliver!(message)
+FakePlugger::DeliveryMethod.new(client: { 'test_api_client' => TestApiClientClass }, delivery_options: { 'test_api_client' => %i[from to subject body] }, default_delivery_system: 'test_api_client', debug: true, raw_message: true).deliver!(message)
 ```
 
 Add `delivery_system` in the `Mail::Message` object (it will search this value in the given Hash). The `delivery_system` type in the `Mail::Message` object should match with the given key type of the Hash (if `delivery_system` is String then Hash key should String as well).
@@ -167,7 +167,7 @@ Add `delivery_system` in the `Mail::Message` object (it will search this value i
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body', delivery_system: 'test_api_client')
 
-FakePlugger::DeliveryMethod.new(delivery_options: { 'test_api_client' => %i[from to subject body] }, client: { 'test_api_client' => TestApiClientClass }, debug: true, raw_message: true).deliver!(message)
+FakePlugger::DeliveryMethod.new(client: { 'test_api_client' => TestApiClientClass }, delivery_options: { 'test_api_client' => %i[from to subject body] }, debug: true, raw_message: true).deliver!(message)
 ```
 
 If we are not adding `delivery_system` anywhere then it will use the first key of the Hash.
@@ -175,7 +175,7 @@ If we are not adding `delivery_system` anywhere then it will use the first key o
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 
-FakePlugger::DeliveryMethod.new(delivery_options: { 'test_api_client' => %i[from to subject body] }, client: { 'test_api_client' => TestApiClientClass }, debug: true, raw_message: true).deliver!(message)
+FakePlugger::DeliveryMethod.new(client: { 'test_api_client' => TestApiClientClass }, delivery_options: { 'test_api_client' => %i[from to subject body] }, debug: true, raw_message: true).deliver!(message)
 ```
 
 We can manipulate the response to get back anything what we want.
@@ -199,7 +199,7 @@ Without the response parameter, it returns with `client` object, then we can for
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 
-FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], client: TestApiClientClass).deliver!(message).deliver
+FakePlugger::DeliveryMethod.new(client: TestApiClientClass, delivery_options: %i[from to subject body]).deliver!(message).deliver
 ```
 
 If we installed **[MailGrabber](https://github.com/MailToolbox/mail_grabber#usage)** gem, then we can store messages, which **[MailGrabber](https://github.com/MailToolbox/mail_grabber#usage)** will show us (please follow the link to check how to do that).
@@ -207,20 +207,20 @@ If we installed **[MailGrabber](https://github.com/MailToolbox/mail_grabber#usag
 ```ruby
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 
-FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], client: TestApiClientClass, use_mail_grabber: true).deliver!(message)
+FakePlugger::DeliveryMethod.new(client: TestApiClientClass, delivery_options: %i[from to subject body], use_mail_grabber: true).deliver!(message)
 ```
 
 We can use `MailPlugger.plug_in` to add our configurations.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject body]
   api.delivery_settings = {
     fake_plugger_debug: true,
     fake_plugger_raw_message: true,
     fake_plugger_use_mail_grabber: true
   }
-  api.client = TestApiClientClass
 end
 
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')

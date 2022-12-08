@@ -71,9 +71,9 @@ class AwsSesApiClient
 end
 
 MailPlugger.plug_in('aws_ses') do |api|
+  api.client = AwsSesApiClient
   api.delivery_options = %i[from to subject text_part html_part message_obj tag configuration_set_name]
   api.delivery_settings = { return_response: true }
-  api.client = AwsSesApiClient
 end
 ```
 
@@ -124,9 +124,9 @@ class AwsSesApiClient
 end
 
 MailPlugger.plug_in('aws_ses') do |api|
+  api.client = AwsSesApiClient
   api.delivery_options = %i[message_obj tag configuration_set_name]
   api.delivery_settings = { return_response: true }
-  api.client = AwsSesApiClient
 end
 ```
 

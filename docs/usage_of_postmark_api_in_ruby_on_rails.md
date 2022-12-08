@@ -40,9 +40,9 @@ class PostmarkApiClient
 end
 
 MailPlugger.plug_in('postmark') do |api|
+  api.client = PostmarkApiClient
   api.delivery_options = %i[from to subject text_part html_part tag]
   api.delivery_settings = { return_response: true }
-  api.client = PostmarkApiClient
 end
 ```
 

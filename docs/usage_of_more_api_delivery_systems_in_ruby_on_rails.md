@@ -97,15 +97,15 @@ class TestApi2ClientClass
 end
 
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject text_part html_part]
   api.delivery_settings = { return_response: true }
-  api.client = TestApiClientClass
 end
 
 MailPlugger.plug_in('test_api2_client') do |api|
+  api.client = TestApi2ClientClass
   api.delivery_options = %i[from to subject text_part html_part]
   api.delivery_settings = { return_response: true }
-  api.client = TestApi2ClientClass
 end
 ```
 

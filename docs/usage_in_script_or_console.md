@@ -108,8 +108,8 @@ We can use `MailPlugger.plug_in` to add our configurations.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
-  api.delivery_options = %i[from to subject body]
   api.client = TestApiClientClass
+  api.delivery_options = %i[from to subject body]
 end
 
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -128,7 +128,7 @@ Or we can use the `MailPlugger::DeliveryMethod` directly as well.
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 # => #<Mail::Message:1960, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
-MailPlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], client: TestApiClientClass).deliver!(message)
+MailPlugger::DeliveryMethod.new(client: TestApiClientClass, delivery_options: %i[from to subject body]).deliver!(message)
 # >>> settings: {:api_key=>"12345"}
 # >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 # >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}]}
@@ -141,8 +141,8 @@ Or add `MailPlugger::DeliveryMethod` to `mail.delivery_method`.
 mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 # => #<Mail::Message:1960, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
-mail.delivery_method MailPlugger::DeliveryMethod, { delivery_options: %i[from to subject body], client: TestApiClientClass }
-# => #<MailPlugger::DeliveryMethod:0x00007fecbbb2ca00 @delivery_options=[:from, :to, :subject, :body], @client=TestApiClientClass, @default_delivery_system=nil, @delivery_settings=nil, @message=nil>
+mail.delivery_method MailPlugger::DeliveryMethod, { client: TestApiClientClass, delivery_options: %i[from to subject body] }
+# => #<MailPlugger::DeliveryMethod:0x00007f838eaf3840 @client=TestApiClientClass, @delivery_options=[:from, :to, :subject, :body], @delivery_settings=nil, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil>
 
 mail.deliver
 # >>> settings: {:api_key=>"12345"}
@@ -165,8 +165,8 @@ Let's add delivery settings to the delivery method.
 mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 # => #<Mail::Message:1960, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
-mail.delivery_method MailPlugger::DeliveryMethod, { delivery_options: %i[from to subject body], client: TestApiClientClass, delivery_settings: { return_response: true } }
-# => #<MailPlugger::DeliveryMethod:0x00007fecbb9e3630 @delivery_options=[:from, :to, :subject, :body], @client=TestApiClientClass, @default_delivery_system=nil, @delivery_settings={:return_response=>true}, @message=nil>
+mail.delivery_method MailPlugger::DeliveryMethod, { client: TestApiClientClass, delivery_options: %i[from to subject body], delivery_settings: { return_response: true } }
+# => #<MailPlugger::DeliveryMethod:0x00007ffbc3d60c10 @client=TestApiClientClass, @delivery_options=[:from, :to, :subject, :body], @delivery_settings={:return_response=>true}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil>
 
 mail.deliver
 # >>> settings: {:api_key=>"12345"}
@@ -187,16 +187,16 @@ Or use `MailPlugger.plug_in` method with delivery settings.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject body]
   api.delivery_settings = { return_response: true }
-  api.client = TestApiClientClass
 end
 
 mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 # => #<Mail::Message:1960, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method MailPlugger::DeliveryMethod
-# => #<MailPlugger::DeliveryMethod:0x00007ffed930b8f0 @delivery_options={"test_api_client"=>[:from, :to, :subject, :body]}, @client={"test_api_client"=>TestApiClientClass}, @default_delivery_system="test_api_client", @delivery_settings={"test_api_client"=>{:return_response=>true}}, @message=nil>
+# => #<MailPlugger::DeliveryMethod:0x00007face199c128 @client={"test_api_client"=>TestApiClientClass}, @delivery_options={"test_api_client"=>[:from, :to, :subject, :body]}, @delivery_settings={"test_api_client"=>{:return_response=>true}}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=["test_api_client"], @rotatable_delivery_systems=#<Enumerator: ["test_api_client"]:cycle>, @sending_method=nil, @default_delivery_system="test_api_client", @message=nil>
 
 mail.deliver
 # >>> settings: {:api_key=>"12345"}
@@ -210,5 +210,91 @@ mail.deliver!
 # >>> settings: {:api_key=>"12345"}
 # >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 # >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}]}
+# => {:response=>"OK"}
+```
+
+We can use more delivery options.
+
+```ruby
+# NOTE: This is just an example for testing...
+class TestApiClientClass
+  def initialize(options = {})
+    @settings = { api_key: '12345' }
+    @options = options
+  end
+
+  def deliver
+    # e.g. API.new(@settings).client.post(generate_mail_hash)
+    puts " >>> settings: #{@settings.inspect}"
+    puts " >>> options: #{@options.inspect}"
+    puts " >>> generate_mail_hash: #{generate_mail_hash.inspect}"
+    { response: 'OK' }
+  end
+
+  private
+
+  def generate_mail_hash
+    {
+      to: generate_recipients,
+      from: {
+        email: @options[:from].first
+      },
+      subject: @options[:subject],
+      content: [
+        {
+          type: 'text/plain',
+          value: @options[:body]
+        }
+      ],
+      tags: [
+        @options[:tag]
+      ]
+    }
+  end
+
+  def generate_recipients
+    @options[:to].map do |to|
+      {
+        email: to
+      }
+    end
+  end
+end
+```
+
+Add this tag option to the Mail::Message object.
+
+```ruby
+MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
+  api.delivery_options = %i[from to subject body tag]
+end
+
+message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body', tag: 'test_tag')
+# => #<Mail::Message:1960, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
+
+MailPlugger::DeliveryMethod.new.deliver!(message)
+# >>> settings: {:api_key=>"12345"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
+# >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}], :tags=>["test_tag"]}
+# => {:response=>"OK"}
+```
+
+Or we can add tag as a default delivery option.
+
+```ruby
+MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
+  api.default_delivery_options = { tag: 'test_tag' }
+  api.delivery_options = %i[from to subject body]
+end
+
+message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
+# => #<Mail::Message:1960, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
+
+MailPlugger::DeliveryMethod.new.deliver!(message)
+# >>> settings: {:api_key=>"12345"}
+# >>> options: {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
+# >>> generate_mail_hash: {:to=>[{:email=>"to@example.com"}], :from=>{:email=>"from@example.com"}, :subject=>"Test email", :content=>[{:type=>"text/plain", :value=>"Test email body"}], :tags=>["test_tag"]}
 # => {:response=>"OK"}
 ```

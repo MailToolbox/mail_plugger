@@ -32,6 +32,7 @@ Or install it yourself as:
 
 ## Usage
 
+- [How to use MailPlugger.configure method](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_configure_method.md)
 - [How to use MailPlugger.plug_in method](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_plug_in_method.md)
 - [How to use MailPlugger::DeliveryMethod class](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_delivery_method.md)
 - [How to use MailPlugger in a Ruby script or IRB console](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_script_or_console.md)
@@ -42,6 +43,7 @@ Or install it yourself as:
   - [How to use API delivery system that add attachments to the mailer method in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_api_attachments_in_ruby_on_rails.md)
   - [How to use more API delivery systems in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_api_delivery_systems_in_ruby_on_rails.md)
   - [How to use one API delivery system with more send methods in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_one_api_delivery_system_with_more_send_methods_in_ruby_on_rails.md)
+  - [How to use MailPlugger.configure method in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_configure_method_in_ruby_on_rails.md)
   - [How to use AWS SES API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_aws_ses_api_in_ruby_on_rails.md)
   - [How to use SparkPost API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_sparkpost_api_in_ruby_on_rails.md)
   - [How to use SendGrid API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_sendgrid_api_in_ruby_on_rails.md)

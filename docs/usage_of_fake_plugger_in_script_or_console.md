@@ -35,6 +35,10 @@ FakePlugger::DeliveryMethod.new.deliver!(message)
 #
 #==> @delivery_settings: {"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}
 #
+#==> @passed_default_delivery_system: nil
+#
+#==> @sending_method: nil
+#
 #==> @default_delivery_system: "test_smtp_client"
 #
 #==> @message: #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, #<To: to@example.com>, <Subject: Test email>>
@@ -96,6 +100,10 @@ FakePlugger::DeliveryMethod.new(delivery_settings: { smtp_settings: { address: '
 #
 #==> @delivery_settings: {:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}}
 #
+#==> @passed_default_delivery_system: nil
+#
+#==> @sending_method: nil
+#
 #==> @default_delivery_system: nil
 #
 #==> @message: #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
@@ -140,7 +148,7 @@ mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test e
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod, { delivery_settings: { smtp_settings: { address: '127.0.0.1', port: 1025 } }, debug: true, raw_message: true }
-# => #<FakePlugger::DeliveryMethod:0x00007f8f9d084e20 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}}, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @initialize=false, @debug=true, @raw_message=true, @delivery_system=nil, @settings=nil, @response=nil, @use_mail_grabber=false>
+# => #<FakePlugger::DeliveryMethod:0x00007ffad5c76e10 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil, @debug=true, @raw_message=true, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver
 #
@@ -149,6 +157,10 @@ mail.deliver
 #------------------------------ Variables ------------------------------
 #
 #==> @delivery_settings: {:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}}
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -186,7 +198,7 @@ mail.deliver
 # if you call mail.deliver twice, then it will send the email, so set delivery_method again
 
 mail.delivery_method FakePlugger::DeliveryMethod, { delivery_settings: { smtp_settings: { address: '127.0.0.1', port: 1025 } }, debug: true, raw_message: true }
-# => #<FakePlugger::DeliveryMethod:0x00007fde01bcc820 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}}, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @initialize=false, @debug=true, @raw_message=true, @delivery_system=nil, @settings=nil, @response=nil, @use_mail_grabber=false>
+# => #<FakePlugger::DeliveryMethod:0x00007f92fdbebd50 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil, @debug=true, @raw_message=true, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver!
 #
@@ -195,6 +207,10 @@ mail.deliver!
 #------------------------------ Variables ------------------------------
 #
 #==> @delivery_settings: {:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}}
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -235,7 +251,7 @@ mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test e
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod, { response: 'OK' }
-# => #<FakePlugger::DeliveryMethod:0x00007fe946991bc8 @client=nil, @delivery_options=nil, @delivery_settings=nil, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @initialize=false, @settings=nil, @debug=false, @raw_message=false, @response="OK", @use_mail_grabber=false, @delivery_system=nil>
+# => #<FakePlugger::DeliveryMethod:0x00007fccf93f4f08 @client=nil, @delivery_options=nil, @delivery_settings=nil, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil, @debug=nil, @raw_message=nil, @response="OK", @use_mail_grabber=nil>
 
 mail.deliver
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
@@ -255,7 +271,7 @@ mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test e
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod, { delivery_settings: { smtp_settings: { address: '127.0.0.1', port: 1025 }, return_response: true } }
-# => #<FakePlugger::DeliveryMethod:0x00007ffacf9a0d18 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true}, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @initialize=false, @delivery_system=nil, @settings=nil, @debug=false, @raw_message=false, @response=nil, @use_mail_grabber=false>
+# => #<FakePlugger::DeliveryMethod:0x00007fe7f3d36d68 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil, @debug=nil, @raw_message=nil, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
@@ -265,7 +281,7 @@ mail.deliver
 # if you call mail.deliver twice, then it will send the email, so set delivery_method again
 
 mail.delivery_method FakePlugger::DeliveryMethod, { delivery_settings: { smtp_settings: { address: '127.0.0.1', port: 1025 }, return_response: true } }
-# => #<FakePlugger::DeliveryMethod:0x00007ffacf32e818 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true}, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @initialize=false, @delivery_system=nil, @settings=nil, @debug=false, @raw_message=false, @response=nil, @use_mail_grabber=false>
+# => #<FakePlugger::DeliveryMethod:0x00007fe7f3abd5c8 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil, @debug=nil, @raw_message=nil, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver!
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
@@ -281,7 +297,7 @@ mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test e
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod, { delivery_settings: { smtp_settings: { address: '127.0.0.1', port: 1025 }, return_response: true }, response: 'OK' }
-# => #<FakePlugger::DeliveryMethod:0x00007fe175853848 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true}, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @initialize=false, @delivery_system=nil, @settings=nil, @debug=false, @raw_message=false, @response="OK", @use_mail_grabber=false>
+# => #<FakePlugger::DeliveryMethod:0x00007fa1c646d560 @client=nil, @delivery_options=nil, @delivery_settings={:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil, @debug=nil, @raw_message=nil, @response="OK", @use_mail_grabber=nil>
 
 mail.deliver
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
@@ -310,7 +326,7 @@ mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test e
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod
-# => #<FakePlugger::DeliveryMethod:0x00007fefb10485f0 @client=nil, @delivery_options=nil, @delivery_settings={"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}, @delivery_systems=["test_smtp_client"], @default_delivery_system="test_smtp_client", @message=nil, @initialize=false, @delivery_system=nil, @settings=nil, @debug=true, @raw_message=true, @response=nil, @use_mail_grabber=false>
+# => #<FakePlugger::DeliveryMethod:0x00007f9a2a442660 @client=nil, @delivery_options=nil, @delivery_settings={"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=["test_smtp_client"], @rotatable_delivery_systems=#<Enumerator: ["test_smtp_client"]:cycle>, @sending_method=nil, @default_delivery_system="test_smtp_client", @message=nil, @debug=nil, @raw_message=nil, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver
 #
@@ -319,6 +335,10 @@ mail.deliver
 #------------------------------ Variables ------------------------------
 #
 #==> @delivery_settings: {"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: "test_smtp_client"
 #
@@ -356,7 +376,7 @@ mail.deliver
 # if you call mail.deliver twice, then it will send the email, so set delivery_method again
 
 mail.delivery_method FakePlugger::DeliveryMethod
-# => #<FakePlugger::DeliveryMethod:0x00007fefb1c81010 @client=nil, @delivery_options=nil, @delivery_settings={"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}, @delivery_systems=["test_smtp_client"], @default_delivery_system="test_smtp_client", @message=nil, @initialize=false, @delivery_system=nil, @settings=nil, @debug=true, @raw_message=true, @response=nil, @use_mail_grabber=false>
+# => #<FakePlugger::DeliveryMethod:0x00007f9a2a62c610 @client=nil, @delivery_options=nil, @delivery_settings={"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=["test_smtp_client"], @rotatable_delivery_systems=#<Enumerator: ["test_smtp_client"]:cycle>, @sending_method=nil, @default_delivery_system="test_smtp_client", @message=nil, @debug=nil, @raw_message=nil, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver!
 #
@@ -365,6 +385,10 @@ mail.deliver!
 #------------------------------ Variables ------------------------------
 #
 #==> @delivery_settings: {"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: "test_smtp_client"
 #
@@ -416,7 +440,7 @@ mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test e
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod
-# => #<FakePlugger::DeliveryMethod:0x00007fe0fc292720 @client=nil, @delivery_options=nil, @delivery_settings={"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_response=>"OK"}}, @delivery_systems=["test_smtp_client"], @default_delivery_system="test_smtp_client", @message=nil, @initialize=false, @delivery_system=nil, @settings=nil, @debug=false, @raw_message=false, @response="OK", @use_mail_grabber=false>
+# => #<FakePlugger::DeliveryMethod:0x00007fd0893569f0 @client=nil, @delivery_options=nil, @delivery_settings={"test_smtp_client"=>{:smtp_settings=>{:address=>"127.0.0.1", :port=>1025}, :return_response=>true, :fake_plugger_response=>"OK"}}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=["test_smtp_client"], @rotatable_delivery_systems=#<Enumerator: ["test_smtp_client"]:cycle>, @sending_method=nil, @default_delivery_system="test_smtp_client", @message=nil, @debug=nil, @raw_message=nil, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver
 # => #<Mail::Message:1880, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
@@ -481,12 +505,12 @@ We can use `MailPlugger.plug_in` to add our configurations.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject body]
   api.delivery_settings = {
     fake_plugger_debug: true,
     fake_plugger_raw_message: true
   }
-  api.client = TestApiClientClass
 end
 
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -503,6 +527,12 @@ FakePlugger::DeliveryMethod.new.deliver!(message)
 #==> @delivery_options: {"test_api_client"=>[:from, :to, :subject, :body]}
 #
 #==> @delivery_settings: {"test_api_client"=>{:fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @default_delivery_options: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: "test_api_client"
 #
@@ -544,9 +574,9 @@ FakePlugger::DeliveryMethod.new.deliver!(message)
 # or
 
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject body]
   api.delivery_settings = { fake_plugger_response: { status: :ok } }
-  api.client = TestApiClientClass
 end
 
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -558,9 +588,9 @@ FakePlugger::DeliveryMethod.new.deliver!(message)
 # or
 
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject body]
   api.delivery_settings = { fake_plugger_response: { return_delivery_data: true } }
-  api.client = TestApiClientClass
 end
 
 message = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -587,6 +617,12 @@ FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], clie
 #==> @delivery_options: [:from, :to, :subject, :body]
 #
 #==> @delivery_settings: nil
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @default_delivery_options: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -643,7 +679,7 @@ mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test e
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod, { delivery_options: %i[from to subject body], client: TestApiClientClass, debug: true, raw_message: true }
-# => #<FakePlugger::DeliveryMethod:0x00007ffd1138ef30 @client=TestApiClientClass, @delivery_options=[:from, :to, :subject, :body], @delivery_settings=nil, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @debug=true, @raw_message=true, @settings=nil, @response=nil>
+# => #<FakePlugger::DeliveryMethod:0x00007fd4b316f370 @client=TestApiClientClass, @delivery_options=[:from, :to, :subject, :body], @delivery_settings=nil, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil, @debug=true, @raw_message=true, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver
 #
@@ -656,6 +692,12 @@ mail.deliver
 #==> @delivery_options: [:from, :to, :subject, :body]
 #
 #==> @delivery_settings: nil
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @default_delivery_options: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -707,6 +749,12 @@ mail.deliver!
 #==> @delivery_options: [:from, :to, :subject, :body]
 #
 #==> @delivery_settings: nil
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @default_delivery_options: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -753,7 +801,7 @@ mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test e
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod, { response: { status: :ok } }
-# => #<FakePlugger::DeliveryMethod:0x00007fe2b0c213a8 @client=nil, @delivery_options=nil, @delivery_settings=nil, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @settings=nil, @debug=false, @raw_message=false, @response={:status=>:ok}>
+# => #<FakePlugger::DeliveryMethod:0x00007fd4b40a9b88 @client=nil, @delivery_options=nil, @delivery_settings=nil, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil, @debug=nil, @raw_message=nil, @response={:status=>:ok}, @use_mail_grabber=nil>
 
 mail.deliver
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
@@ -771,7 +819,7 @@ mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test e
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod, { delivery_options: %i[from to subject body], client: TestApiClientClass, delivery_settings: { return_response: true } }
-# => #<FakePlugger::DeliveryMethod:0x00007fb1859f5180 @client=TestApiClientClass, @delivery_options=[:from, :to, :subject, :body], @delivery_settings={:return_response=>true}, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @delivery_system=nil, @settings={:return_response=>true}, @debug=false, @raw_message=false, @response=nil>
+# => #<FakePlugger::DeliveryMethod:0x00007fd4b3b5ada8 @client=TestApiClientClass, @delivery_options=[:from, :to, :subject, :body], @delivery_settings={:return_response=>true}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil, @debug=nil, @raw_message=nil, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
@@ -797,7 +845,7 @@ mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test e
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod, { delivery_settings: { return_response: true }, response: { status: :ok } }
-# => #<FakePlugger::DeliveryMethod:0x00007fe2b20fa3d8 @client=nil, @delivery_options=nil, @delivery_settings={:return_response=>true}, @delivery_systems=nil, @default_delivery_system=nil, @message=nil, @delivery_system=nil, @settings={:return_response=>true}, @debug=false, @raw_message=false, @response={:status=>:ok}>
+# => #<FakePlugger::DeliveryMethod:0x00007fd4b40b9e20 @client=nil, @delivery_options=nil, @delivery_settings={:return_response=>true}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=nil, @rotatable_delivery_systems=nil, @sending_method=nil, @default_delivery_system=nil, @message=nil, @debug=nil, @raw_message=nil, @response={:status=>:ok}, @use_mail_grabber=nil>
 
 mail.deliver
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
@@ -812,20 +860,20 @@ Let's use `MailPlugger.plug_in` method  with return response.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject body]
   api.delivery_settings = {
     return_response: true,
     fake_plugger_debug: true,
     fake_plugger_raw_message: true
   }
-  api.client = TestApiClientClass
 end
 
 mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod
-# => #<FakePlugger::DeliveryMethod:0x00007f84aea2e768 @client={"test_api_client"=>TestApiClientClass}, @delivery_options={"test_api_client"=>[:from, :to, :subject, :body]}, @delivery_settings={"test_api_client"=>{:return_response=>true, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}, @delivery_systems=["test_api_client"], @default_delivery_system="test_api_client", @message=nil, @delivery_system="test_api_client", @settings={:return_response=>true, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}, @debug=true, @raw_message=true, @response=nil>
+# => #<FakePlugger::DeliveryMethod:0x00007fd4b39a7448 @client={"test_api_client"=>TestApiClientClass}, @delivery_options={"test_api_client"=>[:from, :to, :subject, :body]}, @delivery_settings={"test_api_client"=>{:return_response=>true, :fake_plugger_debug=>true, :fake_plugger_raw_message=>true}}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=["test_api_client"], @rotatable_delivery_systems=#<Enumerator: ["test_api_client"]:cycle>, @sending_method=nil, @default_delivery_system="test_api_client", @message=nil, @debug=nil, @raw_message=nil, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver
 #
@@ -838,6 +886,12 @@ mail.deliver
 #==> @delivery_options: [:from, :to, :subject, :body]
 #
 #==> @delivery_settings: nil
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @default_delivery_options: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -889,6 +943,12 @@ mail.deliver!
 #==> @delivery_options: [:from, :to, :subject, :body]
 #
 #==> @delivery_settings: nil
+#
+#==> @passed_default_delivery_system: nil
+#
+#==> @default_delivery_options: nil
+#
+#==> @sending_method: nil
 #
 #==> @default_delivery_system: nil
 #
@@ -941,6 +1001,12 @@ mail.deliver!.deliver
 #
 #==> @delivery_settings: nil
 #
+#==> @passed_default_delivery_system: nil
+#
+#==> @default_delivery_options: nil
+#
+#==> @sending_method: nil
+#
 #==> @default_delivery_system: nil
 #
 #==> @message: #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>
@@ -986,19 +1052,19 @@ Let's use `MailPlugger.plug_in` method with return response and fake response.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
+  api.client = TestApiClientClass
   api.delivery_options = %i[from to subject body]
   api.delivery_settings = {
     return_response: true,
     fake_plugger_response: { status: :ok }
   }
-  api.client = TestApiClientClass
 end
 
 mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Tes...
 
 mail.delivery_method FakePlugger::DeliveryMethod
-# => #<FakePlugger::DeliveryMethod:0x00007f8263a51f30 @client={"test_api_client"=>TestApiClientClass}, @delivery_options={"test_api_client"=>[:from, :to, :subject, :body]}, @delivery_settings={"test_api_client"=>{:return_response=>true, :fake_plugger_response=>{:status=>:ok}}}, @delivery_systems=["test_api_client"], @default_delivery_system="test_api_client", @message=nil, @delivery_system="test_api_client", @settings={:return_response=>true, :fake_plugger_response=>{:status=>:ok}}, @debug=false, @raw_message=false, @response={:status=>:ok}>
+# => #<FakePlugger::DeliveryMethod:0x00007feb0a2ec668 @client={"test_api_client"=>TestApiClientClass}, @delivery_options={"test_api_client"=>[:from, :to, :subject, :body]}, @delivery_settings={"test_api_client"=>{:return_response=>true, :fake_plugger_response=>{:status=>:ok}}}, @passed_default_delivery_system=nil, @default_delivery_options=nil, @delivery_systems=["test_api_client"], @rotatable_delivery_systems=#<Enumerator: ["test_api_client"]:cycle>, @sending_method=nil, @default_delivery_system="test_api_client", @message=nil, @debug=nil, @raw_message=nil, @response=nil, @use_mail_grabber=nil>
 
 mail.deliver
 # => #<Mail::Message:1860, Multipart: false, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>>

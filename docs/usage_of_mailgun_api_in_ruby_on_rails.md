@@ -39,9 +39,9 @@ class MailgunApiClient
 end
 
 MailPlugger.plug_in('mailgun') do |api|
+  api.client = MailgunApiClient
   api.delivery_options = %i[from to subject text_part html_part]
   api.delivery_settings = { return_response: true }
-  api.client = MailgunApiClient
 end
 ```
 

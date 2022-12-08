@@ -101,7 +101,7 @@ module MailPlugger
     #         ],
     #         tags: [
     #           @options[:tag]
-    #         ],
+    #         ]
     #       }
     #     end
     #
