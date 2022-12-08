@@ -1,6 +1,6 @@
 **Go To:**
 
-- [How to use MailPlugger in Ruby on Rails](#how-to-use-mailpluggerconfigure-in-ruby-on-rails)
+- [How to use MailPlugger.configure method in Ruby on Rails](#how-to-use-mailpluggerconfigure-method-in-ruby-on-rails)
   - [Default delivery system](#default-delivery-system)
   - [Sending method](#sending-method)
     - [default_delivery_system](#default_delivery_system)
