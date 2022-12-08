@@ -12,7 +12,8 @@ RSpec.describe MailPlugger::MailHelper do
           @client = options[:client]
           @delivery_options = options[:delivery_options]
           @delivery_settings = options[:delivery_settings]
-          @passed_delivery_system = options[:passed_delivery_system]
+          @passed_default_delivery_system =
+            options[:passed_default_delivery_system]
           @default_delivery_options = options[:default_delivery_options]
           @delivery_systems = options[:delivery_systems]
           @rotatable_delivery_systems = options[:rotatable_delivery_systems]
@@ -507,7 +508,7 @@ RSpec.describe MailPlugger::MailHelper do
           client: client,
           delivery_options: delivery_options,
           delivery_settings: delivery_settings,
-          passed_delivery_system: passed_delivery_system,
+          passed_default_delivery_system: passed_default_delivery_system,
           delivery_systems: delivery_systems,
           rotatable_delivery_systems: rotatable_delivery_systems,
           sending_method: sending_method
@@ -518,7 +519,7 @@ RSpec.describe MailPlugger::MailHelper do
     let(:client) { nil }
     let(:delivery_options) { nil }
     let(:delivery_settings) { nil }
-    let(:passed_delivery_system) { nil }
+    let(:passed_default_delivery_system) { nil }
     let(:delivery_systems) { nil }
     let(:rotatable_delivery_systems) { nil }
     let(:sending_method) { nil }
@@ -672,16 +673,16 @@ RSpec.describe MailPlugger::MailHelper do
     context 'when sending_method is default_delivery_system' do
       let(:sending_method) { :default_delivery_system }
 
-      context 'and passed_delivery_system does NOT exist' do
-        let(:passed_delivery_system) { nil }
+      context 'and passed_default_delivery_system does NOT exist' do
+        let(:passed_default_delivery_system) { nil }
 
         it_behaves_like 'returning with the delivery system key', 'first'
       end
 
-      context 'and passed_delivery_system exists' do
-        let(:passed_delivery_system) { 'delivery_system' }
+      context 'and passed_default_delivery_system exists' do
+        let(:passed_default_delivery_system) { 'delivery_system' }
 
-        it 'returns with the passed_delivery_system' do
+        it 'returns with the passed_default_delivery_system' do
           expect(default_delivery_system_get).to eq('delivery_system')
         end
       end
@@ -738,16 +739,16 @@ RSpec.describe MailPlugger::MailHelper do
     context 'when sending_method is nil' do
       let(:sending_method) { nil }
 
-      context 'and passed_delivery_system does NOT exist' do
-        let(:passed_delivery_system) { nil }
+      context 'and passed_default_delivery_system does NOT exist' do
+        let(:passed_default_delivery_system) { nil }
 
         it_behaves_like 'returning with the delivery system key', 'first'
       end
 
-      context 'and passed_delivery_system exists' do
-        let(:passed_delivery_system) { 'delivery_system' }
+      context 'and passed_default_delivery_system exists' do
+        let(:passed_default_delivery_system) { 'delivery_system' }
 
-        it 'returns with the passed_delivery_system' do
+        it 'returns with the passed_default_delivery_system' do
           expect(default_delivery_system_get).to eq('delivery_system')
         end
       end
@@ -1254,7 +1255,7 @@ RSpec.describe MailPlugger::MailHelper do
     subject(:sending_method_get) do
       TestClass
         .new(
-          passed_delivery_system: passed_delivery_system,
+          passed_default_delivery_system: passed_default_delivery_system,
           sending_method: sending_method
         )
         .sending_method_get
@@ -1263,16 +1264,16 @@ RSpec.describe MailPlugger::MailHelper do
     context 'when sending_method does NOT exist' do
       let(:sending_method) { nil }
 
-      context 'and passed_delivery_system does NOT exist' do
-        let(:passed_delivery_system) { nil }
+      context 'and passed_default_delivery_system does NOT exist' do
+        let(:passed_default_delivery_system) { nil }
 
         it 'returns with plugged_in_first' do
           expect(sending_method_get).to eq(:plugged_in_first)
         end
       end
 
-      context 'and passed_delivery_system exists' do
-        let(:passed_delivery_system) { 'delivery_system' }
+      context 'and passed_default_delivery_system exists' do
+        let(:passed_default_delivery_system) { 'delivery_system' }
 
         it 'returns with default_delivery_system' do
           expect(sending_method_get).to eq(:default_delivery_system)
@@ -1283,7 +1284,7 @@ RSpec.describe MailPlugger::MailHelper do
     context 'when sending_method exists' do
       context 'and sending_method does NOT include in ' \
               'DELIVERY_SENDING_METHODS' do
-        let(:passed_delivery_system) { nil }
+        let(:passed_default_delivery_system) { nil }
         let(:sending_method) { :not_exist }
 
         it 'returns with plugged_in_first' do
@@ -1296,16 +1297,16 @@ RSpec.describe MailPlugger::MailHelper do
           context "and sending_method is equal to #{method}" do
             let(:sending_method) { method }
 
-            context 'and passed_delivery_system does NOT exist' do
-              let(:passed_delivery_system) { nil }
+            context 'and passed_default_delivery_system does NOT exist' do
+              let(:passed_default_delivery_system) { nil }
 
               it "returns with #{method}" do
                 expect(sending_method_get).to eq(sending_method)
               end
             end
 
-            context 'and passed_delivery_system exists' do
-              let(:passed_delivery_system) { 'delivery_system' }
+            context 'and passed_default_delivery_system exists' do
+              let(:passed_default_delivery_system) { 'delivery_system' }
 
               it "returns with #{method}" do
                 expect(sending_method_get).to eq(sending_method)
@@ -1317,16 +1318,16 @@ RSpec.describe MailPlugger::MailHelper do
         context 'and sending_method is equal to default_delivery_system' do
           let(:sending_method) { :default_delivery_system }
 
-          context 'and passed_delivery_system does NOT exist' do
-            let(:passed_delivery_system) { nil }
+          context 'and passed_default_delivery_system does NOT exist' do
+            let(:passed_default_delivery_system) { nil }
 
             it 'returns with plugged_in_first' do
               expect(sending_method_get).to eq(:plugged_in_first)
             end
           end
 
-          context 'and passed_delivery_system exists' do
-            let(:passed_delivery_system) { 'delivery_system' }
+          context 'and passed_default_delivery_system exists' do
+            let(:passed_default_delivery_system) { 'delivery_system' }
 
             it 'returns with default_delivery_system' do
               expect(sending_method_get).to eq(:default_delivery_system)

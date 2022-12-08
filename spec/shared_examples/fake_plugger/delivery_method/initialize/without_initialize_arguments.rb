@@ -19,8 +19,10 @@ RSpec.shared_examples 'fake_plugger/delivery_method/initialize/' \
         end
       end
 
-      it 'sets passed_delivery_system with expected value' do
-        expect(init_method.instance_variable_get(:@passed_delivery_system))
+      it 'sets passed_default_delivery_system with expected value' do
+        expect(
+          init_method.instance_variable_get(:@passed_default_delivery_system)
+        )
           .to eq(default_delivery_system)
       end
 

@@ -16,6 +16,9 @@ Metrics/BlockLength:
     - spec/**/*
     - '*.gemspec'
 
+Metrics/ClassLength:
+  Max: 150
+
 Metrics/CyclomaticComplexity:
   Max: 15
 

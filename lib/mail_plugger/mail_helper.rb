@@ -103,7 +103,7 @@ module MailPlugger
     def default_delivery_system_get
       case sending_method_get
       when :default_delivery_system
-        @passed_delivery_system
+        @passed_default_delivery_system
       when :plugged_in_first
         extract_keys&.first
       when :random
@@ -278,12 +278,12 @@ module MailPlugger
     #
     # @return [Symbol] the appropriate sending method
     def sending_method_get
-      if @sending_method.nil? && !@passed_delivery_system.nil?
+      if @sending_method.nil? && !@passed_default_delivery_system.nil?
         :default_delivery_system
       elsif @sending_method.nil? ||
             !SENDING_METHODS.include?(@sending_method.to_sym) ||
             (@sending_method.to_sym == :default_delivery_system &&
-              @passed_delivery_system.nil?)
+              @passed_default_delivery_system.nil?)
         :plugged_in_first
       else
         @sending_method.to_sym

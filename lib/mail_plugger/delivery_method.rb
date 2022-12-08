@@ -22,33 +22,33 @@ module MailPlugger
     # @option options [String/Symbol] default_delivery_system
     #   e.g. 'defined_api'
     def initialize(options = {})
-      @client                     = options[:client] ||
-                                    MailPlugger.client
+      @client                         = options[:client] ||
+                                        MailPlugger.client
 
-      @delivery_options           = options[:delivery_options] ||
-                                    MailPlugger.delivery_options
+      @delivery_options               = options[:delivery_options] ||
+                                        MailPlugger.delivery_options
 
-      @delivery_settings          = options[:delivery_settings] ||
-                                    MailPlugger.delivery_settings
+      @delivery_settings              = options[:delivery_settings] ||
+                                        MailPlugger.delivery_settings
 
-      @passed_delivery_system     = options[:default_delivery_system] ||
-                                    MailPlugger.default_delivery_system
-
-      # -----------------------------------------------------------------------
-
-      @default_delivery_options   = MailPlugger.default_delivery_options
-
-      @delivery_systems           = MailPlugger.delivery_systems
-
-      @rotatable_delivery_systems = MailPlugger.rotatable_delivery_systems
-
-      @sending_method             = MailPlugger.sending_method
+      @passed_default_delivery_system = options[:default_delivery_system] ||
+                                        MailPlugger.default_delivery_system
 
       # -----------------------------------------------------------------------
 
-      @default_delivery_system    = default_delivery_system_get
+      @default_delivery_options       = MailPlugger.default_delivery_options
 
-      @message                    = nil
+      @delivery_systems               = MailPlugger.delivery_systems
+
+      @rotatable_delivery_systems     = MailPlugger.rotatable_delivery_systems
+
+      @sending_method                 = MailPlugger.sending_method
+
+      # -----------------------------------------------------------------------
+
+      @default_delivery_system        = default_delivery_system_get
+
+      @message                        = nil
     end
 
     # Using SMTP:

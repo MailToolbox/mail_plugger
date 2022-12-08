@@ -190,7 +190,9 @@ module FakePlugger
 
         ==> @delivery_settings: #{@delivery_settings.inspect}
 
-        ==> @passed_delivery_system: #{@passed_delivery_system.inspect}
+        ==> @passed_default_delivery_system: #{
+          @passed_default_delivery_system.inspect
+        }
 
         ==> @default_delivery_options: #{@default_delivery_options.inspect}
 
@@ -227,7 +229,9 @@ module FakePlugger
 
         ==> @delivery_settings: #{@delivery_settings.inspect}
 
-        ==> @passed_delivery_system: #{@passed_delivery_system.inspect}
+        ==> @passed_default_delivery_system: #{
+          @passed_default_delivery_system.inspect
+        }
 
         ==> @sending_method: #{@sending_method.inspect}
 
