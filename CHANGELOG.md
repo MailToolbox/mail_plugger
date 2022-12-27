@@ -1,5 +1,25 @@
 # Change log
 
+## 1.7.0 (2022-12-27)
+
+### New features
+
+* Add `configure` method to MailPlugger.
+
+### Changes
+
+* Add mail 2.8 gem support.
+* Update the documentations.
+* Change RuboCop rules.
+* Update gem description.
+* Refactor RSpec tests.
+* Update bundler and gems.
+
+### Bug fixes
+
+* Fix the Ruby version problem in the GitHub Actions workflow file.
+
+
 ## 1.6.1 (2022-05-27)
 
 ### Changes
