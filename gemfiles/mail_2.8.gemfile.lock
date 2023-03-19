@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    mail_plugger (1.7.2)
+    mail_plugger (1.7.3)
       mail (~> 2.5)
       net-smtp (~> 0.3)
 
