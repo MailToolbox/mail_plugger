@@ -10,7 +10,7 @@ GIT
 PATH
   remote: ..
   specs:
-    mail_plugger (1.7.3)
+    mail_plugger (1.7.4)
       mail (~> 2.5)
       net-smtp (~> 0.3)
 
