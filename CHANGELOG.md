@@ -1,5 +1,15 @@
 # Change log
 
+## 1.7.4 (2023-05-19)
+
+### Changes
+
+* Add Ruby 3.2 support.
+* Update MailGrabber to version 1.3.4.
+* Update appraisal gem from github to fix issues.
+* Update bundler and gems.
+
+
 ## 1.7.3 (2023-03-19)
 
 ### Changes
