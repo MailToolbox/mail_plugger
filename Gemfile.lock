@@ -1,3 +1,12 @@
+GIT
+  remote: https://github.com/thoughtbot/appraisal.git
+  revision: b200e636903700098bef25f4f51dbc4c46e4c04c
+  specs:
+    appraisal (2.4.1)
+      bundler
+      rake
+      thor (>= 0.14.0)
+
 PATH
   remote: .
   specs:
@@ -8,10 +17,6 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    appraisal (2.4.1)
-      bundler
-      rake
-      thor (>= 0.14.0)
     ast (2.4.2)
     date (3.3.3)
     diff-lcs (1.5.0)
@@ -90,7 +95,7 @@ GEM
     simplecov_json_formatter (0.1.4)
     sqlite3 (1.6.1)
       mini_portile2 (~> 2.8.0)
-    thor (1.2.1)
+    thor (1.2.2)
     timeout (0.3.2)
     unicode-display_width (2.4.2)
     webrick (1.8.1)
@@ -99,7 +104,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  appraisal
+  appraisal!
   mail_grabber
   mail_plugger!
   rake (~> 13.0)
