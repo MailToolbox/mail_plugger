@@ -23,10 +23,10 @@ Metrics/CyclomaticComplexity:
   Max: 15
 
 Metrics/MethodLength:
-  Max: 20
+  Max: 25
 
 Metrics/ModuleLength:
-  Max: 200
+  Max: 250
 
 Lint/AmbiguousBlockAssociation:
   Exclude:
