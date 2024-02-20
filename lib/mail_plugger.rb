@@ -145,9 +145,9 @@ module MailPlugger
       delivery_options
       delivery_settings
     ].each do |method|
-      define_method "#{method}=" do |value|
-        variable = instance_variable_get("@#{method}")
-        variable = instance_variable_set("@#{method}", {}) if variable.nil?
+      define_method :"#{method}=" do |value|
+        variable = instance_variable_get(:"@#{method}")
+        variable = instance_variable_set(:"@#{method}", {}) if variable.nil?
         variable[@delivery_system] = value
       end
     end

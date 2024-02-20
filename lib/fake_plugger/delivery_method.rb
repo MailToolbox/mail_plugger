@@ -299,10 +299,10 @@ module FakePlugger
       @response = settings[:fake_plugger_response] if @response.nil?
 
       %w[debug raw_message use_mail_grabber].each do |variable_name|
-        next unless instance_variable_get("@#{variable_name}").nil?
+        next unless instance_variable_get(:"@#{variable_name}").nil?
 
         instance_variable_set(
-          "@#{variable_name}",
+          :"@#{variable_name}",
           settings[:"fake_plugger_#{variable_name}"] || false
         )
       end
