@@ -23,7 +23,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mail_grabber (1.3.4)
+    mail_grabber (1.3.5)
       mail (~> 2.5)
       rackup (~> 0.2)
       sqlite3 (~> 1.4)
