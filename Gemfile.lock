@@ -23,7 +23,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mail_grabber (1.3.5)
+    mail_grabber (1.3.6)
       mail (~> 2.5)
       rackup (~> 0.2)
       sqlite3 (~> 1.4)
@@ -43,7 +43,7 @@ GEM
       ast (~> 2.4.1)
       racc
     racc (1.7.3)
-    rack (3.0.9)
+    rack (3.0.9.1)
     rackup (0.2.3)
       rack (>= 3.0.0.beta1)
       webrick
