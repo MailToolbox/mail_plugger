@@ -1,5 +1,13 @@
 # Change log
 
+## 1.7.7 (2024-09-25)
+
+### Changes
+
+* Update MailGrabber to version 1.3.7 because of security issues in the webrick gem.
+* Update gems.
+
+
 ## 1.7.6 (2024-03-05)
 
 ### Changes
