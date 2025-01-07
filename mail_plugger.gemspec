@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/MailToolbox/mail_plugger'
   spec.license       = 'MIT'
 
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.7.0')
+  spec.required_ruby_version = Gem::Requirement.new('>= 3.0.0')
 
   spec.extra_rdoc_files = ['LICENSE.txt', 'README.md']
 
