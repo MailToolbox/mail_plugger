@@ -1,5 +1,15 @@
 # Change log
 
+## 1.8.0 (2025-01-07)
+
+### Changes
+
+* Add Ruby 3.4 support.
+* Drop Ruby 2.7 support.
+* Update MailGrabber to version 1.4.1.
+* Update bundler and gems.
+
+
 ## 1.7.7 (2024-09-25)
 
 ### Changes
