@@ -46,6 +46,9 @@ RSpec/ContextWording:
     - and
     - but
 
+RSpec/IncludeExamples:
+  Enabled: false
+
 RSpec/MultipleExpectations:
   Max: 5
 
