@@ -27,8 +27,10 @@ RSpec.describe MailPlugger::MailHelper do
     stub_const('OtherDummyApi', Class.new { def deliver; end })
   end
 
-  describe '#check_version_of' do
-    subject(:check_version) { TestClass.new.check_version_of('mail', version) }
+  describe '#gem_version_satisfied?' do
+    subject(:gem_version_satisfied) do
+      TestClass.new.gem_version_satisfied?('mail', version)
+    end
 
     before do
       allow(Gem.loaded_specs['mail']).to receive(:version)
@@ -42,7 +44,7 @@ RSpec.describe MailPlugger::MailHelper do
         let(:current_version) { Gem::Version.new('2.7.0') }
 
         it 'returns with false' do
-          expect(check_version).to be false
+          expect(gem_version_satisfied).to be false
         end
       end
 
@@ -50,7 +52,7 @@ RSpec.describe MailPlugger::MailHelper do
         let(:current_version) { Gem::Version.new('2.7.1') }
 
         it 'returns with true' do
-          expect(check_version).to be true
+          expect(gem_version_satisfied).to be true
         end
       end
     end
@@ -62,7 +64,7 @@ RSpec.describe MailPlugger::MailHelper do
         let(:current_version) { Gem::Version.new('2.6.9') }
 
         it 'returns with false' do
-          expect(check_version).to be false
+          expect(gem_version_satisfied).to be false
         end
       end
 
@@ -70,7 +72,7 @@ RSpec.describe MailPlugger::MailHelper do
         let(:current_version) { Gem::Version.new('2.7.1') }
 
         it 'returns with false' do
-          expect(check_version).to be false
+          expect(gem_version_satisfied).to be false
         end
       end
 
@@ -78,7 +80,7 @@ RSpec.describe MailPlugger::MailHelper do
         let(:current_version) { Gem::Version.new('2.7.0') }
 
         it 'returns with true' do
-          expect(check_version).to be true
+          expect(gem_version_satisfied).to be true
         end
       end
     end
@@ -90,7 +92,7 @@ RSpec.describe MailPlugger::MailHelper do
         let(:current_version) { Gem::Version.new('2.6.9') }
 
         it 'returns with true' do
-          expect(check_version).to be true
+          expect(gem_version_satisfied).to be true
         end
       end
 
@@ -98,7 +100,7 @@ RSpec.describe MailPlugger::MailHelper do
         let(:current_version) { Gem::Version.new('2.7.0') }
 
         it 'returns with false' do
-          expect(check_version).to be false
+          expect(gem_version_satisfied).to be false
         end
       end
     end

@@ -26,7 +26,7 @@ module MailPlugger
     # @param [String] version the satisfied version of the gem
     #
     # @return [Boolean] true/false
-    def check_version_of(gem_name, version)
+    def gem_version_satisfied?(gem_name, version)
       requirement     = Gem::Requirement.new(version)
       current_version = Gem.loaded_specs[gem_name].version
 
@@ -220,11 +220,11 @@ module MailPlugger
     # @return [String] version dependent method call
     def mail_field_value
       @mail_field_value ||=
-        if check_version_of('mail', '> 2.7.0')
+        if gem_version_satisfied?('mail', '> 2.7.0')
           %w[unparsed_value]
-        elsif check_version_of('mail', '= 2.7.0')
+        elsif gem_version_satisfied?('mail', '= 2.7.0')
           %w[instance_variable_get @unparsed_value]
-        elsif check_version_of('mail', '< 2.7.0')
+        elsif gem_version_satisfied?('mail', '< 2.7.0')
           %w[instance_variable_get @value]
         end
     end
