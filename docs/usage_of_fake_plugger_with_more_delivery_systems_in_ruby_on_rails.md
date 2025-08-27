@@ -1,8 +1,10 @@
 # How to use FakePlugger with more delivery systems in Ruby on Rails
 
-Let's modify the configuration which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_in_ruby_on_rails.md).
+**This Class was made for development and testing purposes. Please do not use it in the production environment.**
 
-Change `config/initializers/mail_plugger.rb`.
+Let's modify the configuration that was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_fake_plugger_in_ruby_on_rails.md).
+
+Change the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -69,7 +71,7 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Then change `app/mailers/test_mailer.rb` file.
+Then change the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -85,19 +87,19 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-Then we should add views of the second mailer method, so create `app/views/test_mailer/send_test2.html.erb`
+Then we should add views of the second mailer method, so create the `app/views/test_mailer/send_test2.html.erb`
 
 ```erb
 <p>Test email body</p>
 ```
 
-and `app/views/test_mailer/send_test2.text.erb`.
+and the `app/views/test_mailer/send_test2.text.erb` files.
 
 ```erb
 Test email body
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -122,7 +124,7 @@ TestMailer.send_test2.deliver_now!
 #=> {:response=>"Message sent via API"}
 ```
 
-Let's try the same thing in `rails console -e test`
+Let's try the same thing using `rails console -e test`
 
 ```ruby
 TestMailer.send_test.deliver_now!

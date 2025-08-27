@@ -1,9 +1,8 @@
 # How to use FakePlugger with MailGrabber in Ruby on Rails
 
-**This Class was made for development and testing purpose. Please do not use on production environment.**
+**This Class was made for development and testing purposes. Please do not use it in the production environment.**
 
-After to add `mail_plugger`, `mail_grabber` gems and if we are using API then the gem of API of the mail provider, create `config/initializers/mail_plugger.rb` file and add something similar.
-
+After adding the `mail_plugger` and the `mail_grabber` gems, and if we are using API, then the gem of the API of the mail provider, create the `config/initializers/mail_plugger.rb` file and add something similar.
 
 If we are using SMTP
 
@@ -74,13 +73,13 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Then change `config/environments/development.rb` file.
+Then change the `config/environments/development.rb` file.
 
 ```ruby
 config.action_mailer.delivery_method = :fake_plugger
 ```
 
-Also add route that we can reach MailGrabber web interface. Let's change `config/routes.rb` file.
+Also, add a route that we can reach the MailGrabber web interface. Let's change the `config/routes.rb` file.
 
 ```ruby
 require 'mail_grabber/web'
@@ -90,7 +89,7 @@ Rails.application.routes.draw do
 end
 ```
 
-So now we should add a mailer method. Let's create `app/mailers/test_mailer.rb` file.
+So now we should add a mailer method. Let's create the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -106,19 +105,19 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-Then we should add views (the body) of this email, so create `app/views/test_mailer/send_test.html.erb`
+Then we should add views (the body) of this email, so create the `app/views/test_mailer/send_test.html.erb`
 
 ```erb
 <p>Test email body</p>
 ```
 
-and `app/views/test_mailer/send_test.text.erb`.
+and the `app/views/test_mailer/send_test.text.erb` files.
 
 ```erb
 Test email body
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -143,7 +142,7 @@ TestMailer.send_test2.deliver_now!
 #=> #<Mail::Message:66960, Multipart: true, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test2 email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; charset=UTF-8; boundary="--==_mimepart_63921f8514491_92391b1c0a1">, <delivery-system: test_api_client>>
 ```
 
-Let's try the same thing in `rails console -e test`
+Let's try the same thing using `rails console -e test`
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -165,4 +164,4 @@ TestMailer.send_test2.deliver_now!
 # => #<Mail::Message:67120, Multipart: true, Headers: <Date: Thu, 08 Dec 2022 18:39:16 +0100>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <639221447acc4_94a11b1c5358@server.local.mail>>, <Subject: Test2 email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; charset=UTF-8; boundary="--==_mimepart_639221447968d_94a11b1c5343">, <Content-Transfer-Encoding: 7bit>, <delivery-system: test_api_client>>
 ```
 
-Then we can check grabbed emails on the web interface. If the Rails server is running, then open a browser and visit on the `http://localhost:3000/mail_grabber` page.
+Then we can check the grabbed emails on the web interface. If the Rails server is running, then open a browser and visit on the `http://localhost:3000/mail_grabber` page.

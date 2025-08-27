@@ -1,8 +1,8 @@
 # How to add API specific options to the mailer method in Ruby on Rails
 
-Let's use mailer method which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#api).
+Let's use the mailer method that was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#api).
 
-Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
+Change the API class and the `MailPlugger.plug_in` method in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -62,7 +62,7 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-So add special API options to the mailer method. Let's change `app/mailers/test_mailer.rb` file.
+So add special API options to the mailer method. Let's change the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -74,7 +74,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -91,7 +91,7 @@ TestMailer.send_test.deliver_now!
 
 If those API specific options are common, then we can use `default_delivery_options` as well.
 
-Change `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
+Change the `MailPlugger.plug_in` method in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
@@ -107,7 +107,7 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Change `app/mailers/test_mailer.rb` file as well.
+Change the `app/mailers/test_mailer.rb` file as well.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -119,7 +119,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!

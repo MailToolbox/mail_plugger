@@ -34,8 +34,9 @@ module MailPlugger
     end
 
     # Extract 'client'. If it's a hash, then it'll return the right
-    # client belongs to the delivery system. If it's not a hash, it'll return
-    # the given value. But if the value doesn't a class, it'll raise an error.
+    # client that belongs to the delivery system. If it's not a hash,
+    # it'll return the given value. But if the value isn't a class,
+    # it'll raise an error.
     #
     # @return [Class] the defined API class
     def client
@@ -51,9 +52,9 @@ module MailPlugger
       api_client
     end
 
-    # Collects data from Mail::Message object.
+    # Collects data from the Mail::Message object.
     #
-    # @return [Hash] the data which was defined in 'delivery_options'
+    # @return [Hash] the data that was defined in 'delivery_options'
     def delivery_data
       data = {}
 
@@ -79,11 +80,11 @@ module MailPlugger
     end
 
     # Extract 'default_delivery_options'. If it's a hash, then it'll return the
-    # right sending options belongs to the delivery system.
+    # right sending options that belong to the delivery system.
     # If 'default_delivery_options' is nil, it'll return an empty hash. But if
-    # the value doesn't a hash, it'll raise an error.
+    # the value isn't a hash, it'll raise an error.
     #
-    # @return [Hash] the data which was defined in 'default_delivery_options'
+    # @return [Hash] the data that was defined in 'default_delivery_options'
     def default_data
       options = option_value_from(@default_delivery_options)
 
@@ -114,8 +115,9 @@ module MailPlugger
     end
 
     # Extract 'delivery_options'. If it's a hash, then it'll return the right
-    # options, belongs to the delivery system. If it's not a hash, it'll return
-    # the given value. But if the value doesn't an array, it'll raise an error.
+    # options that belong to the delivery system. If it's not a hash,
+    # it'll return the given value. But if the value isn't an array,
+    # it'll raise an error.
     #
     # @return [Array] the options it'll collect from the Mail::Message object
     def delivery_options
@@ -129,10 +131,11 @@ module MailPlugger
       options
     end
 
-    # Extract 'delivery_system' from the Mail::Message object or if it's not
+    # Extract 'delivery_system' from the Mail::Message object, or if it's not
     # defined, then use the default one. If it's still nil and one of the
-    # 'delivery_options', 'client' and/or 'delivery_settings' is a hash and
-    # 'delivery_settings' doesn't contain 'delivery_system' then raise error.
+    # 'delivery_options', 'client', and/or 'delivery_settings' is a hash and
+    # 'delivery_settings' doesn't contain 'delivery_system',
+    # then raise an error.
     #
     # @return [String] with the name of the delivery system
     def delivery_system
@@ -147,11 +150,11 @@ module MailPlugger
       @delivery_system
     end
 
-    # Check the given 'delivery_options', 'client' and 'delivery_settings' are
-    # hashes and if one of that does, then check the 'delivery_system' is valid
-    # or not.
+    # Check that the given 'delivery_options', 'client', and 'delivery_settings'
+    # are hashes, and if one of those is, then check whether the
+    # 'delivery_system' is valid or not.
     # If the given 'delivery_system' is nil or doesn't match with extracted
-    # keys, then it will raise error.
+    # keys, then it will raise an error.
     def delivery_system_value_check
       return unless need_delivery_system?
 
@@ -166,8 +169,8 @@ module MailPlugger
             "\"delivery_system\" '#{@delivery_system}' does not exist"
     end
 
-    # Check that 'delivery_settings' has 'delivery_system' key or not.
-    # If 'delivery_settings' contains 'DELIVERY_SETTINGS_KEYS' then it returns
+    # Check that 'delivery_settings' has the 'delivery_system' key or not.
+    # If 'delivery_settings' contains 'DELIVERY_SETTINGS_KEYS', then it returns
     # false, else true.
     #
     # @return [Boolean] true/false
@@ -192,17 +195,18 @@ module MailPlugger
       end
     end
 
-    # Return 'delivery_systems' array if it's exist. If not, then extract keys
-    # from 'delivery_options', 'client' or 'delivery_settings',
-    # depends on which is a hash. If none of these are hashes, then returns nil.
+    # Return the 'delivery_systems' array if it exists. If not, then extract
+    # keys from 'delivery_options', 'client', or 'delivery_settings', depending
+    # on which is a hash. If none of these are hashes, then returns nil.
     #
     # @return [Array/NilClass] with the keys or nil
     def extract_keys
       @delivery_systems || extract_keys_from_other_variables
     end
 
-    # Extract keys from 'delivery_options', 'client' or 'delivery_settings',
-    # depends on which is a hash. If none of these are hashes, then returns nil.
+    # Extract keys from 'delivery_options', 'client', or 'delivery_settings',
+    # depending on which is a hash. If none of these are hashes,
+    # then returns nil.
     #
     # @return [Array/NilClass] with the keys from one of the hash or nil
     def extract_keys_from_other_variables
@@ -217,7 +221,7 @@ module MailPlugger
 
     # How to extract the (unparsed) value of the mail message fields.
     #
-    # @return [String] version dependent method call
+    # @return [String] version-dependent method call
     def mail_field_value
       @mail_field_value ||=
         if gem_version_satisfied?('mail', '> 2.7.0')
@@ -240,9 +244,9 @@ module MailPlugger
       message_field.public_send(*mail_field_value)
     end
 
-    # Check if either 'deliviery_options' or 'client' is a hash, or
-    # 'delivery_settings' is a hash but not contains 'DELIVERY_SETTINGS_KEYS'
-    # in first level.
+    # Check if either 'delivery_options' or 'client' is a hash, or
+    # 'delivery_settings' is a hash but does not contain
+    # 'DELIVERY_SETTINGS_KEYS' at the first level.
     #
     # @return [Boolean] true/false
     def need_delivery_system?
@@ -264,7 +268,7 @@ module MailPlugger
       end
     end
 
-    # Check that settings contains any SMTP related settings.
+    # Check that the settings contain any SMTP-related settings.
     #
     # @return [Boolean] true/false
     def send_via_smtp?
@@ -291,9 +295,9 @@ module MailPlugger
     end
 
     # Extract 'settings'. If 'delivery_settings' is a hash, then it'll return
-    # the right settings, belongs to the delivery system. If 'delivery_settings'
-    # is nil, it'll return an empty hash. But if the value doesn't a hash, it'll
-    # raise an error.
+    # the right settings that belong to the delivery system.
+    # If 'delivery_settings' is nil, it'll return an empty hash.
+    # But if the value isn't a hash, it'll raise an error.
     #
     # @return [Hash] settings for Mail delivery_method and/or FakePlugger
     def settings

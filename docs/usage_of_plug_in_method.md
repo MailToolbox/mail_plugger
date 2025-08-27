@@ -7,15 +7,15 @@
 
 # How to use MailPlugger.plug_in method
 
-With `plug_in` method, we can add configurations for the delivery method.
+With the `plug_in` method, we can add configurations for the delivery method.
 
-It has a parameter which calls to `delivery_system`. This parameter is a name of the delivery system like `aws_ses`, `sparkpost`, `sendgrid`, etc. Basically, it can be anything which helps to identify this delivery system. The `delivery_system` can be either String or Symbol, but the `delivery_system` type should match with the type of the `Mail::Message` object `delivery_system` parameter (if `delivery_system` is String then in the `Mail::Message` object `delivery_system` parameter should be String as well).
+It has a parameter that calls to `delivery_system`. This parameter contains the name of the delivery system like `aws_ses`, `sparkpost`, `sendgrid`, etc. Basically, it can be anything that helps to identify this delivery system. The `delivery_system` can be either String or Symbol, but the `delivery_system` type should match with the type of the `delivery_system` parameter of the `Mail::Message` object (if `delivery_system` is String, then the `delivery_system` parameter in the `Mail::Message` object should be String as well).
 
 It can accept 4 configurations:
-- `client` which should be a Class. This Class is a special Class which generates the data and calls the API to send the message. The Class should have an `initialize` and a `deliver` method.
-- `default_delivery_options` which should be a Hash. All message what we send with the `delivery_system` will get these options defined in this Hash, but if an option is defined in the `Mail::Message` object as well, then it will override the value of the default option.
-- `delivery_options` which should be an Array with Symbols or Strings. It will search these options in the `Mail::Message` object like `from`, `to`, `cc`, `bcc`, `subject`, `body`, `text_part`, `html_part`, `attachments` or anything what we will add to this object. Also, we can retrieve the `Mail::Message` object with `message_obj`.
-- `delivery_settings` which should be a Hash. The Mail gem can use these settings like `{ return_response: true }` or we can add SMTP settings like `{ smtp_sttings: { address: 'smtp.server.com', port: 587, ... } }`.
+- `client` which should be a Class. This Class is a special Class that generates the data and calls the API to send the message. The Class should have an `initialize` and a `deliver` method.
+- `default_delivery_options` which should be a Hash. All messages that we send with the `delivery_system` will get these options defined in this Hash, but if an option is defined in the `Mail::Message` object as well, then it will override the value of the default option.
+- `delivery_options` which should be an Array with Symbols or Strings. It will search these options in the `Mail::Message` object, like `from`, `to`, `cc`, `bcc`, `subject`, `body`, `text_part`, `html_part`, `attachments`, or anything that we will add to this object. Also, we can retrieve the `Mail::Message` object with `message_obj`.
+- `delivery_settings` which should be a Hash. The Mail gem can use these settings like `{ return_response: true }`, or we can add SMTP settings like `{ smtp_settings: { address: 'smtp.server.com', port: 587, ... } }`.
 
 Example:
 

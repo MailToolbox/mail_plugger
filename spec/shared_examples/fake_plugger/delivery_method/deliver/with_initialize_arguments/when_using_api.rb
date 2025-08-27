@@ -124,7 +124,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
           context 'when none of the delivery_options and client are hashes' do
             # In this case delivey_options and client are not hashes,
-            # so the delivey_system is not important.
+            # so the delivery_system is not important.
             context 'but message does NOT contain delivery_system' do
               let(:message) { Mail.new }
 
@@ -235,7 +235,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
           context 'when none of the delivery_options and client are hashes' do
             # In this case delivey_options and client are not hashes,
-            # so the delivey_system is not important.
+            # so the delivery_system is not important.
             context 'but message does NOT contain delivery_system' do
               let(:message) { Mail.new }
 
@@ -347,7 +347,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
 
           context 'when none of the delivery_options and client are hashes' do
             # In this case delivey_options and client are not hashes,
-            # so the delivey_system is not important.
+            # so the delivery_system is not important.
             context 'but message does NOT contain delivery_system' do
               let(:message) { Mail.new }
 

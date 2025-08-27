@@ -11,10 +11,10 @@ First, you should be able to `require 'mail'` and `require 'mail_plugger'` to ge
 
 ## SMTP
 
-*This is just a theoretical example, because here it would be smarter to use the built-in SMTP solution of `mail` gem. The advantage of this solution will be much more usable in Ruby on Rails. Especially when we would like to use more than one SMTP servers, or we would like to combine SMTP and API connections.*
+*This is just a theoretical example, because here it would be smarter to use the built-in SMTP solution of the `mail` gem. The advantage of this solution will be much more usable in Ruby on Rails. Especially when we would like to use more than one SMTP server, or we would like to combine SMTP and API connections.*
 
 
-We can use `MailPlugger.plug_in` to add our configurations.
+We can use the `MailPlugger.plug_in` method to add our configurations.
 
 ```ruby
 MailPlugger.plug_in('test_smtp_client') do |smtp|
@@ -38,7 +38,7 @@ MailPlugger::DeliveryMethod.new(delivery_settings: { smtp_settings: { address: '
 # => #<Mail::Message:1880, Multipart: false, Headers: <Date: Tue, 25 May 2021 21:09:06 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60ad4b52a2079_3e16708170b1@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: text/plain>, <Content-Transfer-Encoding: 7bit>>
 ```
 
-Or add `MailPlugger::DeliveryMethod` to `mail.delivery_method`.
+Or add the `MailPlugger::DeliveryMethod` to the `mail.delivery_method`.
 
 ```ruby
 mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -58,7 +58,7 @@ mail.deliver!
 
 ## API
 
-We need a class which will send the message in the right format via API.
+We need a class that sends the message in the correct format via API.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -104,7 +104,7 @@ class TestApiClientClass
 end
 ```
 
-We can use `MailPlugger.plug_in` to add our configurations.
+We can use the `MailPlugger.plug_in` method to add our configurations.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
@@ -135,7 +135,7 @@ MailPlugger::DeliveryMethod.new(client: TestApiClientClass, delivery_options: %i
 # => {:response=>"OK"}
 ```
 
-Or add `MailPlugger::DeliveryMethod` to `mail.delivery_method`.
+Or add the `MailPlugger::DeliveryMethod` to the `mail.delivery_method`.
 
 ```ruby
 mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -183,7 +183,7 @@ mail.deliver!
 # => {:response=>"OK"}
 ```
 
-Or use `MailPlugger.plug_in` method with delivery settings.
+Or use the `MailPlugger.plug_in` method with delivery settings.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
@@ -262,7 +262,7 @@ class TestApiClientClass
 end
 ```
 
-Add this tag option to the Mail::Message object.
+Add this tag option to the `Mail::Message` object.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
@@ -280,7 +280,7 @@ MailPlugger::DeliveryMethod.new.deliver!(message)
 # => {:response=>"OK"}
 ```
 
-Or we can add tag as a default delivery option.
+Or we can add a tag as a default delivery option.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|

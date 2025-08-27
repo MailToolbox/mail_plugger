@@ -1,8 +1,8 @@
 # How to use one API delivery system with more send methods in Ruby on Rails
 
-Let's modify the configuration which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_api_delivery_systems_in_ruby_on_rails.md).
+Let's modify the configuration that was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_api_delivery_systems_in_ruby_on_rails.md).
 
-Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
+Change the API class and the `MailPlugger.plug_in` method in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -76,7 +76,7 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Then change `app/mailers/test_mailer.rb` file.
+Then change the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -92,7 +92,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!

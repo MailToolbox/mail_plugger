@@ -7,11 +7,11 @@
 
 # How to use FakePlugger in Ruby on Rails
 
-**This Class was made for development and testing purpose. Please do not use on production environment.**
+**This Class was made for development and testing purposes. Please do not use it in the production environment.**
 
 ## SMTP
 
-After to add `mail_plugger` gem, create `config/initializers/mail_plugger.rb` file and add something similar.
+After adding the `mail_plugger` gem, create the `config/initializers/mail_plugger.rb` file and add something similar.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -20,19 +20,19 @@ MailPlugger.plug_in('test_smtp_client') do |smtp|
 end
 ```
 
-Then change `config/application.rb` file.
+Then change the `config/application.rb` file.
 
 ```ruby
 config.action_mailer.delivery_method = :mail_plugger
 ```
 
-Also change, e.g. `config/environments/test.rb` file.
+Also, change, e.g. the `config/environments/test.rb` file.
 
 ```ruby
 config.action_mailer.delivery_method = :fake_plugger
 ```
 
-So now we should add a mailer method. Let's create `app/mailers/test_mailer.rb` file.
+So now we should add a mailer method. Let's create the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -44,19 +44,19 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-Then we should add views (the body) of this email, so create `app/views/test_mailer/send_test.html.erb`
+Then we should add views (the body) of this email, so create the `app/views/test_mailer/send_test.html.erb`
 
 ```erb
 <p>Test email body</p>
 ```
 
-and `app/views/test_mailer/send_test.text.erb`.
+and the `app/views/test_mailer/send_test.text.erb` files.
 
 ```erb
 Test email body
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -121,7 +121,7 @@ TestMailer.send_test.deliver_now!
 #=> #<Mail::Message:61240, Multipart: true, Headers: <Date: Sun, 06 Jun 2021 11:22:32 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60bc93d8a8437_df4eec1861752@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60bc93d8a3e76_df4eec18616bf"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
 ```
 
-Let's try the same thing in `rails console -e test`
+Let's try the same thing using `rails console -e test`
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -186,7 +186,7 @@ TestMailer.send_test.deliver_now!
 # => #<Mail::Message:61260, Multipart: true, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60bc945431b46_e0c5ec045286b"; charset=UTF-8>>
 ```
 
-Let's add `return_response: true` to the delivery settings as well in `config/initializers/mail_plugger.rb`.
+Let's add `return_response: true` to the delivery settings as well in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.plug_in('test_smtp_client') do |smtp|
@@ -197,7 +197,7 @@ MailPlugger.plug_in('test_smtp_client') do |smtp|
 end
 ```
 
-Then in the `rails console`.
+Then, in the `rails console`.
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -262,7 +262,7 @@ TestMailer.send_test.deliver_now!
 #=> #<Mail::Message:61240, Multipart: true, Headers: <Date: Sun, 06 Jun 2021 11:33:53 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60bc9681d13bf_e3ddec1821061@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60bc9681ced00_e3ddec1820931"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
 ```
 
-Let's try the same thing in `rails console -e test`
+Let's try the same thing using `rails console -e test`
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -380,7 +380,7 @@ TestMailer.send_test.deliver_now!.deliver
 # => #<Mail::Message:61300, Multipart: true, Headers: <Date: Sun, 06 Jun 2021 11:39:04 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60bc97b8bae59_e570ec04161ee@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60bc97b8ba738_e570ec0416044"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
 ```
 
-Let's add debug option as well in `config/initializers/mail_plugger.rb`.
+Let's add debug option as well in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.plug_in('test_smtp_client') do |smtp|
@@ -392,7 +392,7 @@ MailPlugger.plug_in('test_smtp_client') do |smtp|
 end
 ```
 
-Then in the `rails console`.
+Then, in the `rails console`.
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -457,7 +457,7 @@ TestMailer.send_test.deliver_now!
 #=> #<Mail::Message:61240, Multipart: true, Headers: <Date: Sun, 06 Jun 2021 11:48:30 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60bc99eebb552_e8a2ec18637df@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60bc99eeb82f2_e8a2ec1863684"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
 ```
 
-Let's try the same thing in `rails console -e test`
+Let's try the same thing using `rails console -e test`
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -568,7 +568,7 @@ TestMailer.send_test.deliver_now!
 # => #<Mail::Message:61260, Multipart: true, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60bc9a6e1ee37_e993ec04920b"; charset=UTF-8>>
 ```
 
-Let's add fake response in `config/initializers/mail_plugger.rb`.
+Let's add fake response in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.plug_in('test_smtp_client') do |smtp|
@@ -580,7 +580,7 @@ MailPlugger.plug_in('test_smtp_client') do |smtp|
 end
 ```
 
-Then in the `rails console`.
+Then, in the `rails console`.
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -645,7 +645,7 @@ TestMailer.send_test.deliver_now!
 #=> #<Mail::Message:61240, Multipart: true, Headers: <Date: Sun, 06 Jun 2021 11:56:32 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60bc9bd077b15_eb83ec188609d@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60bc9bd07311e_eb83ec188598d"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
 ```
 
-Let's try the same thing in `rails console -e test`
+Let's try the same thing using `rails console -e test`
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -712,7 +712,7 @@ TestMailer.send_test.deliver_now!
 
 ## API
 
-After to add `mail_plugger` gem and the gem of API of the mail provider, create `config/initializers/mail_plugger.rb` file and add something similar.
+After adding the `mail_plugger` gem and the gem of the API of the mail provider, create the `config/initializers/mail_plugger.rb` file and add something similar.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -767,19 +767,19 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Then change `config/application.rb` file.
+Then change the `config/application.rb` file.
 
 ```ruby
 config.action_mailer.delivery_method = :mail_plugger
 ```
 
-Also change e.g. `config/environments/test.rb` file.
+Also, change e.g. the `config/environments/test.rb` file.
 
 ```ruby
 config.action_mailer.delivery_method = :fake_plugger
 ```
 
-So now we should add a mailer method. Let's create `app/mailers/test_mailer.rb` file.
+So now we should add a mailer method. Let's create the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -791,19 +791,19 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-Then we should add views (the body) of this email, so create `app/views/test_mailer/send_test.html.erb`
+Then we should add views (the body) of this email, so create the `app/views/test_mailer/send_test.html.erb`
 
 ```erb
 <p>Test email body</p>
 ```
 
-and `app/views/test_mailer/send_test.text.erb`.
+and the `app/views/test_mailer/send_test.text.erb` files.
 
 ```erb
 Test email body
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -874,7 +874,7 @@ TestMailer.send_test.deliver_now!
 #=> #<Mail::Message:61140, Multipart: true, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_600526bddc121_15e86ebc839b"; charset=UTF-8>>
 ```
 
-Let's try the same thing in `rails console -e test`
+Let's try the same thing using `rails console -e test`
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -939,7 +939,7 @@ TestMailer.send_test.deliver_now!
 #=> #<Mail::Message:61100, Multipart: true, Headers: <Date: Sat, 02 Jan 2021 15:08:53 +0100>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <5ff07e7597b40_104cfebb4988d3@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_5ff07e75956a7_104cfebb498739"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>>
 ```
 
-Let's add delivery settings as well in `config/initializers/mail_plugger.rb`.
+Let's add delivery settings as well in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
@@ -949,7 +949,7 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Then in the `rails console`.
+Then, in the `rails console`.
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -1020,7 +1020,7 @@ TestMailer.send_test.deliver_now!
 #=> {:response=>"OK"}
 ```
 
-Let's try the same thing in `rails console -e test`
+Let's try the same thing using `rails console -e test`
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -1098,7 +1098,7 @@ TestMailer.send_test.deliver_now!.deliver
 #=> {:response=>"OK"}
 ```
 
-Let's add debug option as well in `config/initializers/mail_plugger.rb`.
+Let's add debug option as well in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
@@ -1108,7 +1108,7 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Then in the `rails console`.
+Then, in the `rails console`.
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -1179,7 +1179,7 @@ TestMailer.send_test.deliver_now!
 #=> {:response=>"OK"}
 ```
 
-Let's try the same thing in `rails console -e test`
+Let's try the same thing using `rails console -e test`
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -1314,7 +1314,7 @@ TestMailer.send_test.deliver_now!
 # => #<TestApiClientClass:0x00007ff1c88e2c60 @settings={:api_key=>"12345"}, @options={"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "text_part"=>"Test email body\n\n", "html_part"=>"<!DOCTYPE html>\n<html>\n  <head>\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n    <style>\n      /* Email styles need to be inline */\n    </style>\n  </head>\n\n  <body>\n    <p>Test email body</p>\n\n  </body>\n</html>\n"}>
 ```
 
-Let's add fake response in `config/initializers/mail_plugger.rb`.
+Let's add fake response in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
@@ -1324,7 +1324,7 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Then in the `rails console`.
+Then, in the `rails console`.
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -1395,7 +1395,7 @@ TestMailer.send_test.deliver_now!
 #=> {:response=>"OK"}
 ```
 
-Let's try the same thing in `rails console -e test`
+Let's try the same thing using `rails console -e test`
 
 ```ruby
 TestMailer.send_test.deliver_now

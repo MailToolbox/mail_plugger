@@ -1,8 +1,8 @@
 # How to use more SMTP delivery systems in Ruby on Rails
 
-Let's modify the configuration which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#smtp).
+Let's modify the configuration that was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#smtp).
 
-Add another SMTP client in `config/initializers/mail_plugger.rb`.
+Add another SMTP client in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -15,7 +15,7 @@ MailPlugger.plug_in('test_smtp2_client') do |smtp|
 end
 ```
 
-Then change `app/mailers/test_mailer.rb` file.
+Then change the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -31,19 +31,19 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-Then we should add views of the second mailer method, so create `app/views/test_mailer/send_test2.html.erb`
+Then we should add views of the second mailer method, so create the `app/views/test_mailer/send_test2.html.erb`
 
 ```erb
 <p>Test email body</p>
 ```
 
-and `app/views/test_mailer/send_test2.text.erb`.
+and the `app/views/test_mailer/send_test2.text.erb` files.
 
 ```erb
 Test email body
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -79,7 +79,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -99,7 +99,7 @@ TestMailer.send_test2.deliver_now!
 #=> #<Mail::Message:61280, Multipart: true, Headers: <Date: Wed, 02 Jun 2021 07:27:36 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60b716c84b0a7_14472ec18765b0@server.local.mail>>, <Subject: Test2 email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60b716c848d25_14472ec18764d4"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>, <delivery-system: test_smtp_client>>
 ```
 
-Or we can use default, but override it in the method.
+Or we can use the default, but override it in the method.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -115,7 +115,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -135,7 +135,7 @@ TestMailer.send_test2.deliver_now!
 #=> #<Mail::Message:61280, Multipart: true, Headers: <Date: Wed, 02 Jun 2021 07:30:13 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60b71765acdd6_14571ec186227c@server.local.mail>>, <Subject: Test2 email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60b71765aab59_14571ec18621bb"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>, <delivery-system: test_smtp2_client>>
 ```
 
-Or if we are not define any `delivey_system` then it will use the first defined one with `MailPlugger.plug_in` method.
+Or if we do not define any `delivery_system`, then it will use the first plugged-in delivery system, defined with the `MailPlugger.plug_in` method.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -151,7 +151,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -187,7 +187,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!

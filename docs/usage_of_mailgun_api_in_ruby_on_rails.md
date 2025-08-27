@@ -2,17 +2,17 @@
 
 **Please note that these examples were not tested, but I believe it should work.**
 
-Let's use mailer method which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#api).
+Let's use the mailer method that was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#api).
 
-Add `mailgun-ruby` gem to the `Gemfile`.
+Add the `mailgun-ruby` gem to the `Gemfile`.
 
 ```ruby
 gem 'mailgun-ruby'
 ```
 
-Then run `bundle install` command to deploy the gem.
+Then run the `bundle install` command to deploy the gem.
 
-Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
+Change the API class and the `MailPlugger.plug_in` method in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 class MailgunApiClient

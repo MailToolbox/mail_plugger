@@ -1,8 +1,8 @@
-# How to use API delivery system that add attachments to the mailer method in Ruby on Rails
+# How to use the API delivery system that adds attachments to the mailer method in Ruby on Rails
 
-Let's use mailer method which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#api).
+Let's use the mailer method that was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md#api).
 
-Change the API and `MailPlugger.plug_in` method in `config/initializers/mail_plugger.rb`.
+Change the API class and the `MailPlugger.plug_in` method in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -72,7 +72,7 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Let's change `app/mailers/test_mailer.rb` file.
+Let's change the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -87,14 +87,14 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-Then change `app/views/test_mailer/send_test.html.erb` and add inline attachment.
+Then change the `app/views/test_mailer/send_test.html.erb` file and add an inline attachment.
 
 ```erb
 <p>Test email body</p>
 <%= image_tag attachments['image2.png'].url %>
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!

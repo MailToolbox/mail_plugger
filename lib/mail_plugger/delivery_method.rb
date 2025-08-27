@@ -4,9 +4,9 @@ module MailPlugger
   class DeliveryMethod
     include MailHelper
 
-    # Initialize delivery method attributes. If we are using MailPlugger.plug_in
-    # method, then these attributes can be nil, if not then we should set these
-    # attributes.
+    # Initialize delivery method attributes. If we are using the
+    # MailPlugger.plug_in method, then these attributes can be nil.
+    # Otherwise, we should set these attributes.
     #
     # @param [Hash] options check options below
     # @option options [Class/Hash] client
@@ -52,14 +52,14 @@ module MailPlugger
     end
 
     # Using SMTP:
-    # Send message via SMTP protocol if the 'delivery_settings' contains a
+    # Send a message via SMTP protocol if the 'delivery_settings' contains a
     # 'smtp_settings' key and the value is a hash with the settings.
     #
     # Using API:
-    # Send message with the given client if the message parameter is a
+    # Send a message with the given client if the message parameter is a
     # Mail::Message object. Before doing that, extract this information from the
     # Mail::Message object which was provided in the 'delivery_options'. After
-    # that it generates a hash with these data and sends the message with the
+    # that, it generates a hash with the data and sends the message with the
     # provided client class which has a 'deliver' method.
     #
     # @param [Mail::Message] message what we would like to send

@@ -153,7 +153,7 @@ RSpec.shared_examples 'fake_plugger/delivery_method/deliver/' \
         let(:sending_method) { :plugged_in_first }
 
         it_behaves_like 'the message does NOT contain delivery_system',
-                        'and the first plugged in method is SMTP'
+                        'and the first plugged-in method is SMTP'
 
         it_behaves_like 'the message contains delivery_system'
       end

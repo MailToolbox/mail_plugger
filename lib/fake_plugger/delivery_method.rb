@@ -4,8 +4,8 @@ require 'mail_grabber' if Gem.loaded_specs.key?('mail_grabber')
 
 module FakePlugger
   class DeliveryMethod < MailPlugger::DeliveryMethod
-    # Initialize FakePlugger delivery method attributes. If we are using
-    # MailPlugger.plug_in method, then these attributes can be nil, if not then
+    # Initialize FakePlugger delivery method attributes. If we are using the
+    # MailPlugger.plug_in method, then these attributes can be nil. Otherwise,
     # we should set these attributes.
     #
     # @param [Hash] options check options below
@@ -26,14 +26,14 @@ module FakePlugger
     #   if true, it will show debug information
     #
     # @option options [Boolean] raw_message
-    #   if true, it will show raw message
+    #   if true, it will show the raw message
     #
     # @option options [String/Symbol/Array/Hash] response
-    #   the deliver! method will return with this value or if this value is nil
-    #   then it will return with the client object
+    #   the deliver! method will return with this value,
+    #   or if this value is nil, then it will return with the client object
     #
     # @option options [Boolean] use_mail_grabber
-    #   if true it will store the message in a database which MailGrabber can
+    #   if true, it will store the message in a database that MailGrabber can
     #   read
     def initialize(options = {})
       super
@@ -48,26 +48,26 @@ module FakePlugger
     end
 
     # Using SMTP:
-    # Mock send message via SMTP protocol if the 'delivery_settings' contains a
-    # 'smtp_settings' key and the value is a hash with the settings.
+    # Mock the message sending via SMTP protocol if the 'delivery_settings'
+    # contains a 'smtp_settings' key and the value is a hash with the settings.
     #
     # Using API:
-    # Mock send message with the given client if the message parameter is a
-    # Mail::Message object. If 'response' parameter is nil, then it will extract
-    # this information from the Mail::Message object which was provided in the
-    # 'delivery_options'. After that it generates a hash with these data and
-    # returns with the provided client class which has a 'deliver' method, but
-    # it won't call the 'deliver' method.
-    # If the 'response' parameter is a hash with 'return_delivery_data: true'
+    # Mock the message sending, using the given client if the message parameter
+    # is a Mail::Message object. If the 'response' parameter is nil, then it
+    # will extract this information from the Mail::Message object which was
+    # provided in the 'delivery_options'. After that, it generates a hash with
+    # the data and returns with the provided client class, which has a 'deliver'
+    # method, but it won't call the 'deliver' method.
+    # If the 'response' parameter is a hash with 'return_delivery_data: true',
     # then it will return with the extracted delivery data.
     #
     #
-    # If the 'response' parameter is not nil, then returns with that given data
-    # without call any other methods.
-    # Except if 'debug' is true. In this case, it will call those methods which
-    # are calling in normal operation as well.
+    # If the 'response' parameter is not nil, then it returns with the given
+    # data without calling any other methods.
+    # Except if 'debug' is true. In this case, it will call those methods that
+    # are called in normal operation as well.
     # If 'debug' is true, then it prints out some debug information.
-    # If 'raw_message' is true, then it prints out raw message.
+    # If 'raw_message' is true, then it prints out the raw message.
     # If 'use_mail_grabber' is true, then it stores the message in a database.
     #
     # @param [Mail::Message] message what we would like to send
@@ -166,7 +166,7 @@ module FakePlugger
     private
 
     # Call extra options like show debug information, show raw message,
-    # use mail grabber.
+    # and use mail grabber.
     def call_extra_options
       show_debug_info if @debug
       show_raw_message if @raw_message
@@ -176,7 +176,7 @@ module FakePlugger
       MailGrabber::DeliveryMethod.new.deliver!(@message)
     end
 
-    # Debug information for API
+    # Debug information for API.
     def debug_info_for_api # rubocop:disable Metrics/AbcSize
       puts <<~DEBUG_INFO
 
@@ -219,7 +219,7 @@ module FakePlugger
       DEBUG_INFO
     end
 
-    # Debug information for SMTP
+    # Debug information for SMTP.
     def debug_info_for_smtp
       puts <<~DEBUG_INFO
 
@@ -250,7 +250,7 @@ module FakePlugger
       DEBUG_INFO
     end
 
-    # Prepare delivery. It depends on that is SMTP or API.
+    # Prepare delivery. It depends on whether it is SMTP or API.
     def prepare_delivery
       if send_via_smtp?
         @message.delivery_method :smtp, settings[:smtp_settings]
@@ -267,7 +267,7 @@ module FakePlugger
         @response[:return_delivery_data]
     end
 
-    # Return with a response which depends on the conditions.
+    # Return with a response that depends on the conditions.
     def return_with_response
       return prepare_delivery if @response.nil?
 
@@ -276,12 +276,12 @@ module FakePlugger
       @response
     end
 
-    # Show debug information from variables and methods.
+    # Show debug information with the variables and methods.
     def show_debug_info
       send_via_smtp? ? debug_info_for_smtp : debug_info_for_api
     end
 
-    # Show raw message for debug purpose.
+    # Show the raw message for debugging purposes.
     def show_raw_message
       puts <<~RAW_MESSAGE
 

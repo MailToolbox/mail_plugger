@@ -145,7 +145,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
 
                 context 'and message contains delivery_system' do
                   # In this case delivey_settings does not contain
-                  # delivery_system, so the delivey_system is not important.
+                  # delivery_system, so the delivery_system is not important.
                   context 'but the given delivery_system does NOT exist' do
                     let(:message) { Mail.new(delivery_system: 'key') }
 
@@ -462,7 +462,7 @@ RSpec.shared_examples 'mail_plugger/delivery_method/deliver/' \
 
                 context 'and message contains delivery_system' do
                   # In this case delivey_settings does not contain
-                  # delivery_system, so the delivey_system is not important.
+                  # delivery_system, so the delivery_system is not important.
                   context 'but the given delivery_system does NOT exist' do
                     let(:message) { Mail.new(delivery_system: 'key') }
 

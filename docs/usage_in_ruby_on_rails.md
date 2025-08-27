@@ -9,10 +9,10 @@
 
 ## SMTP
 
-*This is just a theoretical example, because if we would like to use only one SMTP connection to send emails, it would be smarter to use the built-in SMTP solution of Ruby on Rails. The advantage of this solution will be much more usable when we would like to use more than one SMTP servers, or we would like to combine SMTP and API connections.*
+*This is just a theoretical example, because if we would like to use only one SMTP connection to send emails, it would be smarter to use the built-in SMTP solution of Ruby on Rails. The advantage of this solution will be much more usable when we would like to use more than one SMTP server, or we would like to combine SMTP and API connections.*
 
 
-After to add `mail_plugger` gem, create `config/initializers/mail_plugger.rb` file and add something similar.
+After adding the `mail_plugger` gem, create the `config/initializers/mail_plugger.rb` file and add something similar.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -21,13 +21,13 @@ MailPlugger.plug_in('test_smtp_client') do |smtp|
 end
 ```
 
-Then change `config/application.rb` file.
+Then change the `config/application.rb` file.
 
 ```ruby
 config.action_mailer.delivery_method = :mail_plugger
 ```
 
-So now we should add a mailer method. Let's create `app/mailers/test_mailer.rb` file.
+So now we should add a mailer method. Let's create the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -39,19 +39,19 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-Then we should add views (the body) of this email, so create `app/views/test_mailer/send_test.html.erb`
+Then we should add views (the body) of this email, so create the `app/views/test_mailer/send_test.html.erb`
 
 ```erb
 <p>Test email body</p>
 ```
 
-and `app/views/test_mailer/send_test.text.erb`.
+and the `app/views/test_mailer/send_test.text.erb` files.
 
 ```erb
 Test email body
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -118,7 +118,7 @@ TestMailer.send_test.deliver_now!
 
 ## API
 
-After to add `mail_plugger` gem and the gem of API of the mail provider, create `config/initializers/mail_plugger.rb` file and add something similar.
+After adding the `mail_plugger` gem and the gem of the API of the mail provider, create the `config/initializers/mail_plugger.rb` file and add something similar.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -173,13 +173,13 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Then change `config/application.rb` file.
+Then change the `config/application.rb` file.
 
 ```ruby
 config.action_mailer.delivery_method = :mail_plugger
 ```
 
-So now we should add a mailer method. Let's create `app/mailers/test_mailer.rb` file.
+So now we should add a mailer method. Let's create the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -191,19 +191,19 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-Then we should add views (the body) of this email, so create `app/views/test_mailer/send_test.html.erb`
+Then we should add views (the body) of this email, so create the `app/views/test_mailer/send_test.html.erb`
 
 ```erb
 <p>Test email body</p>
 ```
 
-and `app/views/test_mailer/send_test.text.erb`.
+and the `app/views/test_mailer/send_test.text.erb` files.
 
 ```erb
 Test email body
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now
@@ -274,7 +274,7 @@ TestMailer.send_test.deliver_now!
 #=> #<Mail::Message:61140, Multipart: true, Headers: <From: from@example.com>, <To: to@example.com>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_5ff082bd7aab5_10afcebb4503a4"; charset=UTF-8>>
 ```
 
-Let's add delivery settings as well in `config/initializers/mail_plugger.rb`.
+Let's add delivery settings as well in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
@@ -284,7 +284,7 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Then in the `rails console`.
+Then, in the `rails console`.
 
 ```ruby
 TestMailer.send_test.deliver_now!

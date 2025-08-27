@@ -116,7 +116,7 @@ module MailPlugger
     #
     #   MailPlugger.plug_in('api_client') do |api|
     #     api.client = DefinedApiClientClass
-    #     # Default delivery options for the plugged in client.
+    #     # Default delivery options for the plugged-in client.
     #     api.default_delivery_options = { tag: 'test_tag' }
     #     # It will search these options in the Mail::Message object.
     #     api.delivery_options = [:to, :from, :subject, :text_part, :html_part]
@@ -135,9 +135,9 @@ module MailPlugger
       raise Error::WrongPlugInOption, e.message
     end
 
-    # Define 'client', 'default_delivery_options', 'delivery_options' and
+    # Define 'client', 'default_delivery_options', 'delivery_options', and
     # 'delivery_settings' setter methods. These methods are generating a hash,
-    # where the key is the 'delivery_system'. This let us set/use more than one
+    # where the key is the 'delivery_system'. This lets us set/use more than one
     # STMP/API.
     %w[
       client
@@ -154,7 +154,7 @@ module MailPlugger
 
     private
 
-    # Check 'delivery_system' is valid or not. If it's not valid, then
+    # Check if 'delivery_system' is valid or not. If it's not valid, then
     # it will raise an error.
     #
     # @param [String/Symbol] delivery_system the name of the SMTP/API

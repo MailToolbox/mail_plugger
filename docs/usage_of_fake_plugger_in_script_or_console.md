@@ -7,13 +7,13 @@
 
 # How to use FakePlugger in a Ruby script or IRB console
 
-**This Class was made for development and testing purpose. Please do not use on production environment.**
+**This Class was made for development and testing purposes. Please do not use it in the production environment.**
 
 First, you should be able to `require 'mail'` and `require 'mail_plugger'` to get started.
 
 ## SMTP
 
-We can use `MailPlugger.plug_in` to add our configurations.
+We can use the `MailPlugger.plug_in` method to add our configurations.
 
 ```ruby
 MailPlugger.plug_in('test_smtp_client') do |smtp|
@@ -141,7 +141,7 @@ FakePlugger::DeliveryMethod.new(response: 'OK').deliver!(message)
 # => "OK"
 ```
 
-Or add `FakePlugger::DeliveryMethod` to `mail.delivery_method`.
+Or add the `FakePlugger::DeliveryMethod` to the `mail.delivery_method`.
 
 ```ruby
 mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -290,7 +290,7 @@ mail.deliver!
 # => #<Mail::Message:1880, Multipart: false, Headers: <Date: Sat, 05 Jun 2021 15:14:40 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60bb78c033c63_390e70834920@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: text/plain>, <Content-Transfer-Encoding: 7bit>>
 ```
 
-Let's try to manipulate the response and add `return_response: true` like above.
+Let's try to manipulate the response and add `return_response: true`, like above.
 
 ```ruby
 mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -310,7 +310,7 @@ mail.deliver!
 # => "OK"
 ```
 
-Let's use `MailPlugger.plug_in` method  with return response.
+Let's use the `MailPlugger.plug_in` method  with `return_response: true`.
 
 ```ruby
 MailPlugger.plug_in('test_smtp_client') do |smtp|
@@ -425,7 +425,7 @@ mail.deliver!
 # => #<Mail::Message:1880, Multipart: false, Headers: <Date: Sat, 05 Jun 2021 15:27:15 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60bb7bb39769a_3f5c708-418@server.local.mail>>, <Subject: Test email>, <Mime-Version: 1.0>, <Content-Type: text/plain>, <Content-Transfer-Encoding: 7bit>>
 ```
 
-Let's use `MailPlugger.plug_in` method with return response and fake response.
+Let's use the `MailPlugger.plug_in` method with `return_response: true` and `fake_plugger_response: 'OK'`.
 
 ```ruby
 MailPlugger.plug_in('test_smtp_client') do |smtp|
@@ -455,7 +455,7 @@ mail.deliver!
 
 ## API
 
-We need a class which will send the message in the right format via API.
+We need a class that sends the message in the correct format via API.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -501,7 +501,7 @@ class TestApiClientClass
 end
 ```
 
-We can use `MailPlugger.plug_in` to add our configurations.
+We can use the `MailPlugger.plug_in` method to add our configurations.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
@@ -672,7 +672,7 @@ FakePlugger::DeliveryMethod.new(delivery_options: %i[from to subject body], resp
 # => {"from"=>["from@example.com"], "to"=>["to@example.com"], "subject"=>"Test email", "body"=>"Test email body"}
 ```
 
-Or add `FakePlugger::DeliveryMethod` to `mail.delivery_method`.
+Or add the `FakePlugger::DeliveryMethod` to the `mail.delivery_method`.
 
 ```ruby
 mail = Mail.new(from: 'from@example.com', to: 'to@example.com', subject: 'Test email', body: 'Test email body')
@@ -856,7 +856,7 @@ mail.deliver!
 # => {:status=>:ok}
 ```
 
-Let's use `MailPlugger.plug_in` method  with return response.
+Let's use the `MailPlugger.plug_in` method  with `return_response: true`.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|
@@ -1048,7 +1048,7 @@ mail.deliver!.deliver
 # => {:response=>"OK"}
 ```
 
-Let's use `MailPlugger.plug_in` method with return response and fake response.
+Let's use the `MailPlugger.plug_in` method with `return_response: true` and `fake_plugger_response: { status: :ok }`.
 
 ```ruby
 MailPlugger.plug_in('test_api_client') do |api|

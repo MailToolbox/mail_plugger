@@ -7,11 +7,11 @@
 
 # How to combine SMTP and API delivery systems in Ruby on Rails
 
-Let's modify the configuration which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_smtp_delivery_systems_in_ruby_on_rails.md).
+Let's modify the configuration that was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_smtp_delivery_systems_in_ruby_on_rails.md).
 
-Replace an SMTP client with an API client in `config/initializers/mail_plugger.rb`.
+Replace an SMTP client with an API client in `config/initializers/mail_plugger.rb` file.
 
-## When SMTP client defined first
+## When the SMTP client was plugged in first
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -71,7 +71,7 @@ MailPlugger.plug_in('test_api_client') do |api|
 end
 ```
 
-Then change `app/mailers/test_mailer.rb` file.
+Then change the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -87,7 +87,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -126,7 +126,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -146,7 +146,7 @@ TestMailer.send_test2.deliver_now!
 #=> #<Mail::Message:61280, Multipart: true, Headers: <Date: Thu, 03 Jun 2021 07:53:55 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60b86e73c7b76_d0a8ec18157f0@server.local.mail>>, <Subject: Test2 email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60b86e73c3f28_d0a8ec1815671"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>, <delivery-system: test_smtp_client>>
 ```
 
-Or we can use default, but override it in the method.
+Or we can use the default, but override it in the method.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -162,7 +162,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -185,7 +185,7 @@ TestMailer.send_test2.deliver_now!
 #=> {:response=>"Message sent via API"}
 ```
 
-Or if we are not define any `delivey_system` then it will use the first defined one with `MailPlugger.plug_in` method.
+Or if we do not define any `delivery_system`, then it will use the first plugged-in delivery system, defined with the `MailPlugger.plug_in` method.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -201,7 +201,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -237,7 +237,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -260,7 +260,7 @@ TestMailer.send_test2.deliver_now!
 #=> {:response=>"Message sent via API"}
 ```
 
-## When API client defined first
+## When the API client was plugged in first
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -320,7 +320,7 @@ MailPlugger.plug_in('test_smtp_client') do |smtp|
 end
 ```
 
-Then change `app/mailers/test_mailer.rb` file.
+Then change the `app/mailers/test_mailer.rb` file.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -336,7 +336,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -375,7 +375,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -395,7 +395,7 @@ TestMailer.send_test2.deliver_now!
 #=> #<Mail::Message:61280, Multipart: true, Headers: <Date: Thu, 03 Jun 2021 08:07:58 +0200>, <From: from@example.com>, <To: to@example.com>, <Message-ID: <60b871be40a6_d631ec188886d@server.local.mail>>, <Subject: Test2 email>, <Mime-Version: 1.0>, <Content-Type: multipart/alternative; boundary="--==_mimepart_60b871be1773_d631ec18887a9"; charset=UTF-8>, <Content-Transfer-Encoding: 7bit>, <delivery-system: test_smtp_client>>
 ```
 
-Or we can use default, but override it in the method.
+Or we can use the default, but override it in the method.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -411,7 +411,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -434,7 +434,7 @@ TestMailer.send_test2.deliver_now!
 #=> {:response=>"Message sent via API"}
 ```
 
-Or if we are not define any `delivey_system` then it will use the first defined one with `MailPlugger.plug_in` method.
+Or if we do not define any `delivery_system`, then it will use the first plugged-in delivery system, defined with the `MailPlugger.plug_in` method.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -450,7 +450,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -492,7 +492,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!

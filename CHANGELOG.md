@@ -32,7 +32,7 @@
 
 * Add Ruby 3.3 support.
 * Update MailGrabber to version 1.3.5.
-* Update appraisal gem with the official version.
+* Update the appraisal gem with the official version.
 * Update bundler and gems.
 
 
@@ -42,7 +42,7 @@
 
 * Add Ruby 3.2 support.
 * Update MailGrabber to version 1.3.4.
-* Update appraisal gem from github to fix issues.
+* Update the appraisal gem from GitHub to fix issues.
 * Update bundler and gems.
 
 
@@ -74,12 +74,12 @@
 
 ### New features
 
-* Add `configure` method to MailPlugger.
+* Add a `configure` method to MailPlugger.
 
 ### Changes
 
 * Add mail 2.8 gem support.
-* Update the documentations.
+* Update the documentation.
 * Change RuboCop rules.
 * Update gem description.
 * Refactor RSpec tests.
@@ -122,7 +122,7 @@
 
 ### New features
 
-* Add SMTP support. With this modifications we can use SMTP and API delivery methods as well.
+* Add SMTP support. With these modifications, we can use SMTP and API delivery methods as well.
 
 ### Changes
 
@@ -133,11 +133,11 @@
 
 ### New features
 
-* Add MailGrabber to FakePlugger. Now we can use FakePlugger and MailGrabber in same time.
+* Add MailGrabber to FakePlugger. Now we can use FakePlugger and MailGrabber at the same time.
 
 ### Changes
 
-* Remove unnecessary double quotes from `show_debug_info` method in `FakePlugger::DeliveryMethod` and fix documentations.
+* Remove unnecessary double quotes from the `show_debug_info` method in `FakePlugger::DeliveryMethod` and fix documentation.
 * Update bundler and gems.
 * Update bug_report.md.
 
@@ -146,7 +146,7 @@
 
 ### New organization
 
-* Move mail_plugger repository into MailToolbox organization.
+* Move the mail_plugger repository into the MailToolbox organization.
 
 ### Changes
 
@@ -158,9 +158,9 @@
 
 ### Changes
 
-* Change `FakePlugger::DeliveryMethod` to returns with the extracted delivery data instead of the message object.
-* Update code documentations.
-* Add missing FakePlugger description in the README.md.
+* Change `FakePlugger::DeliveryMethod` to return with the extracted delivery data instead of the message object.
+* Update code documentation.
+* Add the missing FakePlugger description in the README.md.
 
 
 ## 1.1.0 (2021-01-18)
@@ -171,16 +171,16 @@
 
 ### Changes
 
-* Fix typos in the documentations.
-* Add more metadata to gempspec file.
+* Fix typos in the documentation.
+* Add more metadata to the gempspec file.
 
 
 ## 1.0.1 (2021-01-15)
 
 ### Changes
 
-* Tidy up the gemspec file and change which files contains in the gem. Now the gem is much smaller.
-* Add a new mail plugger image which has a different canvas and use it in the README.md.
+* Tidy up the gemspec file and change which files are contained in the gem. Now the gem is much smaller.
+* Add a new mail plugger image that has a different canvas and use it in the README.md.
 
 
 ## 1.0.0 (2021-01-14)
@@ -188,8 +188,8 @@
 ### Changes
 
 * Update gems.
-* Remove `webmock` gem to clean up unused things.
-* Update documentations.
+* Remove the `webmock` gem to clean up unused things.
+* Update documentation.
 
 
 ## 1.0.0.rc1 (2021-01-13)
@@ -197,14 +197,14 @@
 ### Changes
 
 * Change description and fix changelog_uri in gemspec file.
-* Add/Change documentations.
+* Add/Change documentation.
 * Update gems.
 * Change `MailPlugger.plug_in` and `MailPlugger::MailHelper.delivery_options` methods to accept strings and symbols.
-* Change `MailPlugger::MailHelper.delivery_data` method that we can retrieve message object as well.
-* Check hash keys in `MailPlugger::MailHelper.delivery_system` method, so now if we are add wrong `delivey_system` then we are getting a meaningful error message.
-* Change `MailPlugger::MailHelper.extract_attachments` method. If an attachment is inline then the hash contains the `filename` and `cid` as well.
+* Change `MailPlugger::MailHelper.delivery_data` method so that we can retrieve the message object as well.
+* Check hash keys in `MailPlugger::MailHelper.delivery_system` method, so now if we add a wrong `delivery_system`, then we are getting a meaningful error message.
+* Change `MailPlugger::MailHelper.extract_attachments` method. If an attachment is inline, then the hash contains the `filename` and `cid` as well.
 * Add/Change tests.
-* Change `MailPlugger::MailHelper.delivery_option` that returns with indifferent hash.
+* Change `MailPlugger::MailHelper.delivery_option` that returns with an indifferent hash.
 
 
 ## 1.0.0.beta1 (2021-01-02)

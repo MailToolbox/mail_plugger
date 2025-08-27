@@ -11,9 +11,9 @@
 
 # How to use MailPlugger.configure method in Ruby on Rails
 
-Let's modify the configuration which was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
+Let's modify the configuration that was defined [here](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_in_ruby_on_rails.md).
 
-Change the `MailPlugger.plug_in` methods in `config/initializers/mail_plugger.rb`.
+Change the `MailPlugger.plug_in` methods in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 # NOTE: This is just an example for testing...
@@ -75,7 +75,7 @@ end
 
 ## Default delivery system
 
-Add `MailPlugger.configure` in `config/initializers/mail_plugger.rb`.
+Add `MailPlugger.configure` in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.configure do |config|
@@ -83,7 +83,7 @@ MailPlugger.configure do |config|
 end
 ```
 
-Then change `app/mailers/test_mailer.rb` file and define `delivery_system`.
+Then change the `app/mailers/test_mailer.rb` file and define `delivery_system`.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -99,7 +99,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -122,7 +122,7 @@ TestMailer.send_test2.deliver_now!
 #=> {:response=>"Message sent via API"}
 ```
 
-Or if we are not define any `delivey_system` then it will use the `default_delivery_system` defined with `MailPlugger.configure` method.
+Or if we do not define any `delivery_system`, then it will use the `default_delivery_system`, defined with the `MailPlugger.configure` method.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -138,7 +138,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -168,7 +168,7 @@ TestMailer.send_test2.deliver_now!
 
 ### default_delivery_system
 
-Same behavior like above, just we are defining both `default_delivery_system` and `sending_method` as well.
+Same behavior as above, just we are defining both `default_delivery_system` and `sending_method` as well.
 
 ```ruby
 MailPlugger.configure do |config|
@@ -179,7 +179,7 @@ end
 
 ### plugged_in_first
 
-Change `MailPlugger.configure` in `config/initializers/mail_plugger.rb`.
+Change the `MailPlugger.configure` in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.configure do |config|
@@ -187,7 +187,7 @@ MailPlugger.configure do |config|
 end
 ```
 
-Then change `app/mailers/test_mailer.rb` file and define `delivery_system`.
+Then change the `app/mailers/test_mailer.rb` file and define `delivery_system`.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -203,7 +203,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -226,7 +226,7 @@ TestMailer.send_test2.deliver_now!
 #=> {:response=>"Message sent via API"}
 ```
 
-Or if we are not define any `delivey_system` then it will use the first defined one with `MailPlugger.plug_in` method.
+Or if we do not define any `delivery_system`, then it will use the first plugged-in delivery system, defined with the `MailPlugger.plug_in` method.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -242,7 +242,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -264,7 +264,7 @@ TestMailer.send_test2.deliver_now!
 
 ### random
 
-Change `MailPlugger.configure` in `config/initializers/mail_plugger.rb`.
+Change the `MailPlugger.configure` in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.configure do |config|
@@ -272,7 +272,7 @@ MailPlugger.configure do |config|
 end
 ```
 
-Then change `app/mailers/test_mailer.rb` file and define `delivery_system`.
+Then change the `app/mailers/test_mailer.rb` file and define `delivery_system`.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -288,7 +288,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -311,7 +311,7 @@ TestMailer.send_test2.deliver_now!
 #=> {:response=>"Message sent via API"}
 ```
 
-Or if we are not define any `delivey_system` then it will choose randomly between the defined delivery systems.
+Or if we do not define any `delivery_system`, then it will choose randomly between the defined delivery systems.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -327,7 +327,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -360,7 +360,7 @@ TestMailer.send_test.deliver_now!
 
 ### round_robin
 
-Change `MailPlugger.configure` in `config/initializers/mail_plugger.rb`.
+Change the `MailPlugger.configure` in the `config/initializers/mail_plugger.rb` file.
 
 ```ruby
 MailPlugger.configure do |config|
@@ -368,7 +368,7 @@ MailPlugger.configure do |config|
 end
 ```
 
-Then change `app/mailers/test_mailer.rb` file and define `delivery_system`.
+Then change the `app/mailers/test_mailer.rb` file and define `delivery_system`.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -384,7 +384,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
@@ -407,7 +407,7 @@ TestMailer.send_test2.deliver_now!
 #=> {:response=>"Message sent via API"}
 ```
 
-Or if we are not define any `delivey_system` then it will choose delivery systems in circular order.
+Or if we do not define any `delivery_system`, then it will choose delivery systems in circular order.
 
 ```ruby
 class TestMailer < ApplicationMailer
@@ -423,7 +423,7 @@ class TestMailer < ApplicationMailer
 end
 ```
 
-In the `rails console` we can try it out.
+In the `rails console`, we can try it out.
 
 ```ruby
 TestMailer.send_test.deliver_now!
