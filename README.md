@@ -57,6 +57,7 @@ It is a Ruby library that provides a specialized mail delivery method with vario
   - [How to use the API delivery system that adds attachments to the mailer method in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_api_attachments_in_ruby_on_rails.md)
   - [How to use more API delivery systems in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_more_api_delivery_systems_in_ruby_on_rails.md)
   - [How to use one API delivery system with more send methods in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_one_api_delivery_system_with_more_send_methods_in_ruby_on_rails.md)
+  - [How to use one API delivery system with different configuration options in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_one_api_delivery_system_with_different_configuration_options_in_ruby_on_rails.md)
   - [How to use AWS SES API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_aws_ses_api_in_ruby_on_rails.md)
   - [How to use SparkPost API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_sparkpost_api_in_ruby_on_rails.md)
   - [How to use SendGrid API with MailPlugger in Ruby on Rails](https://github.com/MailToolbox/mail_plugger/blob/main/docs/usage_of_sendgrid_api_in_ruby_on_rails.md)
