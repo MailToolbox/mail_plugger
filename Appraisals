@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+appraise 'mail-2.9' do
+  gem 'mail', '~> 2.9.0'
+end
+
 appraise 'mail-2.8' do
   gem 'mail', '~> 2.8.0'
 end
