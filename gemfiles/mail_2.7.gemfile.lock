@@ -21,7 +21,7 @@ GEM
     lint_roller (1.1.0)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    mail_grabber (1.4.1)
+    mail_grabber (1.5.0)
       base64 (~> 0.2)
       mail (~> 2.5)
       rackup (~> 2.1)
