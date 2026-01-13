@@ -1,5 +1,12 @@
 # Change log
 
+## 1.9.1 (2026-01-13)
+
+### Changes
+
+* Add mail 2.9 gem support.
+
+
 ## 1.9.0 (2026-01-13)
 
 ### Changes
