@@ -8,22 +8,16 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.9)
-      public_suffix (>= 2.0.2, < 8.0)
     appraisal (2.5.0)
       bundler
       rake
       thor (>= 0.14.0)
     ast (2.4.3)
     base64 (0.3.0)
-    bigdecimal (4.0.1)
     date (3.5.1)
     diff-lcs (1.6.2)
     docile (1.4.1)
-    json (2.19.2)
-    json-schema (6.2.0)
-      addressable (~> 2.8)
-      bigdecimal (>= 3.1, < 5)
+    json (2.19.3)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
@@ -38,8 +32,6 @@ GEM
       mail (~> 2.5)
       rackup (~> 2.1)
       sqlite3 (~> 2.0)
-    mcp (0.8.0)
-      json-schema (>= 4.1)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     net-imap (0.6.3)
@@ -52,11 +44,10 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     parallel (1.27.0)
-    parser (3.3.10.2)
+    parser (3.3.11.1)
       ast (~> 2.4.1)
       racc
     prism (1.9.0)
-    public_suffix (7.0.5)
     racc (1.8.1)
     rack (3.2.5)
     rackup (2.3.1)
@@ -77,11 +68,10 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.7)
-    rubocop (1.85.1)
+    rubocop (1.86.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
-      mcp (~> 0.6)
       parallel (~> 1.10)
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
