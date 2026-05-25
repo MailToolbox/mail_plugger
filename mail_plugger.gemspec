@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'mail_plugger'
   spec.version       = MailPlugger::VERSION
   spec.authors       = ['Norbert Szivós']
-  spec.email         = ['sysqa@yahoo.com']
+  spec.email         = ['norbertszivos-dev@yahoo.com']
 
   spec.summary       = 'Plug in required mailer(s) with MailPlugger.'
   spec.description   = 'MailPlugger helps you to use one or more mail ' \
